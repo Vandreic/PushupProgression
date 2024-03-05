@@ -1,0 +1,119 @@
+[gd_scene load_steps=5 format=3 uid="uid://bv2v88irqyogj"]
+
+[ext_resource type="Script" path="res://src/ui/ui_manager.gd" id="1_8wh5j"]
+[ext_resource type="Texture2D" uid="uid://d13gqxbmtf6rg" path="res://assets/progress _icon/progress_bar_under.png" id="2_miyvb"]
+[ext_resource type="Texture2D" uid="uid://be0a0aiqer2cv" path="res://assets/progress _icon/progress_bar_over.png" id="3_03rnj"]
+[ext_resource type="Texture2D" uid="uid://0eci0l65srde" path="res://assets/progress _icon/progress_bar_progress.png" id="4_hs708"]
+
+[node name="UI" type="CanvasLayer"]
+
+[node name="UIManager" type="Node" parent="." groups=["ui_manager"]]
+script = ExtResource("1_8wh5j")
+
+[node name="UIWindow" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.1
+anchor_top = 0.05
+anchor_right = 0.9
+anchor_bottom = 0.987
+theme_override_constants/separation = 60
+
+[node name="QuoteLabel" type="Label" parent="UIWindow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 50
+text = "Consistency is key!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressContainer" type="VBoxContainer" parent="UIWindow"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ProgressLabel" type="Label" parent="UIWindow/ProgressContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Today's progression: 0 pushups."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="TextureProgressBar" parent="UIWindow/ProgressContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+fill_mode = 4
+texture_under = ExtResource("2_miyvb")
+texture_over = ExtResource("3_03rnj")
+texture_progress = ExtResource("4_hs708")
+
+[node name="ProgressValueLabel" type="Label" parent="UIWindow/ProgressContainer/ProgressBar"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "0%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UIWindow/ProgressContainer"]
+layout_mode = 2
+
+[node name="DailyGoalLabel" type="Label" parent="UIWindow/ProgressContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 30
+text = "Goal: 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RemainingPushupsLabel" type="Label" parent="UIWindow/ProgressContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 30
+text = "Remaining: 50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AddPushupsButton" type="Button" parent="UIWindow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 32
+text = "Add 10 pushups"
+
+[node name="AppVersion" type="Label" parent="."]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.117647)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -36.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResetProgressionButton" type="Button" parent="."]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -57.0
+offset_right = 144.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 26
+text = "Reset"

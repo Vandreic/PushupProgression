@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8m5sfw05s6ty"]
+
+[ext_resource type="Script" path="res://src/main/main.gd" id="1_ui10i"]
+[ext_resource type="PackedScene" uid="uid://bv2v88irqyogj" path="res://src/ui/ui.tscn" id="2_06dc6"]
+[ext_resource type="Script" path="res://src/utilities/save_system.gd" id="3_vaodl"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_ui10i")
+
+[node name="UI" parent="." instance=ExtResource("2_06dc6")]
+
+[node name="ProgressionController" type="Node" parent="."]
+
+[node name="Utilities" type="Node" parent="."]
+
+[node name="SaveSystem" type="Node" parent="Utilities" groups=["save_system"]]
+script = ExtResource("3_vaodl")
