@@ -39,7 +39,7 @@ extends Node
 
 ## App versiob label.
 @onready var app_version: Label = %AppVersion
-
+	
 
 ## On [member UIManager.add_pushups_button] pressed.
 func _on_add_pushups_button_pressed() -> void:
@@ -63,15 +63,23 @@ func _on_add_pushups_button_pressed() -> void:
 
 
 ## On [member UIManager.reset_progression_button] pressed.
-func _on_reset_progression_button() -> void:
-	# Check if any sessions
-	if GlobalVariables.total_pushups_sessions > 0:
-		# Reset progression data
-		get_tree().call_group("save_system", "reset_date")
-		# Update UI
-		update_ui()
-	else:
-		print("Error: No progress to reset.")
+func _on_reset_progression_button_pressed() -> void:
+	# Instantiate popup box scene
+	var box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+	# Add scene to tree (Needed before modifying)
+	get_parent().get_parent().add_child(box)
+	# Update popup box text
+	box.update_text("Attention: All saved progress will be lost permanently and cannot be undone.")
+	# Connect to confirm button signal
+	box.confirm_button_pressed.connect(_on_reset_progression_button_confirm)
+	
+
+## On [member UIManager.reset_progression_button] confirm.
+func _on_reset_progression_button_confirm() -> void:
+	# Reset progression data
+	get_tree().call_group("save_system", "reset_date")
+	# Update UI
+	update_ui()
 
 
 ## Update progress bar.
@@ -149,4 +157,4 @@ func _ready():
 	
 	# Connect pressed button signals
 	add_pushups_button.pressed.connect(_on_add_pushups_button_pressed)
-	reset_progression_button.pressed.connect(_on_reset_progression_button)
+	reset_progression_button.pressed.connect(_on_reset_progression_button_pressed)
