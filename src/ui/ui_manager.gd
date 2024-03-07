@@ -1,8 +1,8 @@
-## UI Manager.
+## UI Manager Script.
 ##
 ## [br]
 ##
-## Manages UI element updates. [br]
+## This script controls the behavior of UI elements. [br]
 ##
 ## [br]
 ## 
@@ -44,7 +44,7 @@ extends Node
 ## Open reset options menu.
 func open_reset_options_menu() -> void:
 	# Instantiate reset options menu scene
-	var options_menu: CanvasLayer = load("res://src/ui/reset_options_menu/ResetOptionsMenu.tscn").instantiate()
+	var options_menu: CanvasLayer = load("res://src/ui/reset_options_menu/reset_options_menu.tscn").instantiate()
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(options_menu)
 	# Connect signals, passing a reset option
