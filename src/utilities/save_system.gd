@@ -26,6 +26,22 @@ const SAVE_GAME_PATH: String = "user://"
 const SAVE_FILE: String = "savedata.save"
 
 
+## Create dictionary for the current day's data.
+func create_day_data_dict() -> Dictionary:
+	# Initialize dictionary for current day
+	var day_dict: Dictionary = {}
+	# Add daily goal to dictionary
+	day_dict["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
+	# Add remaining pushups to dictionary
+	day_dict["remaining_pushups"] = GlobalVariables.remaining_pushups
+	# Add total pushups for today to dictionary
+	day_dict["total_pushups_today"] = GlobalVariables.total_pushups_today
+	# Add sessions to dictionary
+	day_dict["sessions"] = {}
+	# Return created dictionary
+	return day_dict
+
+
 ## Create a new [Dictionary] to store progression data and save it to 
 ## [member GlobalVariables.save_data_dict].
 func create_save_data_dict() -> void:
@@ -48,21 +64,15 @@ func create_save_data_dict() -> void:
 	# Create day as dictionary
 	calendar_dict["calendar"][year][month][day] = {}
 	
-	# Create daily goal
-	calendar_dict["calendar"][year][month][day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Create remaining pushups
-	calendar_dict["calendar"][year][month][day]["remaining_pushups"] = GlobalVariables.remaining_pushups
-	# Create total pushups
-	calendar_dict["calendar"][year][month][day]["total_pushups_today"] = GlobalVariables.total_pushups_today
-	# Create sessions
-	calendar_dict["calendar"][year][month][day]["sessions"] = {}
+	# Create dictionary for the current day's data
+	calendar_dict["calendar"][year][month][day] = create_day_data_dict()
 	
 	# Save calendar to save data dictionary
 	GlobalVariables.save_data_dict = calendar_dict
 
 
-## Create [Dictionary] from [param saved_data_dict] and save it to 
-## [member GlobalVariables.save_data_dict]. [br]
+## Create [Dictionary] for saving data from existing saved data [param saved_data_dict] 
+## and save it to [member GlobalVariables.save_data_dict]. [br]
 ##
 ## [br]
 ##
@@ -132,27 +142,35 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 				# Add sessions dictionary to calendar
 				years_dict[year][month][day]["sessions"] = sessions_dict
 
-	# Create dictionary if none exist for current date
-	if not saved_data_dict["calendar"].has(current_year) or\
-	not saved_data_dict["calendar"][current_year].has(current_month) or\
-	not saved_data_dict["calendar"][current_year][current_month].has(current_day):
+	# Create dictionary if none exist for current year
+	if not saved_data_dict["calendar"].has(current_year):
 		# Create dictionary for current year
 		years_dict[current_year] = {}
 		# Create dictionary for current month
 		years_dict[current_year][current_month] = {}
 		# Create dictionary for current day
 		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_day_data_dict()
 		
-		# Create daily goal
-		years_dict[current_year][current_month][current_day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-		# Create remaining pushups
-		years_dict[current_year][current_month][current_day]["remaining_pushups"] = GlobalVariables.remaining_pushups
-		# Create total pushups
-		years_dict[current_year][current_month][current_day]["total_pushups_today"] = GlobalVariables.total_pushups_today
-		# Create sessions
-		years_dict[current_year][current_month][current_day]["sessions"] = {}
+	
+	# Create dictionary if none exist for current month
+	elif not saved_data_dict["calendar"][current_year].has(current_month):
+		# Create dictionary for current month
+		years_dict[current_year][current_month] = {}
+		# Create dictionary for current day
+		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_day_data_dict()
+	
+	# Create dictionary if none exist for current day	
+	elif not saved_data_dict["calendar"][current_year][current_month].has(current_day):
+		# Create dictionary for current day
+		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_day_data_dict()
 		
-	# Load saved data if dictionary for current day exists
+	# Load saved data if dictionary for current date exists
 	else:
 		# Load daily goal
 		GlobalVariables.daily_pushups_goal = saved_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"]
@@ -171,7 +189,7 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 	
 	# File loaded successfully
 	print("Save file loaded successfully.")
-	
+
 
 ## Return an error message as [String] based on [param file_error] value.
 func get_file_error_message(file_error: Error) -> String:
@@ -412,27 +430,87 @@ func load_data() -> void:
 		# Add dates to calendar dictionary
 		calendar_dict["calendar"] = years_dict
 		
+		print("Load data:\n", calendar_dict["calendar"])
+		
 		# Create save dictionary from saved calendar
 		create_save_data_dict_from_saved_data(calendar_dict)
 
 
 ## Reset all progression data.
-func reset_date() -> void:
+func reset_data(reset_option: String) -> void:
 	print("Deleting all game progress... This CANNOT be undone.")
 	
-	# Reset total pushups
-	GlobalVariables.total_pushups_today = 0
-	# Reset remaining pushups
-	GlobalVariables.remaining_pushups = 0
-	# Reset total sessions
-	GlobalVariables.total_pushups_sessions = 0
-	# Clear saved dictionary
-	GlobalVariables.save_data_dict.clear()
+	# Get datetime as dictionary from system
+	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
+	# Get current year
+	var current_year: int = datetime_dict["year"]
+	# Get current month number
+	var current_month: int = datetime_dict["month"]
+	# Get current day number
+	var current_day: int = datetime_dict["day"]
 	
-	# Create new save dictionary
-	create_save_data_dict()
+	# Check chosen reset option
+	match reset_option:
+		"current_day":
+			print("Resetting saved progression for current day.")
+			# Reset global values
+			reset_global_values()
+			# Reset progression for current day
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day].clear()
+			# Create sessions dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+		
+		#"current_week":
+			#print("Resetting saved progression for current week.")
+			#reset_global_values()
+			## Reset progression for current week
+		
+		"current_month":
+			print("Resetting saved progression for current month.")
+			reset_global_values()
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month].clear()
+			# Create new dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
+			# Create sessions dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+		
+		"current_year":
+			print("Resetting saved progression for current year: ", current_year)
+			reset_global_values()
+			GlobalVariables.save_data_dict["calendar"][current_year].clear()
+			# Create new dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month] = {}
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
+			# Create sessions dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+		
+		"all":
+			print("Resetting all saved progression.")
+			reset_global_values()
+			# Clear saved dictionary
+			GlobalVariables.save_data_dict["calendar"].clear()
+			# Create new dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year] = {}
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month] = {}
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
+			# Create sessions dictionary for current date
+			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+		
+		_:
+			print("Unsupported reset option:", reset_option)
+
 	# Save data
 	save_data()
 	
 	# Game reset successful
 	print("Game reset succesful. All progress erased.")
+
+
+## Reset global values.
+func reset_global_values() -> void:
+	# Reset total pushups
+	GlobalVariables.total_pushups_today = 0
+	# Reset total sessions
+	GlobalVariables.total_pushups_sessions = 0
+	# Reset remaining pushups
+	GlobalVariables.remaining_pushups = 0

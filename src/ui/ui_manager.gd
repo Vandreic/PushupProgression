@@ -41,43 +41,47 @@ extends Node
 @onready var app_version: Label = %AppVersion
 	
 
-## On [member UIManager.add_pushups_button] pressed.
-func _on_add_pushups_button_pressed() -> void:
-	# Update total pushups today
-	GlobalVariables.total_pushups_today += GlobalVariables.pushups_per_session
-	# Update remaining pushups
-	GlobalVariables.remaining_pushups -= GlobalVariables.pushups_per_session
-	
-	# Check if remaining pushups 0
-	if GlobalVariables.remaining_pushups <= 0:
-		# Update remaining pushups to 0
-		GlobalVariables.remaining_pushups = 0
-
-	# Update total sessions
-	GlobalVariables.total_pushups_sessions += 1
-	
-	# Save progression
-	get_tree().call_group("save_system", "save_data")
-	# Update UI
-	update_ui()
-
-
-## On [member UIManager.reset_progression_button] pressed.
-func _on_reset_progression_button_pressed() -> void:
-	# Instantiate popup box scene
-	var box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+## Open reset options menu.
+func open_reset_options_menu() -> void:
+	# Instantiate reset options menu scene
+	var options_menu: CanvasLayer = load("res://src/ui/reset_options_menu/ResetOptionsMenu.tscn").instantiate()
 	# Add scene to tree (Needed before modifying)
-	get_parent().get_parent().add_child(box)
-	# Update popup box text
-	box.update_text("Attention: All saved progress will be lost permanently and cannot be undone.")
-	# Connect to confirm button signal
-	box.confirm_button_pressed.connect(_on_reset_progression_button_confirm)
-	
+	get_parent().add_child(options_menu)
+	# Connect signals, passing a reset option
+	options_menu.reset_current_day_button_pressed.connect(open_popup_confirm_box.bind("current_day"))
+	#options_menu.reset_current_week_button_pressed.connect(open_popup_confirm_box.bind("current_week"))
+	options_menu.reset_current_month_button_pressed.connect(open_popup_confirm_box.bind("current_month"))
+	options_menu.reset_current_year_button_pressed.connect(open_popup_confirm_box.bind("current_year"))
+	options_menu.reset_all_button_pressed.connect(open_popup_confirm_box.bind("all"))
 
-## On [member UIManager.reset_progression_button] confirm.
-func _on_reset_progression_button_confirm() -> void:
-	# Reset progression data
-	get_tree().call_group("save_system", "reset_date")
+
+## Open popup confirm box (Used for reset options menu).
+func open_popup_confirm_box(reset_option: String) -> void:
+	# Instantiate popup confirm box scene
+	var popup_box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+	# Add scene to tree (Needed before modifying)
+	get_parent().add_child(popup_box)
+	
+	# Create info text
+	var info_text: String
+	# Modify info text
+	if reset_option == "all":
+		info_text = "Resetting all data will permanently delete all saved progression and cannot be undone."
+	else:
+		info_text = "Resetting %s will permanently delete all associated data and cannot be undone."\
+		% reset_option.capitalize().to_lower()
+	# Update popup box info text
+	popup_box.update_info_text(info_text)
+	
+	# Connect signal, passing chosen reset option
+	popup_box.confirm_button_pressed.connect(reset_progression.bind(reset_option))
+
+
+## Reset progression. [br]
+## See [member SaveSystem.reset_data] for more details.
+func reset_progression(reset_option: String) -> void:
+	# Reset data based of reset_option value
+	get_tree().call_group("save_system", "reset_data", reset_option)
 	# Update UI
 	update_ui()
 
@@ -142,12 +146,32 @@ func update_ui() -> void:
 	
 	# Update "add pushups" button text
 	add_pushups_button.text = "Add " + str(GlobalVariables.pushups_per_session) + " pushups"
+
+
+## On [member UIManager.add_pushups_button] pressed.
+func _on_add_pushups_button_pressed() -> void:
+	# Update total pushups today
+	GlobalVariables.total_pushups_today += GlobalVariables.pushups_per_session
+	# Update remaining pushups
+	GlobalVariables.remaining_pushups -= GlobalVariables.pushups_per_session
 	
-	# Disable "reset progression" button if no sessions
-	if GlobalVariables.total_pushups_sessions <= 0:
-		reset_progression_button.disabled = true
-	else:
-		reset_progression_button.disabled = false
+	# Update remaining pushups to 0 if <= 0
+	if GlobalVariables.remaining_pushups <= 0:
+		GlobalVariables.remaining_pushups = 0
+
+	# Update total sessions
+	GlobalVariables.total_pushups_sessions += 1
+	
+	# Save data
+	get_tree().call_group("save_system", "save_data")
+	# Update UI
+	update_ui()
+
+
+## On [member UIManager.reset_progression_button] pressed.
+func _on_reset_progression_button_pressed() -> void:
+	# Open reset options menu
+	open_reset_options_menu()
 
 
 # Called when the node enters the scene tree for the first time.

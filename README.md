@@ -1,6 +1,6 @@
 # ***PushupProgression***
 ![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-3776AB.svg?style=plastic&logo=godot-engine&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.0.0-00BB1A.svg?style=plastic)
+![Version](https://img.shields.io/badge/version-1.1.0-00BB1A.svg?style=plastic)
 
 An app for tracking pushup progress and reaching daily goals. Designed for smartphones.
 
@@ -11,8 +11,8 @@ Created with [Godot Game Engine [4.3.dev4]](https://godotengine.org/).
 <p align="center"><img src="app_screenshot.png" width="40%" ></p>
 
 ## Roadmap
-* Implement pop-up confirmation for resetting saved progression
-* Provide reset options for saved progression (Note: Currently resets all progression)
+* ~~Implement pop-up confirmation for resetting saved progression~~
+* ~~Provide reset options for saved progression~~
 * Custom daily goals & pushups per session option
 * Visual theme update
 * Integrate logging system for saving and loading processes

@@ -21,15 +21,13 @@ extends CanvasLayer
 ## Cancel button.
 @onready var cancel_button: Button = %CancelButton
 
-## Signal: Emits when [member PopupConfirmBoxManager.confirm_button] pressed
-signal confirm_button_pressed
 
-## Signal: Emits when [member PopupConfirmBoxManager.cancel_button] pressed
-signal cancel_button_pressed
+## Signal: Emits when [member PopupConfirmBoxManager.confirm_button] pressed.
+signal confirm_button_pressed
 
 
 ## Update information text inside box.
-func update_text(text: String) -> void:	
+func update_info_text(text: String) -> void:	
 	info_text_label.text = text	+ "\n\n" + "Press \"Confirm\" to procced."
 
 
@@ -42,8 +40,6 @@ func close_popup_box() -> void:
 
 ## On [member PopupConfirmBoxManager.cancel_button] pressed.
 func _on_cancel_button_pressed() -> void:
-	# Emit button signal
-	cancel_button_pressed.emit()
 	# Close popup box
 	close_popup_box()
 
