@@ -31,20 +31,28 @@ extends Node
 ## Remaining pushups label.
 @onready var remaining_pushups_label: Label = %RemainingPushupsLabel
 
-## Button: Add pushups.
+## Add pushups button.
 @onready var add_pushups_button: Button = %AddPushupsButton
 
-## Button: Reset progression.
-@onready var reset_progression_button: Button = %ResetProgressionButton
+## Open options menu button.
+@onready var options_menu_button: TextureButton = %OptionsMenuButton
 
 ## App versiob label.
 @onready var app_version: Label = %AppVersion
-	
+
+
+## Open settings menu button.
+func open_settings_menu() -> void:
+	# Instantiate reset options menu scene
+	var settings_menu: CanvasLayer = load("res://src/ui/options_menu/settings_menu/settings_menu.tscn").instantiate()
+	# Add scene to tree (Needed before modifying)
+	get_parent().add_child(settings_menu)
+
 
 ## Open reset options menu.
 func open_reset_options_menu() -> void:
 	# Instantiate reset options menu scene
-	var options_menu: CanvasLayer = load("res://src/ui/reset_options_menu/reset_options_menu.tscn").instantiate()
+	var options_menu: CanvasLayer = load("res://src/ui/options_menu/reset_options_menu/reset_options_menu.tscn").instantiate()
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(options_menu)
 	# Connect signals, passing a reset option
@@ -168,17 +176,21 @@ func _on_add_pushups_button_pressed() -> void:
 	update_ui()
 
 
-## On [member UIManager.reset_progression_button] pressed.
-func _on_reset_progression_button_pressed() -> void:
-	# Open reset options menu
-	open_reset_options_menu()
+## On [member UIManager.options_menu_button] pressed.
+func _on_options_menu_button_pressed() -> void:
+	# Instantiate options menu scene
+	var options_menu: CanvasLayer = load("res://src/ui/options_menu/options_menu.tscn").instantiate()
+	# Add scene to tree (Needed before modifying)
+	get_parent().add_child(options_menu)
+	# Connect to custom pressed button signals
+	options_menu.settings_button_pressed.connect(open_settings_menu)
+	options_menu.reset_menu_button_pressed.connect(open_reset_options_menu)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Set app version label
 	app_version.text = "version " + str(ProjectSettings.get_setting("application/config/version"))
-	
 	# Connect pressed button signals
 	add_pushups_button.pressed.connect(_on_add_pushups_button_pressed)
-	reset_progression_button.pressed.connect(_on_reset_progression_button_pressed)
+	options_menu_button.pressed.connect(_on_options_menu_button_pressed)

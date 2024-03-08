@@ -1,6 +1,6 @@
 # ***PushupProgression***
 ![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-3776AB.svg?style=plastic&logo=godot-engine&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.1.0-00BB1A.svg?style=plastic)
+![Version](https://img.shields.io/badge/version-1.2.0-00BB1A.svg?style=plastic)
 
 An app for tracking pushup progress and reaching daily goals. Designed for smartphones.
 

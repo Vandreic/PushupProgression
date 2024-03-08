@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bv2v88irqyogj"]
+[gd_scene load_steps=7 format=3 uid="uid://bv2v88irqyogj"]
 
 [ext_resource type="Script" path="res://src/ui/ui_manager.gd" id="1_8wh5j"]
 [ext_resource type="Texture2D" uid="uid://d13gqxbmtf6rg" path="res://assets/progress _icon/progress_bar_under.png" id="2_miyvb"]
 [ext_resource type="Texture2D" uid="uid://be0a0aiqer2cv" path="res://assets/progress _icon/progress_bar_over.png" id="3_03rnj"]
 [ext_resource type="Texture2D" uid="uid://0eci0l65srde" path="res://assets/progress _icon/progress_bar_progress.png" id="4_hs708"]
+[ext_resource type="Texture2D" uid="uid://bqc88w0kgbwhk" path="res://assets/icons/options_menu_button_normal.png" id="5_5ag4w"]
+[ext_resource type="Texture2D" uid="uid://6eg6c7ec3dik" path="res://assets/icons/options_menu_button_pressed.png" id="6_y5tyq"]
 
 [node name="UI" type="CanvasLayer"]
 
@@ -93,6 +95,19 @@ size_flags_vertical = 4
 theme_override_font_sizes/font_size = 32
 text = "Add 10 pushups"
 
+[node name="OptionsMenuButton" type="TextureButton" parent="."]
+unique_name_in_owner = true
+anchors_preset = -1
+anchor_left = 0.9
+anchor_top = 0.94
+anchor_right = 0.99
+anchor_bottom = 0.99
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("5_5ag4w")
+texture_pressed = ExtResource("6_y5tyq")
+stretch_mode = 5
+
 [node name="AppVersion" type="Label" parent="."]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.117647)
@@ -106,14 +121,3 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="ResetProgressionButton" type="Button" parent="."]
-unique_name_in_owner = true
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -57.0
-offset_right = 144.0
-grow_vertical = 0
-theme_override_font_sizes/font_size = 26
-text = "Reset"

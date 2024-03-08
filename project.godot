@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PushupProgression"
-config/version="1.1.0"
+config/version="1.2.0"
 run/main_scene="res://src/main/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -34,8 +34,10 @@ folder_colors={
 "res://global/": "red",
 "res://src/main/": "red",
 "res://src/ui/": "blue",
+"res://src/ui/options_menu/": "green",
+"res://src/ui/options_menu/reset_options_menu/": "orange",
+"res://src/ui/options_menu/settings_menu/": "orange",
 "res://src/ui/popup_confirm_box/": "orange",
-"res://src/ui/reset_options_menu/": "orange",
 "res://src/utilities/": "red"
 }
 

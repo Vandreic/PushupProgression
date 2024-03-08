@@ -430,15 +430,13 @@ func load_data() -> void:
 		# Add dates to calendar dictionary
 		calendar_dict["calendar"] = years_dict
 		
-		print("Load data:\n", calendar_dict["calendar"])
-		
 		# Create save dictionary from saved calendar
 		create_save_data_dict_from_saved_data(calendar_dict)
 
 
 ## Reset all progression data.
 func reset_data(reset_option: String) -> void:
-	print("Deleting all game progress... This CANNOT be undone.")
+	print("Deleting saved progress... This CANNOT be undone.")
 	
 	# Get datetime as dictionary from system
 	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
@@ -475,7 +473,7 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
 		
 		"current_year":
-			print("Resetting saved progression for current year: ", current_year)
+			print("Resetting saved progression for current year.")
 			reset_global_values()
 			GlobalVariables.save_data_dict["calendar"][current_year].clear()
 			# Create new dictionary for current date
@@ -499,11 +497,11 @@ func reset_data(reset_option: String) -> void:
 		_:
 			print("Unsupported reset option:", reset_option)
 
+	# Game reset successful
+	print("Game reset succesful. Progress erased.")
+
 	# Save data
 	save_data()
-	
-	# Game reset successful
-	print("Game reset succesful. All progress erased.")
 
 
 ## Reset global values.

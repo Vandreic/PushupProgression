@@ -1,6 +1,6 @@
 ## Reset Options Menu Manager Script.
 ## 
-## This script controls the behavior of the reset options menu. [br]
+## This script controls the behavior of reset options menu. [br]
 ##
 ## [br]
 ##
@@ -49,7 +49,7 @@ signal reset_all_button_pressed
 
 
 ## Close reset menu (Removes scene from tree).
-func close_reset_menu() -> void:
+func close_menu() -> void:
 	# Delete scene from tree
 	get_parent().remove_child(self)
 	queue_free()
@@ -60,7 +60,7 @@ func _on_reset_current_day_button_pressed() -> void:
 	# Emit button signal
 	reset_current_day_button_pressed.emit()
 	# Close reset menu
-	close_reset_menu()
+	close_menu()
 
 
 # On [member ResetOptionsMenuManager.reset_current_week_button] pressed.
@@ -68,7 +68,7 @@ func _on_reset_current_day_button_pressed() -> void:
 	## Emit button signal
 	#reset_current_week_button_pressed.emit()
 	## Close reset menu
-	#close_reset_menu()
+	#close_menu()
 
 
 ## On [member ResetOptionsMenuManager.reset_current_month_button] pressed.
@@ -76,7 +76,7 @@ func _on_reset_current_month_button_pressed() -> void:
 	# Emit button signal
 	reset_current_month_button_pressed.emit()
 	# Close reset menu
-	close_reset_menu()
+	close_menu()
 
 
 ## On [member ResetOptionsMenuManager.reset_current_year_button] pressed.
@@ -84,7 +84,7 @@ func _on_reset_current_year_button_pressed() -> void:
 	# Emit button signal
 	reset_current_year_button_pressed.emit()
 	# Close reset menu
-	close_reset_menu()
+	close_menu()
 
 
 ## On [member ResetOptionsMenuManager.reset_all_button] pressed.
@@ -92,12 +92,12 @@ func _on_reset_all_button_pressed() -> void:
 	# Emit button signal
 	reset_all_button_pressed.emit()
 	# Close reset menu
-	close_reset_menu()
+	close_menu()
 
 
 ## On [member ResetOptionsMenuManager.close_menu_button] pressed.
 func _on_close_menu_button_pressed() -> void:
-	close_reset_menu()
+	close_menu()
 
 
 # Called when the node enters the scene tree for the first time.

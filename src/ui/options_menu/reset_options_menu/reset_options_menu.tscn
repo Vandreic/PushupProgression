@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dxymi4ampb52w"]
 
-[ext_resource type="Script" path="res://src/ui/reset_options_menu/reset_options_menu_manager.gd" id="1_ilmwj"]
+[ext_resource type="Script" path="res://src/ui/options_menu/reset_options_menu/reset_options_menu_manager.gd" id="1_ilmwj"]
 
 [node name="ResetOptionsMenu" type="CanvasLayer"]
 script = ExtResource("1_ilmwj")
