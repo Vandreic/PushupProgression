@@ -109,7 +109,7 @@ func update_progress_bar() -> void:
 		# Update progress bar value
 		progress_bar.value = 100
 		# Update progress value text
-		progress_value_label.text = str(new_progress_bar_value) + "%!"
+		progress_value_label.text = str(round(new_progress_bar_value)) + "%!"
 	else:
 		progress_bar.value = new_progress_bar_value
 		progress_value_label.text = str(round(new_progress_bar_value)) + "%"

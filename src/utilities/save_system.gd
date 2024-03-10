@@ -32,11 +32,13 @@ func create_day_data_dict() -> Dictionary:
 	var day_dict: Dictionary = {}
 	# Add daily goal to dictionary
 	day_dict["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Add remaining pushups to dictionary
+	# Add pushups per session
+	day_dict["pushups_per_session"] = GlobalVariables.pushups_per_session
+	# Add remaining pushups
 	day_dict["remaining_pushups"] = GlobalVariables.remaining_pushups
-	# Add total pushups for today to dictionary
+	# Add total pushups for today
 	day_dict["total_pushups_today"] = GlobalVariables.total_pushups_today
-	# Add sessions to dictionary
+	# Add sessions
 	day_dict["sessions"] = {}
 	# Return created dictionary
 	return day_dict
@@ -113,6 +115,11 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 				# Save daily goal to new dictionaru
 				years_dict[year][month][day]["daily_pushups_goal"] = daily_goal					
 				
+				# Get pushups per session
+				var pushups_per_session: int = saved_data_dict["calendar"][year][month][day]["pushups_per_session"]
+				# Save pushups per session
+				years_dict[year][month][day]["pushups_per_session"] = pushups_per_session	
+				
 				# Get remaining pushups
 				var remaining_pushups: int = saved_data_dict["calendar"][year][month][day]["remaining_pushups"]
 				# Save remaining pushups
@@ -174,6 +181,8 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 	else:
 		# Load daily goal
 		GlobalVariables.daily_pushups_goal = saved_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"]
+		# Load pushups per session
+		GlobalVariables.pushups_per_session = saved_data_dict["calendar"][current_year][current_month][current_day]["pushups_per_session"]
 		# Load remaining pushups
 		GlobalVariables.remaining_pushups = saved_data_dict["calendar"][current_year][current_month][current_day]["remaining_pushups"]
 		# Load total pushups
@@ -272,6 +281,8 @@ func save_data() -> void:
 	
 	# Save daily pushups goal
 	GlobalVariables.save_data_dict["calendar"][year][month][day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
+	# Save pushups per session
+	GlobalVariables.save_data_dict["calendar"][year][month][day]["pushups_per_session"] = GlobalVariables.pushups_per_session
 	# Save remaining pushups
 	GlobalVariables.save_data_dict["calendar"][year][month][day]["remaining_pushups"] = GlobalVariables.remaining_pushups
 	# Save total pushups
@@ -396,6 +407,11 @@ func load_data() -> void:
 					var daily_goal: int = int(save_file_data["calendar"][year][month][day]["daily_pushups_goal"])
 					# Save daily goal
 					years_dict[int(year)][int(month)][int(day)]["daily_pushups_goal"] = daily_goal
+					
+					# Get pushups per session
+					var pushups_per_session: int = int(save_file_data["calendar"][year][month][day]["pushups_per_session"])
+					# Save pushups per session
+					years_dict[int(year)][int(month)][int(day)]["pushups_per_session"] = pushups_per_session
 					
 					# Get remaining pushups
 					var remaining_pushups: int = int(save_file_data["calendar"][year][month][day]["remaining_pushups"])

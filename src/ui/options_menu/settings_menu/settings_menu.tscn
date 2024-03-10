@@ -58,7 +58,7 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 30
-placeholder_text = "Enter number..."
+placeholder_text = "Current: 100"
 alignment = 1
 clear_button_enabled = true
 
@@ -81,7 +81,7 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 30
-placeholder_text = "Enter number..."
+placeholder_text = "Current: 10"
 alignment = 1
 clear_button_enabled = true
 

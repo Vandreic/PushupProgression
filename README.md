@@ -8,12 +8,12 @@ Created with [Godot Game Engine [4.3.dev4]](https://godotengine.org/).
 
 <br>
 
-<p align="center"><img src="app_screenshot.png" width="40%" ></p>
+<p align="center"><img src="app_screenshot.png" width="40%" alt="app_screenshot.png" ></p>
 
 ## Roadmap
 * ~~Implement pop-up confirmation for resetting saved progression~~
 * ~~Provide reset options for saved progression~~
-* Custom daily goals & pushups per session option
+* ~~Custom daily goals & pushups per session option~~
 * Visual theme update
 * Integrate logging system for saving and loading processes
 * Add notification for saved progression status
