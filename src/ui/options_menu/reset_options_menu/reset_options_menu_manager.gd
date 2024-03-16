@@ -1,6 +1,6 @@
-## Reset Options Menu Manager Script.
+## Reset Options Menu Manager.
 ## 
-## This script controls the behavior of reset options menu. [br]
+## Controls the behavior of reset options menu. [br]
 ##
 ## [br]
 ##

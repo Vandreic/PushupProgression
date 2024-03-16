@@ -1,6 +1,6 @@
-## Options Menu Manager Script.
+## Options Menu Manager.
 ## 
-## This script controls the behavior of options menu. [br]
+## Controls the behavior of options menu. [br]
 ##
 ## [br]
 ##
@@ -14,8 +14,11 @@ extends CanvasLayer
 ## Settings button.
 @onready var settings_button: Button = %SettingsButton
 
-## Reset menu button.
+## Open reset menu button.
 @onready var reset_menu_button: Button = %ResetMenuButton
+
+## Open logging menu button.
+@onready var logging_menu_button: Button = %LoggingMenuButton
 
 ## Close options menu button.
 @onready var close_menu_button: Button = %CloseMenuButton
@@ -26,6 +29,9 @@ signal settings_button_pressed
 
 ## Signal: Emits when [member OptionsMenuManager.reset_menu_button] pressed.
 signal reset_menu_button_pressed
+
+## Signal: Emits when [member OptionsMenuManager.logging_menu_button] pressed.
+signal logging_menu_button_pressed
 
 
 ## Close options menu (Removes scene from tree).
@@ -51,6 +57,14 @@ func _on_reset_menu_button_pressed() -> void:
 	close_menu()
 
 
+## On [member member OptionsMenuManager.logging_menu_button] pressed.
+func _on_logging_menu_button_pressed() -> void:
+	# Emit button signal
+	logging_menu_button_pressed.emit()
+	# Close options menu
+	close_menu()
+
+
 ## On [member PopupConfirmBoxManager.close_menu_button] pressed.
 func _on_close_menu_button_pressed() -> void:
 	# Close options menu
@@ -62,4 +76,5 @@ func _ready() -> void:
 	# Connect pressed button signals
 	settings_button.pressed.connect(_on_settings_button_pressed)
 	reset_menu_button.pressed.connect(_on_reset_menu_button_pressed)
+	logging_menu_button.pressed.connect(_on_logging_menu_button_pressed)
 	close_menu_button.pressed.connect(close_menu)

@@ -1,6 +1,6 @@
-## Popup Confirm Box Manager Script.
+## Popup Confirm Box Manager.
 ## 
-## This script controls the behavior of a popup confirm box. [br]
+## Controls the behavior of popup confirm box. [br]
 ##
 ## [br]
 ##

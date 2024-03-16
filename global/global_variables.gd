@@ -8,6 +8,15 @@
 
 extends Node
 
+## Constant: Main menu scene file path.
+const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
+
+## Constant: Logging menu scene file path.
+const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
+
+## App running flag [bool].
+var app_running: bool = false
+
 
 ## Daily pushup goal.
 var daily_pushups_goal: int = 100
@@ -24,5 +33,8 @@ var total_pushups_sessions: int = 0
 ## Remaining pushup to reach daily goal.
 var remaining_pushups: int = 0
 
-## Save data dictionary to store all progression data.
+## Save data [Dictionary] to store all progression data.
 var save_data_dict: Dictionary = {}
+
+## Logs [Array].
+var logs_array: Array = []

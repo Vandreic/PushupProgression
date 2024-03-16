@@ -12,8 +12,11 @@ func _ready():
 	# Change window size if screen width < 1280
 	change_window_size() 
 	
-	# Load save file
-	get_tree().call_group("save_system", "load_data")
+	# Load save file if game is not running
+	if GlobalVariables.app_running == false:
+		# Load save file
+		get_tree().call_group("save_system", "load_data")
+	
 	# Update UI
 	get_tree().call_group("ui_manager", "update_ui")
 	

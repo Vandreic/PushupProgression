@@ -1,6 +1,6 @@
-## Settings Menu Manager Script.
+## Settings Menu Manager.
 ## 
-## This script controls the behavior of settings menu. [br]
+## Controls the behavior of settings menu. [br]
 ##
 ## [br]
 ##

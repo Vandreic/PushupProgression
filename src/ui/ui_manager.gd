@@ -1,8 +1,8 @@
-## UI Manager Script.
+## UI Manager.
 ##
 ## [br]
 ##
-## This script controls the behavior of UI elements. [br]
+## Controls the behavior of UI elements. [br]
 ##
 ## [br]
 ## 
@@ -83,6 +83,12 @@ func open_popup_confirm_box(reset_option: String) -> void:
 	
 	# Connect signal, passing chosen reset option
 	popup_box.confirm_button_pressed.connect(reset_progression.bind(reset_option))
+
+
+## Open logging menu (Changes scene).
+func open_logging_menu() -> void:
+	# Change to logging menu scene
+	get_tree().change_scene_to_file(GlobalVariables.LOGGING_MENU_SCENE_PATH)
 
 
 ## Reset progression. [br]
@@ -169,7 +175,8 @@ func _on_add_pushups_button_pressed() -> void:
 
 	# Update total sessions
 	GlobalVariables.total_pushups_sessions += 1
-	
+	# Create log message
+	get_tree().call_group("save_system", "create_log", "Added new pushup session.")
 	# Save data
 	get_tree().call_group("save_system", "save_data")
 	# Update UI
@@ -185,6 +192,7 @@ func _on_options_menu_button_pressed() -> void:
 	# Connect to custom pressed button signals
 	options_menu.settings_button_pressed.connect(open_settings_menu)
 	options_menu.reset_menu_button_pressed.connect(open_reset_options_menu)
+	options_menu.logging_menu_button_pressed.connect(open_logging_menu)
 
 
 # Called when the node enters the scene tree for the first time.

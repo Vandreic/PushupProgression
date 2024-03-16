@@ -26,6 +26,41 @@ const SAVE_GAME_PATH: String = "user://"
 const SAVE_FILE: String = "savedata.save"
 
 
+## Create log message.
+func create_log(log_message: String) -> void:
+	# Get time from system as dictionary
+	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
+	# Get current hour
+	var hour: String = str(datetime_dict["hour"])
+	# Get current minut
+	var minute: String = str(datetime_dict["minute"])
+	# Get current second
+	var second: String = str(datetime_dict["second"])
+	
+	# Convert hour to "00" format
+	if hour.length() < 2:
+		var _new_hour_value: String = "0" + hour
+		hour = _new_hour_value
+		
+	# Convert minute to "00" format
+	if minute.length() < 2:
+		var _new_minute_value: String = "0" + minute
+		minute = _new_minute_value
+
+	# Convert second to "00" format
+	if second.length() < 2:
+		var _new_second_value: String = "0" + second
+		second = _new_second_value
+	
+	# Create timestamp
+	var timestamp: String = "[%s:%s:%s] " % [hour, minute, second]
+	
+	# Cretae full log message
+	var full_log_message: String = timestamp + log_message
+	# Add to logs array
+	GlobalVariables.logs_array.append(full_log_message)
+
+
 ## Create dictionary for the current day's data.
 func create_day_data_dict() -> Dictionary:
 	# Initialize dictionary for current day
@@ -47,6 +82,8 @@ func create_day_data_dict() -> Dictionary:
 ## Create a new [Dictionary] to store progression data and save it to 
 ## [member GlobalVariables.save_data_dict].
 func create_save_data_dict() -> void:
+	create_log("Creating new save data dictionary.")
+	
 	# Get datetime as dictionary from system
 	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
 	# Get current year
@@ -71,6 +108,8 @@ func create_save_data_dict() -> void:
 	
 	# Save calendar to save data dictionary
 	GlobalVariables.save_data_dict = calendar_dict
+	
+	create_log("New save data dictionary created successfully.")
 
 
 ## Create [Dictionary] for saving data from existing saved data [param saved_data_dict] 
@@ -80,6 +119,8 @@ func create_save_data_dict() -> void:
 ##
 ## See [method SaveSystem.load_data] for more details.
 func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
+	create_log("Creating save data dictionary from existing saved data.")
+	
 	# Get date as dictionary from system
 	var datetime_dict: Dictionary = Time.get_date_dict_from_system()
 	# Get current year
@@ -148,7 +189,7 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 				
 				# Add sessions dictionary to calendar
 				years_dict[year][month][day]["sessions"] = sessions_dict
-
+	
 	# Create dictionary if none exist for current year
 	if not saved_data_dict["calendar"].has(current_year):
 		# Create dictionary for current year
@@ -160,7 +201,6 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 		# Create dictionary for the current day's data.
 		years_dict[current_year][current_month][current_day] = create_day_data_dict()
 		
-	
 	# Create dictionary if none exist for current month
 	elif not saved_data_dict["calendar"][current_year].has(current_month):
 		# Create dictionary for current month
@@ -196,8 +236,7 @@ func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
 	# Save calendar
 	GlobalVariables.save_data_dict = calendar_dict
 	
-	# File loaded successfully
-	print("Save file loaded successfully.")
+	create_log("Save data dictionary created from existing data successfully.")
 
 
 ## Return an error message as [String] based on [param file_error] value.
@@ -254,6 +293,8 @@ func get_file_error_message(file_error: Error) -> String:
 ##
 ## [b]Note[/b]: When converting to JSON, all data types are transformed into JSON strings.
 func save_data() -> void:
+	create_log("Saving data to save file.")
+	
 	# Get save file
 	var save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
 	
@@ -261,7 +302,7 @@ func save_data() -> void:
 	if save_file == null:
 		# Get error text
 		var error_text: String = get_file_error_message(FileAccess.get_open_error())
-		print(error_text)
+		create_log("Error opening save file. " + error_text)
 		return
 	
 	# Get datetime as dictionary from system
@@ -305,14 +346,15 @@ func save_data() -> void:
 		# Save timestamp for session
 		GlobalVariables.save_data_dict["calendar"][year][month][day]["sessions"][current_session]["time"] = timestamp
 	
+	create_log("Converting saving data to JSON.")
 	# Convert save data dictionary to JSON
 	var json_string = JSON.stringify(GlobalVariables.save_data_dict, "\t")
 	
+	create_log("Writing saving data to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
 	# Store the save data dictionary as a new line in the save file.
 	save_file.store_line(json_string)
 	
-	# File saved successfully
-	print("Save file saved successfully.")
+	create_log("Saved data to save file successfully.")
 
 
 ## Load progression data from JSON file as [Dictionary] and pass as argument to  
@@ -326,9 +368,12 @@ func save_data() -> void:
 ##
 ## [b]Note:[/b] Converts some keys from JSON strings to Godot data types.
 func load_data() -> void:
+	create_log("Loading data from save file.")
+	
 	# Check if save file exists
 	if not FileAccess.file_exists(SAVE_GAME_PATH + SAVE_FILE):
-		print("No existing save file...")
+		create_log("No existing save file. \
+		Creating new save file, " + SAVE_FILE + ", at " + SAVE_GAME_PATH)
 		
 		# Create new save data dictionary
 		create_save_data_dict()
@@ -340,20 +385,19 @@ func load_data() -> void:
 		if save_file == null:
 			# Get error text
 			var error_text: String = get_file_error_message(FileAccess.get_open_error())
-			print(error_text)
+			create_log("Error creating new save file. " + error_text)
 			return
 		
-		# File created successfully
-		print("Save file created successfully.")
-		
+		create_log("Converting save data dictionary to JSON.")
 		# Convert save data dictionary to JSON
 		var json_string = JSON.stringify(GlobalVariables.save_data_dict, "\t")
 		
+		create_log("Writing save data dictionary to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
 		# Store the save data dictionary as a new line in the save file.
 		save_file.store_line(json_string)
 		
 		# File saved successfully
-		print("Save file saved successfully.")
+		create_log("New save file saved successfully.")
 		return
 	
 	# Load save file
@@ -363,21 +407,27 @@ func load_data() -> void:
 	if save_file == null:
 		# Get error text
 		var error_text: String = get_file_error_message(FileAccess.get_open_error())
-		print(error_text)
+		create_log("Error opening save file. " + error_text)
 		return
 
 	# Create JSON helper
 	var json = JSON.new()
 	
+	create_log("Receiving data from save file.")
 	# Get JSON
 	var json_string = save_file.get_as_text()
 	
-	# Parse JSON
+	create_log("Converting data from save file.")
+	# Parse (convert) JSON
 	var save_file_data = json.parse_string(json_string)
 	
-	# If parse error occurs
+	# If parse (convert) error occurs
 	if save_file_data == null:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
+		# Create error message
+		var error_message: String = "JSON Parse Error: " + json.get_error_message()\
+		+ " in " + json_string + " at line " + json.get_error_line()
+		
+		create_log("Error converting data to save file. " + error_message)
 		return
 	
 	# Check if save data is dictionary
@@ -446,13 +496,14 @@ func load_data() -> void:
 		# Add dates to calendar dictionary
 		calendar_dict["calendar"] = years_dict
 		
+		create_log("Loaded data from save file successfully.")
 		# Create save dictionary from saved calendar
 		create_save_data_dict_from_saved_data(calendar_dict)
 
 
 ## Reset all progression data.
 func reset_data(reset_option: String) -> void:
-	print("Deleting saved progress... This CANNOT be undone.")
+	create_log("Resetting data with option: [" + reset_option + "]. This CANNOT be undone!")
 	
 	# Get datetime as dictionary from system
 	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
@@ -466,30 +517,25 @@ func reset_data(reset_option: String) -> void:
 	# Check chosen reset option
 	match reset_option:
 		"current_day":
-			print("Resetting saved progression for current day.")
 			# Reset global values
 			reset_global_values()
 			# Reset progression for current day
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day].clear()
 			# Create sessions dictionary for current date
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-		
-		#"current_week":
-			#print("Resetting saved progression for current week.")
-			#reset_global_values()
-			## Reset progression for current week
+			create_log("Successfully data reset for current day: %s/%s-%s." % [current_day, current_month, current_year])
 		
 		"current_month":
-			print("Resetting saved progression for current month.")
 			reset_global_values()
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month].clear()
 			# Create new dictionary for current date
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-		
+			create_log("Successfully data reset for current month: /%s-%s." % [current_month, current_year])
+			
 		"current_year":
-			print("Resetting saved progression for current year.")
+			create_log("Resetting saved progression for current year.")
 			reset_global_values()
 			GlobalVariables.save_data_dict["calendar"][current_year].clear()
 			# Create new dictionary for current date
@@ -497,9 +543,10 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+			create_log("Successfully data reset for current year: %s." % current_year)
 		
 		"all":
-			print("Resetting all saved progression.")
+			create_log("Resetting all saved progression.")
 			reset_global_values()
 			# Clear saved dictionary
 			GlobalVariables.save_data_dict["calendar"].clear()
@@ -509,12 +556,10 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
+			create_log("Successfully data reset for all saved progression.")
 		
 		_:
-			print("Unsupported reset option:", reset_option)
-
-	# Game reset successful
-	print("Game reset succesful. Progress erased.")
+			create_log("Unsupported reset option: " + reset_option)
 
 	# Save data
 	save_data()
@@ -528,3 +573,4 @@ func reset_global_values() -> void:
 	GlobalVariables.total_pushups_sessions = 0
 	# Reset remaining pushups
 	GlobalVariables.remaining_pushups = 0
+	create_log("Global values reset successfully.")
