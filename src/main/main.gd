@@ -14,7 +14,6 @@ func _ready():
 	
 	# Load save file if game is not running
 	if GlobalVariables.app_running == false:
-		# Load save file
 		get_tree().call_group("save_system", "load_data")
 	
 	# Update UI

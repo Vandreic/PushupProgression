@@ -1,19 +1,21 @@
-## Save & load progression.
-##
-## A save system to save and load progression data. [br][br]
-## Progression data is saved to a [Dictionary] named [code]save_data_dict[/code]
-## stored within [GlobalVariables]. [br]
-## See [method SaveSystem.create_save_data_dict] and 
-## [method SaveSystem.create_save_data_dict_from_saved_data] for more details. [br]
-##
-## [br]
-##
-## [code]save_data_dict[/code] is converted to JSON and saved to file on system. [br]
-## File path: [constant SaveSystem.SAVE_GAME_PATH] [br]
-## 
-## [br]
-## 
-## Path: [code]res://src/utilities/save_system.gd[/code]
+	## Save & load progression.
+	##
+	## A save system to save and load progression data. [br][br]
+	## Progression data is saved to a [Dictionary] named [code]save_data_dict[/code]
+	## stored within [GlobalVariables]. [br]
+	## See [method SaveSystem.create_save_data_dict] and 
+	## [method SaveSystem.create_save_data_dict_from_saved_data] for more details. [br]
+	##
+	## [br]
+	##
+	## [code]save_data_dict[/code] is converted to JSON and saved to file on system. [br]
+	## File path: [constant SaveSystem.SAVE_GAME_PATH] [br]
+	## 
+	## [br]
+	## 
+	## Path: [code]res://src/utilities/save_system.gd[/code]
+
+#TODO: Improve loading save data ( Remove load_save_data_dict() )
 
 
 class_name SaveSystem
@@ -51,18 +53,18 @@ func create_log(log_message: String) -> void:
 	if second.length() < 2:
 		var _new_second_value: String = "0" + second
 		second = _new_second_value
-	
+
 	# Create timestamp
 	var timestamp: String = "[%s:%s:%s] " % [hour, minute, second]
-	
+
 	# Cretae full log message
 	var full_log_message: String = timestamp + log_message
 	# Add to logs array
 	GlobalVariables.logs_array.append(full_log_message)
 
 
-## Create dictionary for the current day's data.
-func create_day_data_dict() -> Dictionary:
+## Create [Dictionary] for the current day's data.
+func create_current_day_data_dict() -> Dictionary:
 	# Initialize dictionary for current day
 	var day_dict: Dictionary = {}
 	# Add daily goal to dictionary
@@ -84,159 +86,37 @@ func create_day_data_dict() -> Dictionary:
 func create_save_data_dict() -> void:
 	create_log("Creating new save data dictionary.")
 	
-	# Get datetime as dictionary from system
+	# Get datetime dictionary from system
 	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
-	# Get current year
-	var year: int = datetime_dict["year"]
+	# Get current year number
+	var current_year: int = datetime_dict["year"]
 	# Get current month number
-	var month: int = datetime_dict["month"]
+	var current_month: int = datetime_dict["month"]
 	# Get current day number
-	var day: int = datetime_dict["day"]
+	var current_day: int = datetime_dict["day"]
 
-	# Create calendar as dictionary
-	var calendar_dict: Dictionary = {"calendar" = {}}
+	# Create dictionary for calendar
+	var calendar_dict: Dictionary = {}
 
-	# Create year as dictionary
-	calendar_dict["calendar"][year] = {}
-	# Create month as dictionary
-	calendar_dict["calendar"][year][month] = {}
-	# Create day as dictionary
-	calendar_dict["calendar"][year][month][day] = {}
+	# Create dictionary for current year
+	calendar_dict[current_year] = {}
+	# Create dictinary for current month
+	calendar_dict[current_year][current_month] = {}
+	# Create dictinary for current day
+	calendar_dict[current_year][current_month][current_day] = {}
 	
 	# Create dictionary for the current day's data
-	calendar_dict["calendar"][year][month][day] = create_day_data_dict()
+	calendar_dict[current_year][current_month][current_day] = create_current_day_data_dict()
 	
-	# Save calendar to save data dictionary
-	GlobalVariables.save_data_dict = calendar_dict
+	# Save calendar dictionary to save data dictionary
+	GlobalVariables.save_data_dict["calendar"] = calendar_dict
+	
+	# Save daily pushups goal
+	GlobalVariables.save_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
+	# Save pushups per session
+	GlobalVariables.save_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
 	
 	create_log("New save data dictionary created successfully.")
-
-
-## Create [Dictionary] for saving data from existing saved data [param saved_data_dict] 
-## and save it to [member GlobalVariables.save_data_dict]. [br]
-##
-## [br]
-##
-## See [method SaveSystem.load_data] for more details.
-func create_save_data_dict_from_saved_data(saved_data_dict: Dictionary) -> void:
-	create_log("Creating save data dictionary from existing saved data.")
-	
-	# Get date as dictionary from system
-	var datetime_dict: Dictionary = Time.get_date_dict_from_system()
-	# Get current year
-	var current_year: int = datetime_dict["year"]
-	# Get current month
-	var current_month: int = datetime_dict["month"]
-	# Get current day
-	var current_day: int = datetime_dict["day"]
-	
-	# Create calendar as dictionary
-	var calendar_dict: Dictionary = {"calendar" = {}}
-	# Years dictionary
-	var years_dict: Dictionary = {}
-	# Months dictionary
-	var months_dict: Dictionary = {}
-	# Days dictionary
-	var days_dict: Dictionary = {}
-	
-	# Create new dictionary for each year.
-	for year in saved_data_dict["calendar"]:
-		years_dict[year] = {}
-		
-		# Create new dictionary for each month
-		for month in saved_data_dict["calendar"][year]:
-			years_dict[year][month] = {}
-			
-			# Create new dictionary for each day
-			for day in saved_data_dict["calendar"][year][month]:
-				years_dict[year][month][day] = {}
-				
-				# Get daily goal from saved dictionary
-				var daily_goal: int = saved_data_dict["calendar"][year][month][day]["daily_pushups_goal"]
-				# Save daily goal to new dictionaru
-				years_dict[year][month][day]["daily_pushups_goal"] = daily_goal					
-				
-				# Get pushups per session
-				var pushups_per_session: int = saved_data_dict["calendar"][year][month][day]["pushups_per_session"]
-				# Save pushups per session
-				years_dict[year][month][day]["pushups_per_session"] = pushups_per_session	
-				
-				# Get remaining pushups
-				var remaining_pushups: int = saved_data_dict["calendar"][year][month][day]["remaining_pushups"]
-				# Save remaining pushups
-				years_dict[year][month][day]["remaining_pushups"] = remaining_pushups
-				
-				# Get total pushups
-				var total_pushups_today: int = saved_data_dict["calendar"][year][month][day]["total_pushups_today"]
-				# Save total pushups
-				years_dict[year][month][day]["total_pushups_today"] = total_pushups_today
-				
-				# Create sessions dictionary
-				var sessions_dict: Dictionary = {}
-				# Loop trough each session
-				for session in saved_data_dict["calendar"][year][month][day]["sessions"]:
-					# Create single session dictionary
-					sessions_dict[session] = {}
-					
-					# Get pushups in session
-					var pushups: int = saved_data_dict["calendar"][year][month][day]["sessions"][session]["pushups"]
-					# Save pushups
-					sessions_dict[session]["pushups"] = pushups
-					
-					# Get timestamp in session
-					var time: String = saved_data_dict["calendar"][year][month][day]["sessions"][session]["time"]
-					sessions_dict[session]["time"] = time
-				
-				# Add sessions dictionary to calendar
-				years_dict[year][month][day]["sessions"] = sessions_dict
-	
-	# Create dictionary if none exist for current year
-	if not saved_data_dict["calendar"].has(current_year):
-		# Create dictionary for current year
-		years_dict[current_year] = {}
-		# Create dictionary for current month
-		years_dict[current_year][current_month] = {}
-		# Create dictionary for current day
-		years_dict[current_year][current_month][current_day] = {}
-		# Create dictionary for the current day's data.
-		years_dict[current_year][current_month][current_day] = create_day_data_dict()
-		
-	# Create dictionary if none exist for current month
-	elif not saved_data_dict["calendar"][current_year].has(current_month):
-		# Create dictionary for current month
-		years_dict[current_year][current_month] = {}
-		# Create dictionary for current day
-		years_dict[current_year][current_month][current_day] = {}
-		# Create dictionary for the current day's data.
-		years_dict[current_year][current_month][current_day] = create_day_data_dict()
-	
-	# Create dictionary if none exist for current day	
-	elif not saved_data_dict["calendar"][current_year][current_month].has(current_day):
-		# Create dictionary for current day
-		years_dict[current_year][current_month][current_day] = {}
-		# Create dictionary for the current day's data.
-		years_dict[current_year][current_month][current_day] = create_day_data_dict()
-		
-	# Load saved data if dictionary for current date exists
-	else:
-		# Load daily goal
-		GlobalVariables.daily_pushups_goal = saved_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"]
-		# Load pushups per session
-		GlobalVariables.pushups_per_session = saved_data_dict["calendar"][current_year][current_month][current_day]["pushups_per_session"]
-		# Load remaining pushups
-		GlobalVariables.remaining_pushups = saved_data_dict["calendar"][current_year][current_month][current_day]["remaining_pushups"]
-		# Load total pushups
-		GlobalVariables.total_pushups_today = saved_data_dict["calendar"][current_year][current_month][current_day]["total_pushups_today"]
-		# Load total sessions
-		GlobalVariables.total_pushups_sessions = int(saved_data_dict["calendar"][current_year][current_month][current_day]["sessions"].size())
-
-	# Add dates to calendar dictionary
-	calendar_dict["calendar"] = years_dict
-	
-	# Save calendar
-	GlobalVariables.save_data_dict = calendar_dict
-	
-	create_log("Save data dictionary created from existing data successfully.")
 
 
 ## Return an error message as [String] based on [param file_error] value.
@@ -287,7 +167,7 @@ func get_file_error_message(file_error: Error) -> String:
 ##
 ## [br]
 ##
-## File path: [constant SaveSystem.SAVE_GAME_PATH] [br]
+## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
 ##
 ## [br]
 ##
@@ -305,29 +185,38 @@ func save_data() -> void:
 		create_log("Error opening save file. " + error_text)
 		return
 	
-	# Get datetime as dictionary from system
+	# Get datetime dictionary from system
 	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
-	# Get current year
-	var year: int = datetime_dict["year"]
+	# Get current year number
+	var current_year: int = datetime_dict["year"]
 	# Get current month number
-	var month: int = datetime_dict["month"]
+	var current_month: int = datetime_dict["month"]
 	# Get current day number
-	var day: int = datetime_dict["day"]
+	var current_day: int = datetime_dict["day"]
 	# Get current hour
-	var hour: int = datetime_dict["hour"]
+	var current_hour: int = datetime_dict["hour"]
 	# Get current minut
-	var minute: int = datetime_dict["minute"]
+	var current_minute: int = datetime_dict["minute"]
 	# Get current second
-	var second: int = datetime_dict["second"]
+	var current_second: int = datetime_dict["second"]
 	
+	#region: Save to settings dictionary	
 	# Save daily pushups goal
-	GlobalVariables.save_data_dict["calendar"][year][month][day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
+	GlobalVariables.save_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
 	# Save pushups per session
-	GlobalVariables.save_data_dict["calendar"][year][month][day]["pushups_per_session"] = GlobalVariables.pushups_per_session
+	GlobalVariables.save_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
+	#endregion
+	
+	#region: Save to calendar dictionary
+	# Save daily pushups goal
+	GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
+	# Save pushups per session
+	GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["pushups_per_session"] = GlobalVariables.pushups_per_session
 	# Save remaining pushups
-	GlobalVariables.save_data_dict["calendar"][year][month][day]["remaining_pushups"] = GlobalVariables.remaining_pushups
+	GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["remaining_pushups"] = GlobalVariables.remaining_pushups
 	# Save total pushups
-	GlobalVariables.save_data_dict["calendar"][year][month][day]["total_pushups_today"] = GlobalVariables.total_pushups_today
+	GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["total_pushups_today"] = GlobalVariables.total_pushups_today
+	#endregion
 	
 	# Check if any sessions
 	if GlobalVariables.total_pushups_sessions > 0:
@@ -337,32 +226,164 @@ func save_data() -> void:
 		var current_session: String = "session_" + str(current_session_num)
 		
 		# Save current session
-		GlobalVariables.save_data_dict["calendar"][year][month][day]["sessions"][current_session] = {}
+		GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session] = {}
 		# Save pushups in session
-		GlobalVariables.save_data_dict["calendar"][year][month][day]["sessions"][current_session]["pushups"] = GlobalVariables.pushups_per_session
+		GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session]["pushups"] = GlobalVariables.pushups_per_session
 		
 		# Create timestamp
-		var timestamp: String = "%s:%s:%s" % [hour, minute, second]
+		var timestamp: String = "%s:%s:%s" % [current_hour, current_minute, current_second]
 		# Save timestamp for session
-		GlobalVariables.save_data_dict["calendar"][year][month][day]["sessions"][current_session]["time"] = timestamp
+		GlobalVariables.save_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session]["time"] = timestamp
 	
 	create_log("Converting saving data to JSON.")
 	# Convert save data dictionary to JSON
 	var json_string = JSON.stringify(GlobalVariables.save_data_dict, "\t")
 	
 	create_log("Writing saving data to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
-	# Store the save data dictionary as a new line in the save file.
+	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
 	
 	create_log("Saved data to save file successfully.")
 
 
-## Load progression data from JSON file as [Dictionary] and pass as argument to  
-## [method SaveSystem.create_save_data_dict_from_saved_data]. [br]
+## Load saved user settings from save data [param saved_settings_dict].
+func load_settings(saved_settings_dict: Dictionary) -> void:
+	# Load daily pushups goal
+	GlobalVariables.daily_pushups_goal = int(saved_settings_dict["daily_pushups_goal"])
+	# Load pushups per session
+	GlobalVariables.pushups_per_session = int(saved_settings_dict["pushups_per_session"])
+
+
+## Load current day's data from save data [param saved_current_day_dict].
+func load_data_for_current_day(saved_current_day_dict) -> void:	
+	# Load remaining pushups
+	GlobalVariables.remaining_pushups = saved_current_day_dict["remaining_pushups"]
+	# Load total pushups
+	GlobalVariables.total_pushups_today = saved_current_day_dict["total_pushups_today"]
+	# Load total sessions
+	GlobalVariables.total_pushups_sessions = int(saved_current_day_dict["sessions"].size())
+
+
+## Load save data (calendar) dictionary [param saved_years_dict] and save it to
+## [member GlobalVariables.save_data_dict]. [br]
+##
+## [br]
+##
+## See [method SaveSystem.load_data] for more details.
+func load_save_data_dict(saved_years_dict: Dictionary) -> void:
+	create_log("Creating save data dictionary from existing saved data.")
+	
+	# Get datetime dictionary from system
+	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
+	# Get current year number
+	var current_year: int = datetime_dict["year"]
+	# Get current month number
+	var current_month: int = datetime_dict["month"]
+	# Get current day number
+	var current_day: int = datetime_dict["day"]
+	
+	# Create dictionary for years
+	var years_dict: Dictionary = {}
+	# Create dictionary for months
+	var months_dict: Dictionary = {}
+	# Create dictionary for days
+	var days_dict: Dictionary = {}
+	
+	# Create new dictionary for each year
+	for year in saved_years_dict:
+		years_dict[year] = {}
+		
+		# Create new dictionary for each month
+		for month in saved_years_dict[year]:
+			years_dict[year][month] = {}
+			
+			# Create new dictionary for each day
+			for day in saved_years_dict[year][month]:
+				years_dict[year][month][day] = {}
+				
+				# Get daily goal from saved dictionary
+				var daily_goal: int = saved_years_dict[year][month][day]["daily_pushups_goal"]
+				# Save daily goal to new dictionary
+				years_dict[year][month][day]["daily_pushups_goal"] = daily_goal					
+				
+				# Get pushups per session
+				var pushups_per_session: int = saved_years_dict[year][month][day]["pushups_per_session"]
+				# Save pushups per session
+				years_dict[year][month][day]["pushups_per_session"] = pushups_per_session	
+				
+				# Get remaining pushups
+				var remaining_pushups: int = saved_years_dict[year][month][day]["remaining_pushups"]
+				# Save remaining pushups
+				years_dict[year][month][day]["remaining_pushups"] = remaining_pushups
+				
+				# Get total pushups
+				var total_pushups_today: int = saved_years_dict[year][month][day]["total_pushups_today"]
+				# Save total pushups
+				years_dict[year][month][day]["total_pushups_today"] = total_pushups_today
+				
+				# Create sessions dictionary
+				var sessions_dict: Dictionary = {}
+				# Loop trough each session
+				for session in saved_years_dict[year][month][day]["sessions"]:
+					# Create single session dictionary
+					sessions_dict[session] = {}
+					
+					# Get pushups in session
+					var pushups: int = saved_years_dict[year][month][day]["sessions"][session]["pushups"]
+					# Save pushups
+					sessions_dict[session]["pushups"] = pushups
+					
+					# Get timestamp in session
+					var time: String = saved_years_dict[year][month][day]["sessions"][session]["time"]
+					# Save timestamp
+					sessions_dict[session]["time"] = time
+				
+				# Add sessions dictionary to calendar dictionary
+				years_dict[year][month][day]["sessions"] = sessions_dict
+	
+	# Create dictionary if none exist for current year
+	if not saved_years_dict.has(current_year):
+		# Create dictionary for current year
+		years_dict[current_year] = {}
+		# Create dictionary for current month
+		years_dict[current_year][current_month] = {}
+		# Create dictionary for current day
+		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+		
+	# Create dictionary if none exist for current month
+	elif not saved_years_dict[current_year].has(current_month):
+		# Create dictionary for current month
+		years_dict[current_year][current_month] = {}
+		# Create dictionary for current day
+		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+	
+	# Create dictionary if none exist for current day	
+	elif not saved_years_dict[current_year][current_month].has(current_day):
+		# Create dictionary for current day
+		years_dict[current_year][current_month][current_day] = {}
+		# Create dictionary for the current day's data.
+		years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+		
+	# Load saved data, if dictionary for current date exists
+	else:
+		# Load data for current day
+		load_data_for_current_day(years_dict[current_year][current_month][current_day])
+	
+	# Save calendar dictionary
+	GlobalVariables.save_data_dict["calendar"] = years_dict
+	
+	create_log("Save data dictionary created from existing data successfully.")
+
+
+## Load save data from save file and save as [Dictionary].
 ##
 ## [br]
 ## 
-## File path: [constant SaveSystem.SAVE_GAME_PATH] [br]
+## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
 ##
 ## [br]
 ##
@@ -378,11 +399,11 @@ func load_data() -> void:
 		# Create new save data dictionary
 		create_save_data_dict()
 		
-		# Create save file
-		var save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
+		# Create new save file
+		var new_save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
 		
 		# Check for file errors
-		if save_file == null:
+		if new_save_file == null:
 			# Get error text
 			var error_text: String = get_file_error_message(FileAccess.get_open_error())
 			create_log("Error creating new save file. " + error_text)
@@ -394,10 +415,10 @@ func load_data() -> void:
 		
 		create_log("Writing save data dictionary to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
 		# Store the save data dictionary as a new line in the save file.
-		save_file.store_line(json_string)
+		new_save_file.store_line(json_string)
 		
 		# File saved successfully
-		create_log("New save file saved successfully.")
+		create_log("New save file created. Saved successfully.")
 		return
 	
 	# Load save file
@@ -414,11 +435,11 @@ func load_data() -> void:
 	var json = JSON.new()
 	
 	create_log("Receiving data from save file.")
-	# Get JSON
+	# Get JSON text from save file
 	var json_string = save_file.get_as_text()
 	
 	create_log("Converting data from save file.")
-	# Parse (convert) JSON
+	# Parse (convert) JSON text
 	var save_file_data = json.parse_string(json_string)
 	
 	# If parse (convert) error occurs
@@ -430,15 +451,18 @@ func load_data() -> void:
 		create_log("Error converting data to save file. " + error_message)
 		return
 	
-	# Check if save data is dictionary
+	# If save data is dictionary, create copy 
 	if save_file_data is Dictionary:
-		# Create calendar as dictionary (Some keys must be integer value)
-		var calendar_dict: Dictionary = {"calendar" = {}}
-		# Years dictionary
+		# Get user settings dictionary
+		var settings_dict: Dictionary = save_file_data["settings"]
+		# Load settings
+		load_settings(settings_dict)
+		
+		# Create new years dictionary
 		var years_dict: Dictionary = {}
-		# Months dictionary
+		# Create new months dictionary
 		var months_dict: Dictionary = {}
-		# Days dictionary
+		# Create new days dictionary
 		var days_dict: Dictionary = {}
 		
 		# Create new dictionary for each year.
@@ -453,9 +477,9 @@ func load_data() -> void:
 				for day in save_file_data["calendar"][year][month]:
 					years_dict[int(year)][int(month)][int(day)] = {}
 					
-					# Get daily goal
+					# Get daily goal from saved data
 					var daily_goal: int = int(save_file_data["calendar"][year][month][day]["daily_pushups_goal"])
-					# Save daily goal
+					# Save daily goal to new calendar dictionary
 					years_dict[int(year)][int(month)][int(day)]["daily_pushups_goal"] = daily_goal
 					
 					# Get pushups per session
@@ -492,13 +516,12 @@ func load_data() -> void:
 						
 					# Add sessions dictionary to calendar
 					years_dict[int(year)][int(month)][int(day)]["sessions"] = sessions_dict
-							
-		# Add dates to calendar dictionary
-		calendar_dict["calendar"] = years_dict
 		
 		create_log("Loaded data from save file successfully.")
-		# Create save dictionary from saved calendar
-		create_save_data_dict_from_saved_data(calendar_dict)
+		# Load save data dictionary
+		load_save_data_dict(years_dict)
+		
+		print(years_dict)
 
 
 ## Reset all progression data.
