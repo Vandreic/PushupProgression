@@ -37,7 +37,7 @@
 ##
 ## [codeblock]
 ## save_data_dict: {
-##     "user_settings": {
+##     "settings": {
 ##         "daily_pushups_goal": 100,
 ##         "pushups_per_session": 10
 ##     },
@@ -70,10 +70,10 @@
 
 extends Node
 
-## Constant: Main menu scene file path.
+## Main menu scene file path.
 const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 
-## Constant: Logging menu scene file path.
+## Logging menu scene file path.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
 
 ## App running flag [bool].
@@ -95,7 +95,7 @@ var total_pushups_sessions: int = 0
 ## Remaining pushup to reach daily goal.
 var remaining_pushups: int = 0
 
-## Save data [Dictionary] to store all progression data.
+## Save data [Dictionary] to store settings and progression data.
 var save_data_dict: Dictionary = {
 	# Stores user settings
 	"settings": {

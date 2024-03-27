@@ -4,7 +4,7 @@
 
 An app for tracking pushup progress and reaching daily goals. Designed for smartphones.
 
-Created with [Godot Game Engine [4.3.dev4]](https://godotengine.org/).
+Created with [Godot Game Engine [4.3.dev5]](https://godotengine.org/).
 
 <br>
 
@@ -15,7 +15,7 @@ Created with [Godot Game Engine [4.3.dev4]](https://godotengine.org/).
 * ~~Provide reset options for saved progression~~
 * ~~Custom daily goals & pushups per session option~~
 * Visual theme update
-* Integrate logging system for saving and loading processes
+* ~~Integrate logging system for saving and loading processes~~
 * Add notification for saved progression status
 * Show previous progression
 
