@@ -57,44 +57,10 @@ func create_log(log_message: String) -> void:
 	# Create timestamp
 	var timestamp: String = "[%s:%s:%s] " % [hour, minute, second]
 
-	# Cretae full log message
+	# Create full log message
 	var full_log_message: String = timestamp + log_message
 	# Add to logs array
 	GlobalVariables.logs_array.append(full_log_message)
-
-
-## Create save file. [br]
-##
-## [br]
-##
-## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
-func create_save_file() -> void:
-	create_log("No existing save file. \
-	Creating new save file, " + SAVE_FILE + ", at " + SAVE_GAME_PATH)
-	
-	# Create new save data dictionary
-	create_save_data_dict()
-	
-	# Create new save file
-	var new_save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
-	
-	# Check for file errors
-	if new_save_file == null:
-		# Get error text
-		var error_text: String = get_file_error_message(FileAccess.get_open_error())
-		create_log("Error creating new save file. " + error_text)
-		return
-	
-	create_log("Converting data to JSON.")
-	# Convert save data dictionary to JSON
-	var json_string = JSON.stringify(GlobalVariables.save_data_dict, "\t")
-	
-	create_log("Writing data to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
-	# Store the save data dictionary as a new line in the save file.
-	new_save_file.store_line(json_string)
-	
-	# File saved successfully
-	create_log("New save file created and data saved successfully.")
 
 
 ## Create [Dictionary] for the current day's data.
@@ -142,13 +108,56 @@ func create_save_data_dict() -> void:
 	
 	# Save calendar dictionary to save data dictionary
 	GlobalVariables.save_data_dict["calendar"] = calendar_dict
-	
 	# Save daily pushups goal
 	GlobalVariables.save_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
 	# Save pushups per session
 	GlobalVariables.save_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
 	
 	create_log("Data dictionary created successfully.")
+
+
+## Create save file. [br]
+##
+## [br]
+##
+## Save file path: [constant SaveSystem.SAVE_GAME_PATH]
+func create_save_file() -> void:
+	# Create log
+	create_log("No existing save file. \
+	Creating new save file, " + SAVE_FILE + ", at " + SAVE_GAME_PATH)
+	# Create notification with extended duration
+	GlobalVariables.create_notification("No existing save file...", true)
+	
+	# Create new save data dictionary
+	create_save_data_dict()
+	
+	# Create new save file
+	var new_save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
+	
+	# Check for file errors
+	if new_save_file == null:
+		# Get error text
+		var error_text: String = get_file_error_message(FileAccess.get_open_error())
+		# Create log
+		create_log("Error creating new save file. " + error_text)
+		# Create notification text
+		var notification_text: String = "Error creating new save file\n" + "See logs for more details."
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
+		return
+	
+	create_log("Converting data to JSON.")
+	# Convert save data dictionary to JSON
+	var json_string = JSON.stringify(GlobalVariables.save_data_dict, "\t")
+	
+	create_log("Writing data to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
+	# Store the save data dictionary as a new line in the save file.
+	new_save_file.store_line(json_string)
+	
+	# Create log
+	create_log("New save file created and data saved successfully.")
+	# Create notification with extended duration
+	GlobalVariables.create_notification("New save file created successfully!", true)
 
 
 ## Return an error message as [String] based on [param file_error] value.
@@ -215,7 +224,12 @@ func save_data() -> void:
 	if save_file == null:
 		# Get error text
 		var error_text: String = get_file_error_message(FileAccess.get_open_error())
+		# Create log
 		create_log("Error opening save file. " + error_text)
+		# Create notification text
+		var notification_text: String = "Error opening save file\n" + "See logs for more details."
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
 		return
 	
 	# Get datetime dictionary from system
@@ -276,7 +290,10 @@ func save_data() -> void:
 	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
 	
+	# Create log
 	create_log("Data saved successfully.")
+	# Create notification
+	GlobalVariables.create_notification("Saved successfully!")
 
 
 ## Load settings. [br][br]
@@ -324,7 +341,12 @@ func load_data() -> void:
 	if save_file == null:
 		# Get error text
 		var error_text: String = get_file_error_message(FileAccess.get_open_error())
+		# Create log
 		create_log("Error opening save file. " + error_text)
+		# Create notification text
+		var notification_text: String = "Error opening save file.\n" + "See logs for more details."
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
 		return
 
 	# Create JSON helper
@@ -336,15 +358,19 @@ func load_data() -> void:
 	
 	create_log("Converting data from save file.")
 	# Parse (convert) JSON text
-	var save_file_data = json.parse_string(json_string)
+	var save_file_data = JSON.parse_string(json_string)
 	
 	# If parse (convert) error occurs
 	if save_file_data == null:
 		# Create error message
 		var error_message: String = "JSON Parse Error: " + json.get_error_message()\
 		+ " in " + json_string + " at line " + json.get_error_line()
-		
+		# Create log
 		create_log("Error converting data from save file. " + error_message)
+		# Create notification text
+		var notification_text: String = "Error converting data from save file\n" + "See logs for more details."
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
 		return
 	
 	# If save data is dictionary, create copy 
@@ -354,12 +380,8 @@ func load_data() -> void:
 		# Load settings
 		load_settings(settings_dict)
 		
-		# Create new years dictionary
+		# Create years dictionary
 		var years_dict: Dictionary = {}
-		# Create new months dictionary
-		var months_dict: Dictionary = {}
-		# Create new days dictionary
-		var days_dict: Dictionary = {}
 		
 		# Create new dictionary for each year.
 		for year in save_file_data["calendar"]:
@@ -455,7 +477,11 @@ func load_data() -> void:
 		
 		# Save created dictionary to save_data_dict
 		GlobalVariables.save_data_dict["calendar"] = years_dict
+		
+		# Create log
 		create_log("Loaded data from save file successfully.")
+		# Create notification
+		GlobalVariables.create_notification("Loaded successfully!")
 
 
 ## Reset global values. [br]
@@ -531,5 +557,7 @@ func reset_data(reset_option: String) -> void:
 		_:
 			create_log("Unsupported reset option: " + reset_option)
 
+	# Create notification
+	GlobalVariables.create_notification("Reset successfully!")
 	# Save data
 	save_data()

@@ -36,32 +36,64 @@ func close_menu() -> void:
 
 ## On [member SettingsMenuManager.close_menu_button] pressed.
 func _on_close_menu_button_pressed() -> void:
+	#region: Daily goal input
 	# Search daily goal input text for digits
 	var daily_goal_input_text = regex.search(daily_goal_input.text)
+	# Update daily goal, if digits
 	if daily_goal_input_text:
 		GlobalVariables.daily_pushups_goal = int(daily_goal_input.text)
-		print("Daily goal updated to: %s" % daily_goal_input.text)
+		# Create log message
+		var log_message: String = "Daily goal updated to: %s" % daily_goal_input.text
+		# Create log
+		GlobalVariables.create_log(log_message)
+		# Create notification with extended duration
+		GlobalVariables.create_notification(log_message, true)
+	# If no input, pass
 	elif daily_goal_input.text.is_empty():
-		print("No changes to daily goal were made.")
+		pass
+	# Else, create notification
 	else:
-		print("Invalid value for daily goal: %s. Only digits are allowed."\
-		% str(daily_goal_input.text))
+		# Create notification text
+		var notification_text: String = "Invalid value for daily goal: %s\n\
+		Only digits allowed." % str(daily_goal_input.text)
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
+	#endregion
 	
+	#region: Pushups per session input
 	# Search pushups per session input text for digits
 	var pushups_per_session_input_text = regex.search(pushups_per_session_input.text)
+	# Update pushups per session, if digits
 	if pushups_per_session_input_text:
 		GlobalVariables.pushups_per_session = int(pushups_per_session_input.text)
-		print("Pushups per session updated to: %s" % pushups_per_session_input.text)
+		# Create log message
+		var log_message: String = "Pushups per session updated to: %s" % pushups_per_session_input.text
+		# Create log
+		GlobalVariables.create_log(log_message)
+		# Create notification with extended duration
+		GlobalVariables.create_notification(log_message, true)
+	# If no input, pass
 	elif pushups_per_session_input.text.is_empty():
-		print("No changes to pushups per session were made.")
+		pass
+	# Else, create notification
 	else:
-		print("Invalid value for pushups per session: %s. Only digits allowed."\
-		% str(pushups_per_session_input.text))
+		# Create notification text
+		var notification_text: String = "Invalid value for pushups per session: %s\n\
+		Only digits allowed." % str(pushups_per_session_input.text)
+		# Create notification with extended duration
+		GlobalVariables.create_notification(notification_text, true)
+	#endregion
 	
-	# Save progression data
-	get_tree().call_group("save_system", "save_data")
-	# Update UI
-	get_tree().call_group("ui_manager", "update_ui")
+	# If no input, create notification with extended duration
+	if daily_goal_input.text.is_empty() and pushups_per_session_input.text.is_empty():
+		GlobalVariables.create_notification("No changes to settings were made.", true)
+	
+	# If valid input, save data and update UI
+	elif daily_goal_input_text or pushups_per_session_input_text:
+		# Save data
+		GlobalVariables.save_data()
+		# Update UI
+		GlobalVariables.update_ui()
 	
 	# Close settings menu
 	close_menu()

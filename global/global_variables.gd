@@ -76,7 +76,7 @@ const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 ## Logging menu scene file path.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
 
-## App running flag [bool].
+## App running flag.
 var app_running: bool = false
 
 
@@ -86,13 +86,13 @@ var daily_pushups_goal: int = 100
 ## Number of pushups in each session.
 var pushups_per_session: int = 10
 
-## Total pushups.
+## Total pushups today.
 var total_pushups_today: int = 0
 
-## Total pushups sessions.
+## Total pushups sessions today.
 var total_pushups_sessions: int = 0
 
-## Remaining pushup to reach daily goal.
+## Remaining pushups to reach daily goal.
 var remaining_pushups: int = 0
 
 ## Save data [Dictionary] to store settings and progression data.
@@ -106,5 +106,52 @@ var save_data_dict: Dictionary = {
 	"calendar": {}
 }
 
-## Logs [Array].
+## Stores log messages.
 var logs_array: Array = []
+
+
+## Create log message. [br]
+##
+## [br]
+##
+## See [method SaveSystem.create_log] for more details.
+func create_log(log_message: String) -> void:
+	# Create log
+	get_tree().call_group("save_system", "create_log", log_message)
+
+
+## Create notification. [br]
+##
+## [br]
+##
+## See [method NotificationSystem.create_notification] for more details.
+func create_notification(notification_text: String, extended_duration: bool = false) -> void:
+	# Create notification
+	get_tree().call_group("notification_system", "create_notification", notification_text, extended_duration)
+
+
+## Update UI. [br]
+##
+## [br]
+##
+## See [method UIManager.update_ui] for more details.
+func update_ui() -> void:
+	get_tree().call_group("ui_manager", "update_ui")
+
+
+## Save data. [br]
+##
+## [br]
+##
+## See [method SaveSystem.save_data] for more details.
+func save_data() -> void:
+	get_tree().call_group("save_system", "save_data")
+
+
+## Load data. [br]
+##
+## [br]
+##
+## See [method SaveSystem.load_data] for more details.
+func load_data() -> void:
+	get_tree().call_group("save_system", "load_data")

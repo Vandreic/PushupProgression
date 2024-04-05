@@ -1,6 +1,6 @@
 ## Logging Menu Controller.
 ## 
-## Creates logs and controls the behavior of logging menu. [br]
+## Creates log messages and controls the behavior of logging menu. [br]
 ##
 ## [br]
 ##
@@ -48,9 +48,6 @@ func create_logs_ui() -> void:
 	# Delete base log node
 	logs_container.remove_child(base_log_label)
 	base_log_label.queue_free()
-	
-	print("Ready")
-	print(GlobalVariables.logs_array)
 	
 
 # Called when the node enters the scene tree for the first time.

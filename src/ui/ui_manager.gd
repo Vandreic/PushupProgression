@@ -176,9 +176,9 @@ func _on_add_pushups_button_pressed() -> void:
 	# Update total sessions
 	GlobalVariables.total_pushups_sessions += 1
 	# Create log message
-	get_tree().call_group("save_system", "create_log", "Added new pushup session.")
+	GlobalVariables.create_log("Added new pushup session.")
 	# Save data
-	get_tree().call_group("save_system", "save_data")
+	GlobalVariables.save_data()
 	# Update UI
 	update_ui()
 

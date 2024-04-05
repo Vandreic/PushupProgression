@@ -1,4 +1,4 @@
-## Main Scene Script.
+## Main Scene.
 ## 
 ## Path: [code]res://src/main/main.gd[/code]
 
@@ -14,24 +14,35 @@ func _ready():
 	
 	# Load save file if game is not running
 	if GlobalVariables.app_running == false:
-		get_tree().call_group("save_system", "load_data")
+		GlobalVariables.load_data()
 	
 	# Update UI
-	get_tree().call_group("ui_manager", "update_ui")
-	
+	GlobalVariables.update_ui()
+
 
 ## Change window size to 480x800 if screen height is less than 1280 pixels 
-## (Used for 1920x1080 monitors) [br]
-## Position window in middle of screen after resizing. [br][br]
+## (Used for 1920x1080 monitors). [br]
+## Position window in center of screen after resizing. [br]
+##
+## [br]
+##
 ## [b]Note:[/b] Used for PC.
 func change_window_size():
-	var current_screen_size: Vector2i = DisplayServer.screen_get_size(0)
-	var window_size_hdpi = Vector2i(480, 800)
+	# Get primary screen id/index
+	var primary_monitor_id: int = DisplayServer.get_primary_screen()
+	# Get primary screen size
+	var screen_size: Vector2i = DisplayServer.screen_get_size(primary_monitor_id)
+	# Define desired window size
+	var window_size: Vector2i = Vector2i(480, 800)
 	
-	# Change resolution if necessary
-	if current_screen_size.y < 1280:
-		DisplayServer.window_set_size(window_size_hdpi)
-		# Position window in center of screen
-		var new_x_pos = (current_screen_size.x * 1.5) - (DisplayServer.window_get_size().x / 2)
-		var new_y_pos = (current_screen_size.y / 2) - (DisplayServer.window_get_size().y / 2)
-		DisplayServer.window_set_position(Vector2i(new_x_pos, new_y_pos))
+	# Change resolution if primary screen height is less than 1280 pixels
+	if screen_size.y < 1280:
+		# Set desired window size
+		DisplayServer.window_set_size(window_size)
+		# Calculate window center position
+		#var center_x: int = int((screen_size.x - window_size.x) / 2.0)
+		var center_x: int = int((screen_size.x - window_size.x) * 1.833)
+		var center_y: int = int((screen_size.y - window_size.y) / 2.0)
+		
+		# Position window in center
+		DisplayServer.window_set_position(Vector2i(center_x, center_y))
