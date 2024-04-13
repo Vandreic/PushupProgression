@@ -1,0 +1,26 @@
+🌟 <b>Pushup Progression:</b> A straightforward app for tracking your pushups and hitting daily goals. 🌟
+
+<br>
+<br>
+<br>
+
+✅ <b>Track Pushups Progress:</b> Easily log and visualize your daily pushup counts.
+
+<br>
+<br>
+
+🎯 <b>Set & Reach Daily Goals:</b> Set personal targets and reach daily goals.
+
+<br>
+<br>
+
+🚫 <b>No Ads, No IAP:</b> Just your pushups and you. No ads or in-app purchases.
+<br>
+<br>
+
+🌐 <b>Open Source:</b> Source code available on Github.
+
+<br>
+<br>
+
+🎮 <b>Made with Godot:</b> Developed using the Godot Game Engine.
