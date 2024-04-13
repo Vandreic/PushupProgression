@@ -30,13 +30,11 @@ const SAVE_FILE: String = "savedata.save"
 
 ## Create log message.
 func create_log(log_message: String) -> void:
-	# Get time from system as dictionary
-	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
-	# Get current hour
+	# Get time dictionary from system
+	var datetime_dict: Dictionary = Time.get_time_dict_from_system()
+	# Get current time
 	var hour: String = str(datetime_dict["hour"])
-	# Get current minut
 	var minute: String = str(datetime_dict["minute"])
-	# Get current second
 	var second: String = str(datetime_dict["second"])
 	
 	# Convert hour to "00" format
@@ -56,7 +54,6 @@ func create_log(log_message: String) -> void:
 
 	# Create timestamp
 	var timestamp: String = "[%s:%s:%s] " % [hour, minute, second]
-
 	# Create full log message
 	var full_log_message: String = timestamp + log_message
 	# Add to logs array
@@ -363,8 +360,8 @@ func load_data() -> void:
 	# If parse (convert) error occurs
 	if save_file_data == null:
 		# Create error message
-		var error_message: String = "JSON Parse Error: " + json.get_error_message()\
-		+ " in " + json_string + " at line " + json.get_error_line()
+		var error_message: String = "JSON Parse Error: " + str(json.get_error_message())\
+		+ " in " + str(json_string) + " at line " + str(json.get_error_line())
 		# Create log
 		create_log("Error converting data from save file. " + error_message)
 		# Create notification text
