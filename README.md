@@ -86,4 +86,4 @@ PushupProgression  hasn't been compiled for macOS, iOS, or Linux, but you can co
 </details>
 
 ## License
-PushupProgression is released under the [MIT License](LICENSE.md).
+PushupProgression is released under the [GNU General Public License v3.0](LICENSE.md).
