@@ -1,8 +1,8 @@
-# ***PushupProgression***
+# ***Push-Up Progression***
 ![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-3776AB.svg?style=plastic&logo=godot-engine&logoColor=white)
 ![Version](https://img.shields.io/badge/version-1.3.0-00BB1A.svg?style=plastic)
 
-An app for tracking pushup progress and reaching daily goals. Designed for smartphones.
+An app for tracking push-up progress and reaching daily goals. Designed for smartphones.
 
 Created with [Godot Game Engine [4.3.dev5]](https://godotengine.org/).
 
@@ -24,7 +24,7 @@ Created with [Godot Game Engine [4.3.dev5]](https://godotengine.org/).
 <details>
 <summary>Android</summary>
 
-You can install PushupProgression by using [Obtainium](https://github.com/ImranR98/Obtainium/) for automatic updates or manually if you prefer direct downloads.
+You can install Push-Up Progression by using [Obtainium](https://github.com/ImranR98/Obtainium/) for automatic updates or manually if you prefer direct downloads.
 
 <details>
 <summary>Install with Obtainium</summary>
@@ -42,12 +42,12 @@ You can install PushupProgression by using [Obtainium](https://github.com/ImranR
 When new updates are released, PushupProgression can be updated via Obtainium.
 
 1. Open Obtainium.
-2. To update PushupProgression:
+2. To update Push-Up Progression:
    * Tap the "update icon" (phone with downward arrow) next to `PushupProgression by Vandreic`.
    <br>***or***<br>
    - Select `PushupProgression` from the app list and tap `Update` from the bottom bar.
 
-**Note:** Obtainium supports automatic updates, allowing apps to be updated seamlessly in the background. This feature is enabled by default and ensures that PushupProgression stays up-to-date. For more details, visit the [Obtainium wiki](https://github.com/ImranR98/Obtainium/wiki#background-updates).
+**Note:** Obtainium supports automatic updates, allowing apps to be updated seamlessly in the background. This feature is enabled by default and ensures that Push-Up Progression stays up-to-date. For more details, visit the [Obtainium wiki](https://github.com/ImranR98/Obtainium/wiki#background-updates).
 
 </details>
 </details>
@@ -63,7 +63,7 @@ When new updates are released, PushupProgression can be updated via Obtainium.
 
 When new updates are released, you need to manually [download](https://github.com/Vandreic/PushupProgression/releases/latest) the latest release and install it over the existing installation. 
 <br><br>
-**Note:** If PushupProgression is installed via Obtainium, updates can be downloaded and installed automatically.
+**Note:** If Push-Up Progression is installed via Obtainium, updates can be downloaded and installed automatically.
 
 </details>
 </details>
@@ -81,9 +81,9 @@ When new updates are released, you need to manually [download](https://github.co
 <details>
 <summary>macOS / iOS / Linux</summary>
 
-PushupProgression  hasn't been compiled for macOS, iOS, or Linux, but you can compile the source code yourself if desired.
+Push-Up Progression hasn't been compiled for macOS, iOS, or Linux, but you can compile the source code yourself if desired.
 
 </details>
 
 ## License
-PushupProgression is released under the [GNU General Public License v3.0](LICENSE.md).
+Push-Up Progression is released under the [GNU General Public License v3.0](LICENSE.md).
