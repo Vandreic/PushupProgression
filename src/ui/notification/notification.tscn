@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://fjatxhusdrmj"]
+[gd_scene load_steps=5 format=3 uid="uid://fjatxhusdrmj"]
 
 [ext_resource type="Script" path="res://src/ui/notification/notification_manager.gd" id="1_bopgf"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_4ve1q"]
 
 [sub_resource type="Animation" id="Animation_7vkrs"]
 resource_name = "show_notification"
@@ -43,26 +44,27 @@ _data = {
 [node name="Notification" type="CanvasLayer"]
 script = ExtResource("1_bopgf")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="BackgroundPanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 anchors_preset = -1
-anchor_left = 0.4
+anchor_left = 0.3
 anchor_top = 0.94
-anchor_right = 0.6
+anchor_right = 0.7
 anchor_bottom = 0.975
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_4ve1q")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="BackgroundPanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 7
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 7
 theme_override_constants/margin_bottom = 5
 
-[node name="NotificationLabel" type="Label" parent="PanelContainer/MarginContainer"]
+[node name="NotificationLabel" type="Label" parent="BackgroundPanelContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "Notification Text..."
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -25,7 +25,9 @@ func reset_progression(reset_option: String) -> void:
 ## Open settings menu button.
 func open_settings_menu() -> void:
 	# Instantiate reset options menu scene
-	var settings_menu: CanvasLayer = load("res://src/ui/options_menu/settings_menu/settings_menu.tscn").instantiate()
+	var settings_menu: CanvasLayer = load("res://src/ui/options_menu/settings_menu/settings_menu.tscn").instantiate()	
+	# Apply chosen UI theme
+	settings_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(settings_menu)
 
@@ -34,11 +36,12 @@ func open_settings_menu() -> void:
 func open_reset_options_menu() -> void:
 	# Instantiate reset options menu scene
 	var options_menu: CanvasLayer = load("res://src/ui/options_menu/reset_options_menu/reset_options_menu.tscn").instantiate()
+	# Apply chosen UI theme
+	options_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(options_menu)
 	# Connect signals, passing a reset option
 	options_menu.reset_current_day_button_pressed.connect(open_popup_confirm_box.bind("current_day"))
-	#options_menu.reset_current_week_button_pressed.connect(open_popup_confirm_box.bind("current_week"))
 	options_menu.reset_current_month_button_pressed.connect(open_popup_confirm_box.bind("current_month"))
 	options_menu.reset_current_year_button_pressed.connect(open_popup_confirm_box.bind("current_year"))
 	options_menu.reset_all_button_pressed.connect(open_popup_confirm_box.bind("all"))
@@ -48,6 +51,8 @@ func open_reset_options_menu() -> void:
 func open_popup_confirm_box(reset_option: String) -> void:
 	# Instantiate popup confirm box scene
 	var popup_box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+	# Apply chosen UI theme
+	popup_box.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(popup_box)
 	
@@ -76,6 +81,8 @@ func open_logging_menu() -> void:
 func _on_options_menu_button_pressed() -> void:
 	# Instantiate options menu scene
 	var options_menu: CanvasLayer = load("res://src/ui/options_menu/options_menu.tscn").instantiate()
+	# Apply chosen UI theme
+	options_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(options_menu)
 	# Connect to custom pressed button signals

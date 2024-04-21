@@ -16,6 +16,11 @@ func _ready():
 	if GlobalVariables.app_running == false:
 		GlobalVariables.load_data()
 	
+	# Set UI theme
+	GlobalVariables.chosen_ui_theme = GlobalVariables.LIGHT_UI_THEME
+	# Apply UI theme
+	GlobalVariables.apply_ui_theme(GlobalVariables.chosen_ui_theme)
+	
 	# Update UI
 	GlobalVariables.update_ui()
 

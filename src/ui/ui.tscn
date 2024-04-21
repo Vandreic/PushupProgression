@@ -1,10 +1,11 @@
-[gd_scene load_steps=10 format=3 uid="uid://bv2v88irqyogj"]
+[gd_scene load_steps=11 format=3 uid="uid://bv2v88irqyogj"]
 
 [ext_resource type="Script" path="res://src/ui/ui_manager.gd" id="1_8wh5j"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_7x34e"]
 [ext_resource type="Script" path="res://src/ui/current_progress_container_manager.gd" id="2_kyyc0"]
-[ext_resource type="Texture2D" uid="uid://d13gqxbmtf6rg" path="res://assets/progress _icon/progress_bar_under.png" id="2_miyvb"]
-[ext_resource type="Texture2D" uid="uid://be0a0aiqer2cv" path="res://assets/progress _icon/progress_bar_over.png" id="3_03rnj"]
-[ext_resource type="Texture2D" uid="uid://0eci0l65srde" path="res://assets/progress _icon/progress_bar_progress.png" id="4_hs708"]
+[ext_resource type="Texture2D" uid="uid://cdow0ukamhth6" path="res://assets/progress _icon/light_ui_theme/progress_bar_under.png" id="2_miyvb"]
+[ext_resource type="Texture2D" uid="uid://30jua0s37gt5" path="res://assets/progress _icon/light_ui_theme/progress_bar_over.png" id="3_03rnj"]
+[ext_resource type="Texture2D" uid="uid://gxdv06s4wfd7" path="res://assets/progress _icon/light_ui_theme/progress_bar_progress.png" id="4_hs708"]
 [ext_resource type="Texture2D" uid="uid://bqc88w0kgbwhk" path="res://assets/options_menu/options_menu_button_normal.png" id="5_5ag4w"]
 [ext_resource type="Script" path="res://src/ui/previous_progress_container_manager.gd" id="6_46bs1"]
 [ext_resource type="Texture2D" uid="uid://6eg6c7ec3dik" path="res://assets/options_menu/options_menu_button_pressed.png" id="6_y5tyq"]
@@ -15,15 +16,27 @@
 [node name="UIManager" type="Node" parent="." groups=["ui_manager"]]
 script = ExtResource("1_8wh5j")
 
-[node name="UIWindow" type="VBoxContainer" parent="."]
+[node name="BackgroundPanel" type="Panel" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_7x34e")
+
+[node name="UIWindow" type="VBoxContainer" parent="BackgroundPanel"]
+layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1
 anchor_top = 0.025
 anchor_right = 0.9
 anchor_bottom = 0.975
+offset_right = 1.71661e-05
+offset_bottom = -3.05176e-05
 theme_override_constants/separation = 40
 
-[node name="QuoteLabel" type="Label" parent="UIWindow"]
+[node name="QuoteLabel" type="Label" parent="BackgroundPanel/UIWindow"]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 50
@@ -31,32 +44,31 @@ text = "Consistency is key!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ProgressUIContainer" type="VBoxContainer" parent="UIWindow"]
+[node name="ProgressUIContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 60
 
-[node name="CurrentProgressContainer" type="VBoxContainer" parent="UIWindow/ProgressUIContainer"]
+[node name="CurrentProgressContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_stretch_ratio = 2.51
 theme_override_constants/separation = 40
 script = ExtResource("2_kyyc0")
 
-[node name="ProgressBarContainer" type="VBoxContainer" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer"]
+[node name="ProgressBarContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ProgressLabel" type="Label" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
+[node name="ProgressLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Today's progression: 0 pushups."
+text = "Today's progression: 0 push-ups."
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ProgressBar" type="TextureProgressBar" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
+[node name="ProgressBar" type="TextureProgressBar" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -66,7 +78,7 @@ texture_under = ExtResource("2_miyvb")
 texture_over = ExtResource("3_03rnj")
 texture_progress = ExtResource("4_hs708")
 
-[node name="ProgressValueLabel" type="Label" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressBar"]
+[node name="ProgressValueLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressBar"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -74,42 +86,38 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 30
 text = "0%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ProgressTextContainer" type="HBoxContainer" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
+[node name="ProgressTextContainer" type="HBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer"]
 layout_mode = 2
 
-[node name="DailyGoalLabel" type="Label" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer"]
+[node name="DailyGoalLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
-theme_override_font_sizes/font_size = 30
 text = "Goal: 100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RemainingPushupsLabel" type="Label" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer"]
+[node name="RemainingPushupsLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_font_sizes/font_size = 30
 text = "Remaining: 100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="AddPushupsButton" type="Button" parent="UIWindow/ProgressUIContainer/CurrentProgressContainer"]
+[node name="AddPushupsButton" type="Button" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 32
 text = "Add 10 pushups"
 
-[node name="PreviousProgressContainer" type="HBoxContainer" parent="UIWindow/ProgressUIContainer"]
+[node name="PreviousProgressContainer" type="HBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -117,28 +125,33 @@ theme_override_constants/separation = 40
 alignment = 1
 script = ExtResource("6_46bs1")
 
-[node name="BasePreviousProgressContainer" type="VBoxContainer" parent="UIWindow/ProgressUIContainer/PreviousProgressContainer"]
+[node name="BasePreviousProgressContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer/PreviousProgressContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ProgressBar" type="ProgressBar" parent="UIWindow/ProgressUIContainer/PreviousProgressContainer/BasePreviousProgressContainer"]
+[node name="ProgressBar" type="ProgressBar" parent="BackgroundPanel/UIWindow/ProgressUIContainer/PreviousProgressContainer/BasePreviousProgressContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 fill_mode = 3
 
-[node name="DateLabel" type="Label" parent="UIWindow/ProgressUIContainer/PreviousProgressContainer/BasePreviousProgressContainer"]
+[node name="DateLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/PreviousProgressContainer/BasePreviousProgressContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 text = "06/04-24"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="OptionsMenuButton" type="TextureButton" parent="."]
+[node name="OptionsMenuButton" type="TextureButton" parent="BackgroundPanel"]
+layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.9
 anchor_top = 0.95
 anchor_right = 0.975
 anchor_bottom = 0.99
+offset_left = -4.99998
+offset_top = -6.40001
+offset_right = 4.99998
+offset_bottom = 6.39996
 grow_horizontal = 2
 grow_vertical = 2
 texture_normal = ExtResource("5_5ag4w")
@@ -146,9 +159,10 @@ texture_pressed = ExtResource("6_y5tyq")
 stretch_mode = 5
 script = ExtResource("7_7g7aa")
 
-[node name="AppVersion" type="Label" parent="."]
+[node name="AppVersion" type="Label" parent="BackgroundPanel"]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0.117647)
+layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0

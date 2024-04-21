@@ -14,6 +14,9 @@ class_name SettingsMenuManager
 extends CanvasLayer
 
 
+## Background Panel node.
+@onready var background_panel: Panel = %BackgroundPanel
+
 ## Daily goal input field.
 @onready var daily_goal_input: LineEdit = %DailyGoalInput
 
@@ -67,7 +70,7 @@ func _on_close_menu_button_pressed() -> void:
 	if pushups_per_session_input_text:
 		GlobalVariables.pushups_per_session = int(pushups_per_session_input.text)
 		# Create log message
-		var log_message: String = "Pushups per session updated to: %s" % pushups_per_session_input.text
+		var log_message: String = "Push-ups per session updated to: %s" % pushups_per_session_input.text
 		# Create log
 		GlobalVariables.create_log(log_message)
 		# Create notification with extended duration
@@ -78,7 +81,7 @@ func _on_close_menu_button_pressed() -> void:
 	# Else, create notification
 	else:
 		# Create notification text
-		var notification_text: String = "Invalid value for pushups per session: %s\n\
+		var notification_text: String = "Invalid value for push-ups per session: %s\n\
 		Only digits allowed." % str(pushups_per_session_input.text)
 		# Create notification with extended duration
 		GlobalVariables.create_notification(notification_text, true)
@@ -107,7 +110,10 @@ func _on_daily_goal_input_text_changed(input_text: String) -> void:
 	if not _input_text:
 		daily_goal_input.add_theme_color_override("font_color", Color.RED)
 	else:
-		daily_goal_input.add_theme_color_override("font_color", Color.WHITE)
+		# Get chosen UI theme font color
+		var font_color: Color = background_panel.theme.get_color("label", "Label")
+		# Change label font color
+		daily_goal_input.add_theme_color_override("font_color", font_color)
 
 
 ## On [member SettingsMenuManager.pushups_per_session_input] text changed.
@@ -118,7 +124,10 @@ func _on_pushups_per_session_input_text_changed(input_text: String) -> void:
 	if not _input_text:
 		pushups_per_session_input.add_theme_color_override("font_color", Color.RED)
 	else:
-		pushups_per_session_input.add_theme_color_override("font_color", Color.WHITE)
+		# Get chosen UI theme font color
+		var font_color: Color = background_panel.theme.get_color("label", "Label")
+		# Change label font color
+		pushups_per_session_input.add_theme_color_override("font_color", font_color)
 
 
 # Called when the node enters the scene tree for the first time.

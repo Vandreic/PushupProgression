@@ -56,7 +56,7 @@ func update_progress_bar() -> void:
 ## Update total pushups text
 func update_total_pushups_text() -> void:
 	# Create progress text
-	var progress_text: String = "Total pushups today: " + str(GlobalVariables.total_pushups_today)
+	var progress_text: String = "Total push-ups today: " + str(GlobalVariables.total_pushups_today)
 	
 	# Check if progress bar reached 100%
 	if progress_bar.value >= 100:
@@ -84,7 +84,7 @@ func update_daily_goal_and_remaining_pushups_text() -> void:
 ## Update "add pushups" button text.
 func update_add_pushups_button_text() -> void:
 	# Update "add pushups" button text
-	add_pushups_button.text = "Add " + str(GlobalVariables.pushups_per_session) + " pushups"
+	add_pushups_button.text = "Add " + str(GlobalVariables.pushups_per_session) + " push-ups"
 
 
 ## Update UI elements.
@@ -113,7 +113,7 @@ func _on_add_pushups_button_pressed() -> void:
 	# Update total sessions
 	GlobalVariables.total_pushups_sessions += 1
 	# Create log message
-	GlobalVariables.create_log("Added new pushup session.")
+	GlobalVariables.create_log("Added new push-up session.")
 	# Save data
 	GlobalVariables.save_data()
 	# Update UI
