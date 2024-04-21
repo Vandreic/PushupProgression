@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://3lf5b3nw6mw2"]
+[gd_scene load_steps=3 format=3 uid="uid://3lf5b3nw6mw2"]
 
 [ext_resource type="Script" path="res://src/ui/options_menu/settings_menu/settings_menu_manager.gd" id="1_codi5"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_cnal0"]
 
 [node name="SettingsMenu" type="CanvasLayer"]
 script = ExtResource("1_codi5")
@@ -13,16 +14,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BoxWindow" type="ColorRect" parent="FullWindow"]
+[node name="BackgroundPanel" type="Panel" parent="FullWindow"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.185
 anchor_top = 0.3
 anchor_right = 0.815
-anchor_bottom = 0.7
-color = Color(0.219608, 0.219608, 0.219608, 1)
+anchor_bottom = 0.725
+theme = ExtResource("2_cnal0")
 
-[node name="TitleLabel" type="Label" parent="FullWindow/BoxWindow"]
+[node name="TitleLabel" type="Label" parent="FullWindow/BackgroundPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -32,66 +34,61 @@ text = "Settings"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SettingsContainer" type="VBoxContainer" parent="FullWindow/BoxWindow"]
+[node name="SettingsContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.025
-anchor_top = 0.3
+anchor_top = 0.26
 anchor_right = 0.975
-anchor_bottom = 0.9
+anchor_bottom = 0.85
+theme_override_constants/separation = 50
 
-[node name="DailyGoalContainer" type="VBoxContainer" parent="FullWindow/BoxWindow/SettingsContainer"]
+[node name="DailyGoalContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel/SettingsContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="DailyGoalLabel" type="Label" parent="FullWindow/BoxWindow/SettingsContainer/DailyGoalContainer"]
+[node name="DailyGoalLabel" type="Label" parent="FullWindow/BackgroundPanel/SettingsContainer/DailyGoalContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "Daily goal"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DailyGoalInput" type="LineEdit" parent="FullWindow/BoxWindow/SettingsContainer/DailyGoalContainer"]
+[node name="DailyGoalInput" type="LineEdit" parent="FullWindow/BackgroundPanel/SettingsContainer/DailyGoalContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 30
 placeholder_text = "Current: 100"
 alignment = 1
 clear_button_enabled = true
 
-[node name="PushupsPerSessionContainer" type="VBoxContainer" parent="FullWindow/BoxWindow/SettingsContainer"]
+[node name="PushupsPerSessionContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel/SettingsContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="PushupsPerSessionLabel" type="Label" parent="FullWindow/BoxWindow/SettingsContainer/PushupsPerSessionContainer"]
+[node name="PushupsPerSessionLabel" type="Label" parent="FullWindow/BackgroundPanel/SettingsContainer/PushupsPerSessionContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
 text = "Pushups per session"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PushupsPerSessionInput" type="LineEdit" parent="FullWindow/BoxWindow/SettingsContainer/PushupsPerSessionContainer"]
+[node name="PushupsPerSessionInput" type="LineEdit" parent="FullWindow/BackgroundPanel/SettingsContainer/PushupsPerSessionContainer"]
 unique_name_in_owner = true
 auto_translate_mode = 1
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 30
 placeholder_text = "Current: 10"
 alignment = 1
 clear_button_enabled = true
 
-[node name="CloseMenuButton" type="Button" parent="FullWindow/BoxWindow"]
+[node name="CloseMenuButton" type="Button" parent="FullWindow/BackgroundPanel"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = -1
-anchor_top = 0.9
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 30
+anchor_left = 0.05
+anchor_top = 0.85
+anchor_right = 0.95
+anchor_bottom = 0.95
+grow_horizontal = 2
 text = "Close"

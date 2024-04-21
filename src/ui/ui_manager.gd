@@ -12,15 +12,17 @@
 class_name UIManager
 extends Node
 
-
-## App versiob label.
-@onready var app_version: Label = %AppVersion
+## Background panel.
+@onready var background_panel: Panel = %BackgroundPanel
 
 ## Current progress container.
 @onready var current_progress_container: VBoxContainer = %CurrentProgressContainer
 
 ## Previous progress container.
 @onready var previous_progress_container: HBoxContainer = %PreviousProgressContainer
+
+## App versiob label.
+@onready var app_version: Label = %AppVersion
 
 
 ## Update UI elements.
@@ -30,6 +32,19 @@ func update_ui() -> void:
 	# Update all UI elements in previous progress container
 	previous_progress_container.update_ui()
 
+
+## Apply UI theme.
+func apply_ui_theme(theme: Theme) -> void:
+	# Apply UI theme to background panel
+	background_panel.theme = theme
+	
+	# Duplicate applied panel theme stylebox
+	var new_theme_stylebox: StyleBoxFlat = background_panel.get_theme_stylebox("panel", "Panel").duplicate()
+	# Set borders width to 0
+	new_theme_stylebox.set_border_width_all(0)
+	# Apply new theme stylebox
+	background_panel.add_theme_stylebox_override("panel", new_theme_stylebox)
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

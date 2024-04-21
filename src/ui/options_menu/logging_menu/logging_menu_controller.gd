@@ -10,6 +10,8 @@
 class_name LoggingMenuController
 extends Control
 
+## Background panel node.
+@onready var background_panel: Panel = %BackgroundPanel
 
 ## Container for logs.
 @onready var logs_container: VBoxContainer = %LogsContainer
@@ -52,6 +54,8 @@ func create_logs_ui() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Apply chosen UI theme
+	background_panel.theme = GlobalVariables.chosen_ui_theme
 	# Connect pressed button signals
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	# Setup logs messages (UI)

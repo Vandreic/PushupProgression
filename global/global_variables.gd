@@ -76,9 +76,14 @@ const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 ## Logging menu scene file path.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
 
+## Light UI theme.
+const LIGHT_UI_THEME: Theme = preload("res://assets/themes/light_ui_theme.tres")
+
+## Chosen UI theme.
+var chosen_ui_theme: Theme
+
 ## App running flag.
 var app_running: bool = false
-
 
 ## Daily pushup goal.
 var daily_pushups_goal: int = 100
@@ -108,6 +113,12 @@ var save_data_dict: Dictionary = {
 
 ## Stores log messages.
 var logs_array: Array = []
+
+## Apply UI theme.
+## @experimental
+func apply_ui_theme(theme: Theme) -> void:
+	# Apply UI theme to UI scene
+	get_tree().call_group("ui_manager", "apply_ui_theme", theme)
 
 
 ## Create log message. [br]
