@@ -15,6 +15,8 @@
 ## > user settings
 ## >> daily pushups goal
 ## >> pushups per session
+## >> ui theme
+## >> ui theme index
 ##
 ## > calendar
 ## >> year number
@@ -39,7 +41,10 @@
 ## save_data_dict: {
 ##     "settings": {
 ##         "daily_pushups_goal": 100,
-##         "pushups_per_session": 10
+##         "pushups_per_session": 10,
+##         "ui_theme": "light_blue",
+##         "ui_theme_index": 0
+##
 ##     },
 ##     "calendar": {
 ##         "2024": {
@@ -67,7 +72,6 @@
 ## [/codeblock]
 
 
-
 extends Node
 
 ## Main menu scene file path.
@@ -75,12 +79,6 @@ const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 
 ## Logging menu scene file path.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
-
-## Light UI theme.
-const LIGHT_UI_THEME: Theme = preload("res://assets/themes/light_ui_theme.tres")
-
-## Chosen UI theme.
-var chosen_ui_theme: Theme
 
 ## App running flag.
 var app_running: bool = false
@@ -105,7 +103,9 @@ var save_data_dict: Dictionary = {
 	# Stores user settings
 	"settings": {
 		"daily_pushups_goal": 0,
-		"pushups_per_session": 0
+		"pushups_per_session": 0,
+		"ui_theme": "",
+		"ui_theme_index": 0
 	},
 	# Stores data for each day
 	"calendar": {}
@@ -114,11 +114,42 @@ var save_data_dict: Dictionary = {
 ## Stores log messages.
 var logs_array: Array = []
 
+## UI theme dictionary. Stores theme properties.
+var ui_themes_dict: Dictionary = {
+	"light_blue": {
+		"theme": preload("res://assets/themes/light_blue_theme.tres"),
+		"instance_id": preload("res://assets/themes/light_blue_theme.tres").get_instance_id(),
+		"progress_bar": {
+			"under": load("res://assets/progress_icon/light_blue_theme/progress_bar_under.png"),
+			"over": load("res://assets/progress_icon/light_blue_theme/progress_bar_over.png"),
+			"progress": load("res://assets/progress_icon/light_blue_theme/progress_bar_progress.png")
+		}
+	},
+	
+	"light_blue_material_design": {
+		"theme": preload("res://assets/themes/light_blue_material_design_theme.tres"),
+		"instance_id": preload("res://assets/themes/light_blue_material_design_theme.tres").get_instance_id(),
+		"progress_bar": {
+			"under": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_under.png"),
+			"over": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_over.png"),
+			"progress": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_progress.png")
+		}
+	}
+}
+
+## Chosen UI theme [Default: Light Blue].
+var chosen_ui_theme: Theme = ui_themes_dict["light_blue"]["theme"]
+
+## Selected theme index [Default: Light Blue]. [br][br]
+## Value is defined in [method AppearanceMenuManager._on_themes_option_button_select].
+var selected_theme_index: int
+
+
 ## Apply UI theme.
 ## @experimental
-func apply_ui_theme(theme: Theme) -> void:
+func apply_ui_theme() -> void:
 	# Apply UI theme to UI scene
-	get_tree().call_group("ui_manager", "apply_ui_theme", theme)
+	get_tree().call_group("ui_manager", "apply_ui_theme")
 
 
 ## Create log message. [br]

@@ -37,10 +37,11 @@ folder_colors={
 "res://src/main/": "red",
 "res://src/ui/": "blue",
 "res://src/ui/options_menu/": "green",
+"res://src/ui/options_menu/appearance_menu/": "orange",
 "res://src/ui/options_menu/logging_menu/": "teal",
 "res://src/ui/options_menu/reset_options_menu/": "orange",
 "res://src/ui/options_menu/settings_menu/": "orange",
-"res://src/ui/popup_confirm_box/": "orange",
+"res://src/ui/popup_confirm_box/": "yellow",
 "res://src/utilities/": "red"
 }
 

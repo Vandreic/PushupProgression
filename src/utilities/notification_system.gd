@@ -33,10 +33,10 @@ func create_notification(notification_text: String, extend_duration: bool = fals
 	var panel_container: PanelContainer = notification_node.get_node("%BackgroundPanelContainer")
 	
 	# Get normal state button background color from chosen UI theme
-	var bg_color: Color = GlobalVariables.LIGHT_UI_THEME.get_theme_item\
+	var bg_color: Color = GlobalVariables.chosen_ui_theme.get_theme_item\
 	(Theme.DATA_TYPE_STYLEBOX, "normal", "Button").bg_color
 	# Duplicate panel container theme stylebox
-	var new_theme_stylebox: StyleBoxFlat = GlobalVariables.LIGHT_UI_THEME.get_theme_item\
+	var new_theme_stylebox: StyleBoxFlat = GlobalVariables.chosen_ui_theme.get_theme_item\
 	(Theme.DATA_TYPE_STYLEBOX, "panel", "PanelContainer").duplicate()
 	# Change stylebox background color
 	new_theme_stylebox.bg_color = bg_color
@@ -44,7 +44,7 @@ func create_notification(notification_text: String, extend_duration: bool = fals
 	panel_container.add_theme_stylebox_override("panel", new_theme_stylebox)
 	
 	# Get font color from chosen UI theme
-	var font_color: Color = GlobalVariables.LIGHT_UI_THEME.get_color("label", "Label")
+	var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("label", "Label")
 	# Change label font color
 	panel_container.add_theme_color_override("font_color", font_color)
 	

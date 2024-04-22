@@ -14,6 +14,9 @@ extends CanvasLayer
 ## Settings button.
 @onready var settings_button: Button = %SettingsButton
 
+## Appearance button.
+@onready var appearance_button: Button = %AppearanceButton
+
 ## Open reset menu button.
 @onready var reset_menu_button: Button = %ResetMenuButton
 
@@ -26,6 +29,9 @@ extends CanvasLayer
 
 ## Signal: Emits when [member OptionsMenuManager.settings_button] pressed.
 signal settings_button_pressed
+
+## Signal: Emits when [member OptionsMenuManager.appearance_button] pressed.
+signal appearance_button_pressed
 
 ## Signal: Emits when [member OptionsMenuManager.reset_menu_button] pressed.
 signal reset_menu_button_pressed
@@ -45,6 +51,14 @@ func close_menu() -> void:
 func _on_settings_button_pressed() -> void:
 	# Emit button signal
 	settings_button_pressed.emit()
+	# Close options menu
+	close_menu()
+
+
+## On [member member OptionsMenuManager.appearance_button] pressed.
+func _on_appearance_button_pressed() -> void:
+	# Emit button signal
+	appearance_button_pressed.emit()
 	# Close options menu
 	close_menu()
 
@@ -75,6 +89,7 @@ func _on_close_menu_button_pressed() -> void:
 func _ready() -> void:
 	# Connect pressed button signals
 	settings_button.pressed.connect(_on_settings_button_pressed)
+	appearance_button.pressed.connect(_on_appearance_button_pressed)
 	reset_menu_button.pressed.connect(_on_reset_menu_button_pressed)
 	logging_menu_button.pressed.connect(_on_logging_menu_button_pressed)
 	close_menu_button.pressed.connect(close_menu)

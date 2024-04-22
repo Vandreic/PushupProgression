@@ -87,9 +87,9 @@ func _on_close_menu_button_pressed() -> void:
 		GlobalVariables.create_notification(notification_text, true)
 	#endregion
 	
-	# If no input, create notification with extended duration
+	# If no input, pass
 	if daily_goal_input.text.is_empty() and pushups_per_session_input.text.is_empty():
-		GlobalVariables.create_notification("No changes to settings were made.", true)
+		pass
 	
 	# If valid input, save data and update UI
 	elif daily_goal_input_text or pushups_per_session_input_text:
