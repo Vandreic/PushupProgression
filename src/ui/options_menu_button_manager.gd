@@ -13,23 +13,24 @@ class_name OptionsMenuButtonManager
 extends TextureButton
 
 
-## Reset progression. [br]
-## See [member SaveSystem.reset_data] for more details.
-func reset_progression(reset_option: String) -> void:
-	# Reset data based of reset_option value
-	get_tree().call_group("save_system", "reset_data", reset_option)
-	# Update UI
-	GlobalVariables.update_ui()
-
-
 ## Open settings menu button.
 func open_settings_menu() -> void:
-	# Instantiate reset options menu scene
+	# Instantiate settings menu scene
 	var settings_menu: CanvasLayer = load("res://src/ui/options_menu/settings_menu/settings_menu.tscn").instantiate()	
 	# Apply chosen UI theme
 	settings_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(settings_menu)
+
+
+## Open appearance menu button.
+func open_appearance_menu() -> void:
+	# Instantiate appearance menu scene
+	var appearance_menu: CanvasLayer = load("res://src/ui/options_menu/appearance_menu/appearance_menu.tscn").instantiate()	
+	# Apply chosen UI theme
+	appearance_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
+	# Add scene to tree (Needed before modifying)
+	get_parent().add_child(appearance_menu)
 
 
 ## Open reset options menu.
@@ -77,6 +78,15 @@ func open_logging_menu() -> void:
 	get_tree().change_scene_to_file(GlobalVariables.LOGGING_MENU_SCENE_PATH)
 
 
+## Reset progression. [br]
+## See [member SaveSystem.reset_data] for more details.
+func reset_progression(reset_option: String) -> void:
+	# Reset data based of reset_option value
+	get_tree().call_group("save_system", "reset_data", reset_option)
+	# Update UI
+	GlobalVariables.update_ui()
+
+
 ## On options menu button pressed.
 func _on_options_menu_button_pressed() -> void:
 	# Instantiate options menu scene
@@ -87,6 +97,7 @@ func _on_options_menu_button_pressed() -> void:
 	get_parent().add_child(options_menu)
 	# Connect to custom pressed button signals
 	options_menu.settings_button_pressed.connect(open_settings_menu)
+	options_menu.appearance_button_pressed.connect(open_appearance_menu)
 	options_menu.reset_menu_button_pressed.connect(open_reset_options_menu)
 	options_menu.logging_menu_button_pressed.connect(open_logging_menu)
 

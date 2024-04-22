@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://3lf5b3nw6mw2"]
 
 [ext_resource type="Script" path="res://src/ui/options_menu/settings_menu/settings_menu_manager.gd" id="1_codi5"]
-[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_cnal0"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_cnal0"]
 
 [node name="SettingsMenu" type="CanvasLayer"]
 script = ExtResource("1_codi5")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://caemshoneox7b"]
 
 [ext_resource type="Script" path="res://src/ui/popup_confirm_box/popup_confirm_box_manager.gd" id="1_0xlnq"]
-[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_jv47q"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_jv47q"]
 
 [node name="PopupConfirmBox" type="CanvasLayer"]
 script = ExtResource("1_0xlnq")

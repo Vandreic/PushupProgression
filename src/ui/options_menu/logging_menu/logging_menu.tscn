@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://4xm567g2cjnt"]
 
 [ext_resource type="Script" path="res://src/ui/options_menu/logging_menu/logging_menu_controller.gd" id="1_d717i"]
-[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_0g5ns"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_0g5ns"]
 
 [node name="LoggingMenu" type="Control"]
 layout_mode = 3

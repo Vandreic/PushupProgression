@@ -245,6 +245,15 @@ func save_data() -> void:
 	var current_second: int = datetime_dict["second"]
 	
 	#region: Save to settings dictionary	
+	# Loop trough themes
+	for theme in GlobalVariables.ui_themes_dict:
+		# Get chosen theme (based of instance id)
+		if GlobalVariables.chosen_ui_theme.get_instance_id() == GlobalVariables.ui_themes_dict[theme]["instance_id"]:
+			# Save theme
+			GlobalVariables.save_data_dict["settings"]["ui_theme"] = theme
+			# Save theme index
+			GlobalVariables.save_data_dict["settings"]["ui_theme_index"] = GlobalVariables.selected_theme_index
+			
 	# Save daily pushups goal
 	GlobalVariables.save_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
 	# Save pushups per session
@@ -296,6 +305,17 @@ func save_data() -> void:
 ## Load settings. [br][br]
 ## Loads user settings from the provided [param saved_settings_dict]
 func load_settings(saved_settings_dict: Dictionary) -> void:
+	# Set selected theme index
+	GlobalVariables.selected_theme_index = int(saved_settings_dict["ui_theme_index"])
+	
+	# Loop trough themes
+	for theme in GlobalVariables.ui_themes_dict:
+		# Set current theme to corresponding theme
+		if saved_settings_dict["ui_theme"] == theme:
+			GlobalVariables.chosen_ui_theme = GlobalVariables.ui_themes_dict[theme]["theme"]
+			# Apply theme
+			GlobalVariables.apply_ui_theme()
+			
 	# Load daily pushups goal
 	GlobalVariables.daily_pushups_goal = int(saved_settings_dict["daily_pushups_goal"])
 	# Load pushups per session

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dmql83m487h3v"]
 
 [ext_resource type="Script" path="res://src/ui/options_menu/options_menu_manager.gd" id="1_3n07y"]
-[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_ui_theme.tres" id="2_j2yvb"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_j2yvb"]
 
 [node name="OptionsMenu" type="CanvasLayer" groups=["ui_scene"]]
 script = ExtResource("1_3n07y")
@@ -21,7 +21,7 @@ anchors_preset = -1
 anchor_left = 0.185
 anchor_top = 0.3
 anchor_right = 0.815
-anchor_bottom = 0.635
+anchor_bottom = 0.82
 theme = ExtResource("2_j2yvb")
 
 [node name="TitleLabel" type="Label" parent="FullWindow/BackgroundPanel"]
@@ -34,7 +34,7 @@ text = "Options"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.05
@@ -43,25 +43,31 @@ anchor_right = 0.95
 anchor_bottom = 0.95
 theme_override_constants/separation = 20
 
-[node name="SettingsButton" type="Button" parent="FullWindow/BackgroundPanel/HBoxContainer"]
+[node name="SettingsButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Settings"
 
-[node name="ResetMenuButton" type="Button" parent="FullWindow/BackgroundPanel/HBoxContainer"]
+[node name="AppearanceButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Appearance"
+
+[node name="ResetMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Reset progress"
 
-[node name="LoggingMenuButton" type="Button" parent="FullWindow/BackgroundPanel/HBoxContainer"]
+[node name="LoggingMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Show logs"
 
-[node name="CloseMenuButton" type="Button" parent="FullWindow/BackgroundPanel/HBoxContainer"]
+[node name="CloseMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3

@@ -32,6 +32,21 @@ extends VBoxContainer
 @onready var add_pushups_button: Button = %AddPushupsButton
 
 
+## Apply UI theme. [br][br]
+## Used for [member CurrentProgressContainerManager.progress_bar].
+func apply_ui_theme() -> void:
+	# Loop trough themes in UI themes dictionary
+	for theme in GlobalVariables.ui_themes_dict:
+		# Get chosen UI theme (based of instance id)
+		if GlobalVariables.chosen_ui_theme.get_instance_id() == GlobalVariables.ui_themes_dict[theme]["instance_id"]:
+			# Update progress bar - under
+			progress_bar.texture_under = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["under"]
+			# Update progress bar - over
+			progress_bar.texture_over = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["over"]
+			# Update progress bar - progress
+			progress_bar.texture_progress = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["progress"]
+
+
 ## Update progress bar.
 func update_progress_bar() -> void:
 	# Get total pushups today
