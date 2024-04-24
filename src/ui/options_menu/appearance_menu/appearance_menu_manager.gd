@@ -8,8 +8,11 @@
 
 
 class_name AppearanceMenuManager
-extends CanvasLayer
+extends OptionMenuComponent
 
+
+## Background panel.
+@onready var background_panel: Panel = %BackgroundPanel
 
 ## Themes option button.
 @onready var themes_option_button: OptionButton = %ThemesOptionButton
@@ -31,17 +34,30 @@ func create_theme_options() -> void:
 	themes_option_button.select(GlobalVariables.selected_theme_index)
 
 
-## Close appearance menu (Removes scene from tree).
-func close_menu() -> void:
-	# Delete scene from tree
-	get_parent().remove_child(self)
-	queue_free()
+## Re-open appearance menu with new applied theme.
+func reopen_menu() -> void:
+	# Define new current scene name
+	var _name: String = "Deleted" + self.name
+	# Change current scene name
+	self.name = _name
+	# Hide current scene
+	self.visible = false
+	
+	# Instantiate new appearance menu scene
+	var new_menu: CanvasLayer = load("res://src/ui/options_menu/appearance_menu/appearance_menu.tscn").instantiate()	
+	# Apply theme to new appearance menu
+	new_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
+	# Add appearance menu scene to tree
+	get_parent().add_child(new_menu)
+	
+	# Close current appearance menu
+	close_menu(self)
 
 
 ## On [member AppearanceMenuManager.close_menu_button] pressed.
 func _on_close_menu_button_pressed() -> void:
 	# Close appearance menu
-	close_menu()
+	close_menu(self)
 
 
 ## On [member AppearanceMenuManager.themes_option_button] select. [br][br]
@@ -59,20 +75,23 @@ func _on_themes_option_button_select(index) -> void:
 			# Update theme
 			GlobalVariables.chosen_ui_theme = GlobalVariables.ui_themes_dict[theme]["theme"]
 	
-	# Apply theme
-	GlobalVariables.apply_ui_theme()
+	# Apply theme to UI scene and log change
+	GlobalVariables.apply_ui_theme(true)
 	# Save data
 	GlobalVariables.save_data()
-	# Re-open menu with selected theme
-	get_tree().call_group("options_menu_button_manager", "open_appearance_menu")
-	# Close current menu 
-	close_menu()
+	
+	# Open new appearance menu (Needed to update theme in menu)
+	get_tree().call_group("options_menu_manager", "_on_appearance_button_pressed")
+	# Re-open appearance menu with new applied theme
+	reopen_menu()
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Connect pressed button signals
-	close_menu_button.pressed.connect(close_menu)
+	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	themes_option_button.item_selected.connect(_on_themes_option_button_select)
 	# Create theme options
 	create_theme_options()
+	# Apply UI theme
+	apply_ui_theme(background_panel)

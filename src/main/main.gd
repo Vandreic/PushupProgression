@@ -12,12 +12,12 @@ func _ready():
 	# Change window size if screen width < 1280
 	change_window_size() 
 	
-	# Apply UI theme
-	GlobalVariables.apply_ui_theme()
-	
 	# Load save file if game is not running
 	if GlobalVariables.app_running == false:
 		GlobalVariables.load_data()
+	# Else, apply UI theme
+	else:
+		GlobalVariables.apply_ui_theme()
 	
 	# Update UI
 	GlobalVariables.update_ui()

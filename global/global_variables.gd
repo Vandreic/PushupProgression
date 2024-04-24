@@ -13,29 +13,31 @@
 ## save_data_dict
 ##
 ## > user settings
-## >> daily pushups goal
-## >> pushups per session
-## >> ui theme
-## >> ui theme index
+##   > daily pushups goal
+##   > pushups per session
+##   > ui theme
+##   > ui theme index
 ##
 ## > calendar
-## >> year number
-## >>> month number
-## >>>> day number
-## >>>>> daily pushups goal today
-## >>>>> pushups per session today
-## >>>>> remaining pushups today
-## >>>>> sessions today
-## >>>>>> session 1
-## >>>>>>> pushups in session
-## >>>>>>> time of session
-## >>>>>> session 2
-## >>>>>>> pushups in session
-## >>>>>>> time of session
-## >>>>> total pushups today
+##   > year number
+##     > month number
+##       > day number
+##         > daily pushups goal today
+##         > pushups per session today
+##         > remaining pushups today
+##         > sessions today
+##           > session 1
+##             > pushups in session
+##             > time of session
+##           > session 2
+##             > pushups in session
+##             > time of session
+##         > total pushups today
 ## [/codeblock]
 ##
-## Example structure:
+## [br]
+##
+## Example structure of [member save_data_dict]:
 ##
 ## [codeblock]
 ## save_data_dict: {
@@ -47,6 +49,7 @@
 ##
 ##     },
 ##     "calendar": {
+##         # Example of progression data for a specific day
 ##         "2024": {
 ##             "03": {
 ##                 "24": {
@@ -67,38 +70,85 @@
 ##                 }
 ##             }
 ##         }
+##         # Additional days follows the same structure
 ##     }
+## }
+## [/codeblock]
+##
+## [br]
+##
+## Structure of [member ui_themes_dict]:
+##
+## [codeblock]
+## ui_themes_dict
+##
+## > Theme name
+##   > Preload theme file
+##   > Unique identifier for the theme
+##   > Boolean for UI borders
+##   > Theme colors (Based of Material Design 3 color schemes)
+##     > Primary container color
+##     > Outline color
+##   > Progress bar textures (Used to match given theme) 
+##     > Under texture
+##     > Over texture
+##     > Progress texture
+## [/codeblock]
+##
+## [br]
+##
+## Example structure of [member ui_themes_dict]:
+##
+## [codeblock]
+## ui_themes_dict: {
+##     # Example theme entry
+##     "light_blue": {
+##         "theme": preload("res://assets/themes/light_blue_theme.tres"),
+##         "instance_id": preload("res://assets/themes/light_blue_theme.tres").get_instance_id(),
+##         "border": true,
+##         "color": {
+##             "primary_container": "#f1f0f7",
+##             "outline": "#000000"
+##         },
+##         "progress_bar": {
+##             "under": load("res://assets/progress_icon/light_blue_theme/progress_bar_under.png"),
+##             "over": load("res://assets/progress_icon/light_blue_theme/progress_bar_over.png"),
+##             "progress": load("res://assets/progress_icon/light_blue_theme/progress_bar_progress.png")
+##         }
+##     }
+##     # Additional themes follow the same structure
 ## }
 ## [/codeblock]
 
 
 extends Node
 
-## Main menu scene file path.
+
+## Path to the main menu scene.
 const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 
-## Logging menu scene file path.
+## Path to the logging menu scene.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
 
-## App running flag.
+## Flag indicating if the app is currently running.
 var app_running: bool = false
 
-## Daily pushup goal.
+## Daily goal for push-ups.
 var daily_pushups_goal: int = 100
 
-## Number of pushups in each session.
+## Push-ups to complete per session.
 var pushups_per_session: int = 10
 
-## Total pushups today.
+## Total push-ups completed today.
 var total_pushups_today: int = 0
 
-## Total pushups sessions today.
+## Number of push-up sessions completed today.
 var total_pushups_sessions: int = 0
 
-## Remaining pushups to reach daily goal.
+## Push-ups remaining to reach today's goal.
 var remaining_pushups: int = 0
 
-## Save data [Dictionary] to store settings and progression data.
+## Dictionary for storing user settings and progression data.
 var save_data_dict: Dictionary = {
 	# Stores user settings
 	"settings": {
@@ -111,14 +161,19 @@ var save_data_dict: Dictionary = {
 	"calendar": {}
 }
 
-## Stores log messages.
+## Array of log messages.
 var logs_array: Array = []
 
-## UI theme dictionary. Stores theme properties.
+## Dictionary of UI themes and their properties.
 var ui_themes_dict: Dictionary = {
 	"light_blue": {
 		"theme": preload("res://assets/themes/light_blue_theme.tres"),
 		"instance_id": preload("res://assets/themes/light_blue_theme.tres").get_instance_id(),
+		"border": true,
+		"color": {
+			"primary_container": "#f1f0f7",
+			"outline": "#000000"
+		},
 		"progress_bar": {
 			"under": load("res://assets/progress_icon/light_blue_theme/progress_bar_under.png"),
 			"over": load("res://assets/progress_icon/light_blue_theme/progress_bar_over.png"),
@@ -129,25 +184,81 @@ var ui_themes_dict: Dictionary = {
 	"light_blue_material_design": {
 		"theme": preload("res://assets/themes/light_blue_material_design_theme.tres"),
 		"instance_id": preload("res://assets/themes/light_blue_material_design_theme.tres").get_instance_id(),
+		"border": false,
+		"color": {
+			"primary_container": "#dae2ff",
+			"outline": "#757680"
+		},
 		"progress_bar": {
 			"under": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_under.png"),
 			"over": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_over.png"),
 			"progress": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_progress.png")
 		}
+	},
+	
+	"dark_blue_material_design": {
+		"theme": preload("res://assets/themes/dark_blue_material_design_theme.tres"),
+		"instance_id": preload("res://assets/themes/dark_blue_material_design_theme.tres").get_instance_id(),
+		"border": true,
+		"color": {
+			"primary_container": "#121318",
+			"outline": "#8f909a"
+		},
+		"progress_bar": {
+			"under": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_under.png"),
+			"over": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_over.png"),
+			"progress": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_progress.png")
+		}
 	}
 }
 
-## Chosen UI theme [Default: Light Blue].
+## Currently active UI theme. [Default: Light Blue].
 var chosen_ui_theme: Theme = ui_themes_dict["light_blue"]["theme"]
 
-## Selected theme index [Default: Light Blue]. [br][br]
+## Index of the currently selected theme. [Default: Light Blue]. [br][br]
 ## Value is defined in [method AppearanceMenuManager._on_themes_option_button_select].
 var selected_theme_index: int
 
 
-## Apply UI theme.
-## @experimental
-func apply_ui_theme() -> void:
+## Create [StyleBoxFlat] for [Panel] variant.
+func create_panel_stylebox_variant() -> StyleBoxFlat:
+	# Duplicate panel theme stylebox from chosen theme
+	var stylebox: StyleBoxFlat = chosen_ui_theme.get_stylebox("panel", "Panel").duplicate()
+	
+	# Loop trough themes
+	for theme in ui_themes_dict:
+		# Get chosen theme (based of instance id)
+		if chosen_ui_theme.get_instance_id() == ui_themes_dict[theme]["instance_id"]:
+			# Change background color
+			stylebox.bg_color = Color(ui_themes_dict[theme]["color"]["primary_container"])
+			# Add corner radius
+			stylebox.set_corner_radius_all(25)
+			
+			# Check if theme has borders
+			if ui_themes_dict[theme]["border"] == true:
+				# Add borders
+				stylebox.set_border_width_all(6)
+				# Set border color
+				stylebox.border_color = Color(ui_themes_dict[theme]["color"]["outline"])
+	
+	# Return new stylebox
+	return stylebox
+
+
+## Applies [member chosen_ui_theme] and optionally logs the change if 
+## [param log_ui_change] is [code]true[/code].
+func apply_ui_theme(log_ui_change: bool = false) -> void:
+	# Check if create log is true
+	if log_ui_change == true:
+		# Loop trough themes
+		for theme in GlobalVariables.ui_themes_dict:
+			# Get chosen theme (based of instance id)
+			if GlobalVariables.chosen_ui_theme.get_instance_id() == GlobalVariables.ui_themes_dict[theme]["instance_id"]:
+				# Create text for log message
+				var _log_text: String = "UI theme changed to: " + theme.capitalize()
+				# Create log message
+				create_log(_log_text)
+			
 	# Apply UI theme to UI scene
 	get_tree().call_group("ui_manager", "apply_ui_theme")
 
