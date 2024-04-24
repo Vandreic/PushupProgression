@@ -68,7 +68,7 @@ theme_override_constants/separation = 15
 
 [node name="PushupsPerSessionLabel" type="Label" parent="FullWindow/BackgroundPanel/SettingsContainer/PushupsPerSessionContainer"]
 layout_mode = 2
-text = "Pushups per session"
+text = "Push-ups per session"
 horizontal_alignment = 1
 vertical_alignment = 1
 

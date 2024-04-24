@@ -10,7 +10,8 @@
 class_name LoggingMenuController
 extends Control
 
-## Background panel node.
+
+## Background panel.
 @onready var background_panel: Panel = %BackgroundPanel
 
 ## Container for logs.
@@ -30,13 +31,6 @@ var total_logs_counter: int = 1
 func apply_ui_theme() -> void:
 	# Apply chosen UI theme to background panel
 	background_panel.theme = GlobalVariables.chosen_ui_theme
-	
-	# Duplicate applied panel theme stylebox
-	var new_theme_stylebox: StyleBoxFlat = background_panel.get_theme_stylebox("panel", "Panel").duplicate()
-	# Set borders width to 0
-	new_theme_stylebox.set_border_width_all(0)
-	# Apply new theme stylebox
-	background_panel.add_theme_stylebox_override("panel", new_theme_stylebox)
 
 
 ## Create UI for logs messages
@@ -73,5 +67,7 @@ func _ready() -> void:
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	# Setup logs messages (UI)
 	create_logs_ui()
+	# Apply UI theme
+	apply_ui_theme()
 	# Update app running flag
 	GlobalVariables.app_running = true

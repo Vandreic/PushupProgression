@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/ui/options_menu/options_menu_manager.gd" id="1_3n07y"]
 [ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_j2yvb"]
 
-[node name="OptionsMenu" type="CanvasLayer" groups=["ui_scene"]]
+[node name="OptionsMenu" type="CanvasLayer" groups=["options_menu_manager"]]
 script = ExtResource("1_3n07y")
 
 [node name="FullWindow" type="Control" parent="."]

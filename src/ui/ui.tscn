@@ -141,7 +141,7 @@ text = "06/04-24"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="OptionsMenuButton" type="TextureButton" parent="BackgroundPanel" groups=["options_menu_button_manager"]]
+[node name="OptionsMenuButton" type="TextureButton" parent="BackgroundPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.9

@@ -10,14 +10,14 @@
 
 
 class_name ResetOptionsMenuManager
-extends CanvasLayer
+extends OptionMenuComponent
 
+
+## Background panel.
+@onready var background_panel: Panel = %BackgroundPanel
 
 ## Reset current day button.
 @onready var reset_current_day_button: Button = %ResetCurrentDayButton
-
-# Reset current week button.
-#@onready var reset_current_week_button: Button = %ResetCurrentWeekButton
 
 ## Reset current month button.
 @onready var reset_current_month_button: Button = %ResetCurrentMonthButton
@@ -32,79 +32,75 @@ extends CanvasLayer
 @onready var close_menu_button: Button = %CloseMenuButton
 
 
-## Signal: Emits when [member ResetOptionsMenuManager.reset_current_day_button] pressed.
-signal reset_current_day_button_pressed
+## Opens a confirmation popup box for user choices.
+func open_popup_confirm_box(reset_option: String) -> void:
+	# Instantiate popup confirm box scene
+	var popup_box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+	# Add scene to tree (Needed before modifying)
+	get_parent().add_child(popup_box)
+	
+	# Create info text
+	var info_text: String
+	# Modify info text
+	if reset_option == "all":
+		info_text = "Resetting all data will permanently delete all saved progression and cannot be undone."
+	else:
+		info_text = "Resetting %s will permanently delete all associated data and cannot be undone."\
+		% reset_option.capitalize().to_lower()
+	
+	# Update popup box info text
+	popup_box.update_info_text(info_text)
+	# Store reset option
+	popup_box.selected_reset_option = reset_option
 
-# Signal: Emits when [member ResetOptionsMenuManager.reset_current_week_button] pressed.
-#signal reset_current_week_button_pressed
 
-## Signal: Emits when [member ResetOptionsMenuManager.reset_current_month_button] pressed.
-signal reset_current_month_button_pressed
-
-## Signal: Emits when [member ResetOptionsMenuManager.reset_current_year_button] pressed.
-signal reset_current_year_button_pressed
-
-## Signal: Emits when [member ResetOptionsMenuManager.reset_all_button] pressed.
-signal reset_all_button_pressed
-
-
-## Close reset menu (Removes scene from tree).
-func close_menu() -> void:
-	# Delete scene from tree
-	get_parent().remove_child(self)
-	queue_free()
-
-
-## On [member ResetOptionsMenuManager.reset_current_day_button] pressed.
+## Handles [member ResetOptionsMenuManager.reset_current_day_button] button press: 
+## Clears today's progression.
 func _on_reset_current_day_button_pressed() -> void:
-	# Emit button signal
-	reset_current_day_button_pressed.emit()
-	# Close reset menu
-	close_menu()
+	# Opens a confirmation box with the chosen reset option
+	open_popup_confirm_box("current_day")
+	# Close reset options menu
+	close_menu(self)
 
 
-# On [member ResetOptionsMenuManager.reset_current_week_button] pressed.
-#func _on_reset_current_week_button_pressed() -> void:
-	## Emit button signal
-	#reset_current_week_button_pressed.emit()
-	## Close reset menu
-	#close_menu()
-
-
-## On [member ResetOptionsMenuManager.reset_current_month_button] pressed.
+## Handles [member ResetOptionsMenuManager.reset_current_month_button] button press: 
+## Clears this month's progression.
 func _on_reset_current_month_button_pressed() -> void:
-	# Emit button signal
-	reset_current_month_button_pressed.emit()
-	# Close reset menu
-	close_menu()
+	# Opens a confirmation box with the chosen reset option
+	open_popup_confirm_box("current_month")
+	# Close reset options menu
+	close_menu(self)
 
 
-## On [member ResetOptionsMenuManager.reset_current_year_button] pressed.
+## Handles [member ResetOptionsMenuManager.reset_current_year_button] button press: 
+## Clears this year's progression.
 func _on_reset_current_year_button_pressed() -> void:
-	# Emit button signal
-	reset_current_year_button_pressed.emit()
-	# Close reset menu
-	close_menu()
+	# Opens a confirmation box with the chosen reset option
+	open_popup_confirm_box("current_year")
+	# Close reset options menu
+	close_menu(self)
 
 
-## On [member ResetOptionsMenuManager.reset_all_button] pressed.
+## Handles [member ResetOptionsMenuManager.reset_all_button] button press: 
+## Clears all saved progression.
 func _on_reset_all_button_pressed() -> void:
-	# Emit button signal
-	reset_all_button_pressed.emit()
-	# Close reset menu
-	close_menu()
+	# Opens a confirmation box with the chosen reset option
+	open_popup_confirm_box("all")
+	# Close reset options menu
+	close_menu(self)
 
 
 ## On [member ResetOptionsMenuManager.close_menu_button] pressed.
+## Closes reset options menu (Removes reset options menu scene from tree).
 func _on_close_menu_button_pressed() -> void:
-	close_menu()
+	# Close reset options menu
+	close_menu(self)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Connect pressed button signals
 	reset_current_day_button.pressed.connect(_on_reset_current_day_button_pressed)
-	#reset_current_week_button.pressed.connect(_on_reset_current_week_button_pressed)
 	reset_current_month_button.pressed.connect(_on_reset_current_month_button_pressed)
 	reset_current_year_button.pressed.connect(_on_reset_current_year_button_pressed)
 	reset_all_button.pressed.connect(_on_reset_all_button_pressed)
@@ -113,3 +109,6 @@ func _ready() -> void:
 	# Disable "reset current day" button if no sessions
 	if GlobalVariables.total_pushups_sessions <= 0:
 		reset_current_day_button.disabled = true
+	
+	# Apply UI theme to background panel
+	apply_ui_theme(background_panel)

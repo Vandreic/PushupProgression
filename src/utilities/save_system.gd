@@ -517,7 +517,15 @@ func reset_global_values() -> void:
 	GlobalVariables.remaining_pushups = 0
 
 
-## Reset all progression data.
+## Resets progression data based on the provided [param reset_option]. [br]
+##
+## [br]
+##
+## [param reset_option] Options: [br]
+## • [code]current_day[/code]: Clears today's progression. [br]
+## • [code]current_month[/code]: Clears this month's progression. [br]
+## • [code]current_year[/code]: Clears this year's progression. [br]
+## • [code]all[/code]: Clears all saved progression.
 func reset_data(reset_option: String) -> void:
 	create_log("Resetting data with option: [" + reset_option + "].\nThis CANNOT be undone!")
 	# Reset global values
@@ -578,3 +586,5 @@ func reset_data(reset_option: String) -> void:
 	GlobalVariables.create_notification("Reset successfully!")
 	# Save data
 	save_data()
+	# Update UI
+	GlobalVariables.update_ui()

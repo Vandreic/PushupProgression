@@ -11,10 +11,10 @@
 
 
 class_name SettingsMenuManager
-extends CanvasLayer
+extends OptionMenuComponent
 
 
-## Background Panel node.
+## Background panel.
 @onready var background_panel: Panel = %BackgroundPanel
 
 ## Daily goal input field.
@@ -30,11 +30,13 @@ extends CanvasLayer
 @onready var regex: RegEx = RegEx.new()
 
 
-## Close settings menu (Removes scene from tree).
-func close_menu() -> void:
-	# Delete scene from tree
-	get_parent().remove_child(self)
-	queue_free()
+## Create placeholder text for input fields.
+func create_placeholder_text() -> void:
+	# Placeholder text for input fields
+	var _placeholder_text: String = "Current: %d"
+	# Set placeholder text for input fields
+	daily_goal_input.placeholder_text = _placeholder_text % GlobalVariables.daily_pushups_goal
+	pushups_per_session_input.placeholder_text = _placeholder_text % GlobalVariables.pushups_per_session
 
 
 ## On [member SettingsMenuManager.close_menu_button] pressed.
@@ -63,10 +65,10 @@ func _on_close_menu_button_pressed() -> void:
 		GlobalVariables.create_notification(notification_text, true)
 	#endregion
 	
-	#region: Pushups per session input
-	# Search pushups per session input text for digits
+	#region: Push-ups per session input
+	# Search push-ups per session input text for digits
 	var pushups_per_session_input_text = regex.search(pushups_per_session_input.text)
-	# Update pushups per session, if digits
+	# Update push-ups per session, if digits
 	if pushups_per_session_input_text:
 		GlobalVariables.pushups_per_session = int(pushups_per_session_input.text)
 		# Create log message
@@ -99,7 +101,7 @@ func _on_close_menu_button_pressed() -> void:
 		GlobalVariables.update_ui()
 	
 	# Close settings menu
-	close_menu()
+	close_menu(self)
 
 
 ## On [member SettingsMenuManager.daily_goal_input] text changed.
@@ -110,9 +112,9 @@ func _on_daily_goal_input_text_changed(input_text: String) -> void:
 	if not _input_text:
 		daily_goal_input.add_theme_color_override("font_color", Color.RED)
 	else:
-		# Get chosen UI theme font color
-		var font_color: Color = background_panel.theme.get_color("label", "Label")
-		# Change label font color
+		# Get chosen UI theme line-edit font color
+		var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("font_color", "LineEdit")
+		# Change line-edit font color
 		daily_goal_input.add_theme_color_override("font_color", font_color)
 
 
@@ -124,9 +126,9 @@ func _on_pushups_per_session_input_text_changed(input_text: String) -> void:
 	if not _input_text:
 		pushups_per_session_input.add_theme_color_override("font_color", Color.RED)
 	else:
-		# Get chosen UI theme font color
-		var font_color: Color = background_panel.theme.get_color("label", "Label")
-		# Change label font color
+		# Get chosen UI theme line-edit font color
+		var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("font_color", "LineEdit")
+		# Change line-edit font color
 		pushups_per_session_input.add_theme_color_override("font_color", font_color)
 
 
@@ -137,11 +139,10 @@ func _ready() -> void:
 	# Connect signal for text changes in input fields
 	daily_goal_input.text_changed.connect(_on_daily_goal_input_text_changed)
 	pushups_per_session_input.text_changed.connect(_on_pushups_per_session_input_text_changed)
+	
 	# Compiles and assign search pattern for regex (Only digits)
 	regex.compile("^[0-9]+$")
-	
-	# Placeholder text for input fields
-	var _placeholder_text: String = "Current: %d"
-	# Set placeholder text for input fields
-	daily_goal_input.placeholder_text = _placeholder_text % GlobalVariables.daily_pushups_goal
-	pushups_per_session_input.placeholder_text = _placeholder_text % GlobalVariables.pushups_per_session
+	# Create placeholder text for input fields
+	create_placeholder_text()
+	# Apply UI theme to background panel
+	apply_ui_theme(background_panel)

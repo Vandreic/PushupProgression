@@ -37,17 +37,9 @@ func update_ui() -> void:
 func apply_ui_theme() -> void:
 	# Apply chosen UI theme to background panel
 	background_panel.theme = GlobalVariables.chosen_ui_theme
-	
-	# Duplicate applied panel theme stylebox
-	var new_theme_stylebox: StyleBoxFlat = background_panel.get_theme_stylebox("panel", "Panel").duplicate()
-	# Set borders width to 0
-	new_theme_stylebox.set_border_width_all(0)
-	# Apply new theme stylebox
-	background_panel.add_theme_stylebox_override("panel", new_theme_stylebox)
-	
 	# Apply chosen UI theme to progress bar
 	current_progress_container.apply_ui_theme()
-	
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
