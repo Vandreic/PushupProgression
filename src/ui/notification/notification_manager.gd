@@ -24,18 +24,18 @@ signal notification_removed
 
 
 ## Apply UI theme.
-func apply_ui_theme() -> void:
+func apply_current_ui_theme() -> void:
 	# Apply current theme
-	background_panel_container.theme = GlobalVariables.chosen_ui_theme
+	background_panel_container.theme = GlobalVariables.current_ui_theme
 	# Create stylebox variant
-	var new_stylebox: StyleBoxFlat = GlobalVariables.create_panel_stylebox_variant()
+	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
 	
 	# Loop trough themes
-	for theme in GlobalVariables.ui_themes_dict:
+	for theme in GlobalVariables.available_themes:
 		# Get chosen theme (based of instance id)
-		if GlobalVariables.chosen_ui_theme.get_instance_id() == GlobalVariables.ui_themes_dict[theme]["instance_id"]:
+		if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
 			# Check if theme has borders
-			if GlobalVariables.ui_themes_dict[theme]["border"] == true:
+			if GlobalVariables.available_themes[theme]["border"] == true:
 				# Add borders
 				new_stylebox.set_border_width_all(3)
 	
@@ -67,10 +67,10 @@ func remove_ui() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Apply UI theme
-	apply_ui_theme()
+	apply_current_ui_theme()
 	# Hide notification UI as default
 	hide_ui()
 	# Check if extend duration is true
 	if extend_duration == true:
-		# Extend animation play speed
+		# Reduces animation speed to half, doubling the display duration
 		animation_player.speed_scale = 0.5

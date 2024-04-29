@@ -107,8 +107,8 @@ func _ready() -> void:
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	
 	# Disable "reset current day" button if no sessions
-	if GlobalVariables.total_pushups_sessions <= 0:
+	if GlobalVariables.sessions_completed_today <= 0:
 		reset_current_day_button.disabled = true
 	
 	# Apply UI theme to background panel
-	apply_ui_theme(background_panel)
+	apply_current_ui_theme(background_panel)

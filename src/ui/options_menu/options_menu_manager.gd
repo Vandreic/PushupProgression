@@ -87,4 +87,4 @@ func _ready() -> void:
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	
 	# Apply UI theme to background panel
-	apply_ui_theme(background_panel)
+	apply_current_ui_theme(background_panel)

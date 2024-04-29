@@ -28,13 +28,13 @@ var total_logs_counter: int = 1
 
 
 ## Apply UI theme.
-func apply_ui_theme() -> void:
+func apply_current_ui_theme() -> void:
 	# Apply chosen UI theme to background panel
-	background_panel.theme = GlobalVariables.chosen_ui_theme
+	background_panel.theme = GlobalVariables.current_ui_theme
 
 
 ## Create UI for logs messages
-func create_logs_ui() -> void:
+func create_log_entrys_ui() -> void:
 	# Loop trough all logs inside logs array
 	for log in GlobalVariables.logs_array:
 		# Duplicate base log node
@@ -62,12 +62,12 @@ func _on_close_menu_button_pressed() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Apply UI theme
-	apply_ui_theme()
+	apply_current_ui_theme()
 	# Connect pressed button signals
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	# Setup logs messages (UI)
-	create_logs_ui()
+	create_log_entrys_ui()
 	# Apply UI theme
-	apply_ui_theme()
+	apply_current_ui_theme()
 	# Update app running flag
-	GlobalVariables.app_running = true
+	GlobalVariables.is_app_running = true

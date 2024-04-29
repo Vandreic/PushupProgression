@@ -26,7 +26,7 @@ extends VBoxContainer
 @onready var daily_goal_label: Label = %DailyGoalLabel
 
 ## Remaining pushups label.
-@onready var remaining_pushups_label: Label = %RemainingPushupsLabel
+@onready var pushups_remaining_today_label: Label = %RemainingPushupsLabel
 
 ## Add pushups button.
 @onready var add_pushups_button: Button = %AddPushupsButton
@@ -34,17 +34,17 @@ extends VBoxContainer
 
 ## Apply UI theme. [br][br]
 ## Used for [member CurrentProgressContainerManager.progress_bar].
-func apply_ui_theme() -> void:
+func apply_current_ui_theme() -> void:
 	# Loop trough themes in UI themes dictionary
-	for theme in GlobalVariables.ui_themes_dict:
+	for theme in GlobalVariables.available_themes:
 		# Get chosen UI theme (based of instance id)
-		if GlobalVariables.chosen_ui_theme.get_instance_id() == GlobalVariables.ui_themes_dict[theme]["instance_id"]:
+		if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
 			# Update progress bar - under
-			progress_bar.texture_under = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["under"]
+			progress_bar.texture_under = GlobalVariables.available_themes[theme]["progress_bar"]["under"]
 			# Update progress bar - over
-			progress_bar.texture_over = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["over"]
+			progress_bar.texture_over = GlobalVariables.available_themes[theme]["progress_bar"]["over"]
 			# Update progress bar - progress
-			progress_bar.texture_progress = GlobalVariables.ui_themes_dict[theme]["progress_bar"]["progress"]
+			progress_bar.texture_progress = GlobalVariables.available_themes[theme]["progress_bar"]["progress"]
 
 
 ## Update progress bar.
@@ -82,18 +82,18 @@ func update_total_pushups_text() -> void:
 
 
 ## Update daily goal and remaining pushups text.
-func update_daily_goal_and_remaining_pushups_text() -> void:
+func update_daily_goal_and_pushups_remaining_today_text() -> void:
 	# Update daily goal
 	daily_goal_label.text = "Daily goal: " + str(GlobalVariables.daily_pushups_goal)
 	# Update remaining pushups to reach daily goal
-	GlobalVariables.remaining_pushups = GlobalVariables.daily_pushups_goal - GlobalVariables.total_pushups_today
+	GlobalVariables.pushups_remaining_today = GlobalVariables.daily_pushups_goal - GlobalVariables.total_pushups_today
 	# Update remaining pushups text
-	remaining_pushups_label.text = "Remaining: " + str(GlobalVariables.remaining_pushups)
+	pushups_remaining_today_label.text = "Remaining: " + str(GlobalVariables.pushups_remaining_today)
 	
 	# Check if progress bar reached 100%
 	if progress_bar.value >= 100:
 		# Update remaining pushups text
-		remaining_pushups_label.text = "Remaining: 0"
+		pushups_remaining_today_label.text = "Remaining: 0"
 
 
 ## Update "add pushups" button text.
@@ -109,7 +109,7 @@ func update_ui() -> void:
 	# Update total pushups text
 	update_total_pushups_text()
 	# Update daily goal and remaining pushups text
-	update_daily_goal_and_remaining_pushups_text()
+	update_daily_goal_and_pushups_remaining_today_text()
 	# Update "add pushups" button text
 	update_add_pushups_button_text()
 
@@ -119,16 +119,16 @@ func _on_add_pushups_button_pressed() -> void:
 	# Update total pushups today
 	GlobalVariables.total_pushups_today += GlobalVariables.pushups_per_session
 	# Update remaining pushups
-	GlobalVariables.remaining_pushups -= GlobalVariables.pushups_per_session
+	GlobalVariables.pushups_remaining_today -= GlobalVariables.pushups_per_session
 	
 	# Update remaining pushups to 0 if <= 0
-	if GlobalVariables.remaining_pushups <= 0:
-		GlobalVariables.remaining_pushups = 0
+	if GlobalVariables.pushups_remaining_today <= 0:
+		GlobalVariables.pushups_remaining_today = 0
 
 	# Update total sessions
-	GlobalVariables.total_pushups_sessions += 1
+	GlobalVariables.sessions_completed_today += 1
 	# Create log message
-	GlobalVariables.create_log("Added new push-up session.")
+	GlobalVariables.create_log_entry("Added new push-up session.")
 	# Save data
 	GlobalVariables.save_data()
 	# Update UI
