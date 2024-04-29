@@ -23,9 +23,24 @@ var notifications_queue: Array = []
 ## Current notification.
 var current_notification: CanvasLayer = null
 
-
-## Create notification. [br]
-## Extends duration if [param extend_duration] is [code]true[/code].
+## Instantiates and displays a notification with an optional extended duration. [br]
+##
+## [br]
+##
+## This function handles the creation of a notification scene ([NotificationManager]).
+## The [param notification_text] parameter is displayed within the notification,
+## and if [param extended_duration] parameter is [code]true[/code], the display
+## time of the notification is doubled. [br]
+##
+## [br]
+## 
+## [param notification_text] ([String]): The text to be displayed in the notification. [br]
+## [param extended_duration] ([bool]): If [code]true[/code], the notification
+## display duration is doubled. [br]
+##
+## [br]
+##
+## See [method NotificationManager._ready] for more details.
 func create_notification(notification_text: String, extend_duration: bool = false) -> void:
 	# Instantiate notification scene
 	var notification_node: CanvasLayer = NOTIFICATION_SCENE.instantiate()
@@ -33,10 +48,10 @@ func create_notification(notification_text: String, extend_duration: bool = fals
 	var panel_container: PanelContainer = notification_node.get_node("%BackgroundPanelContainer")
 	
 	# Get normal state button background color from chosen UI theme
-	var bg_color: Color = GlobalVariables.chosen_ui_theme.get_theme_item\
+	var bg_color: Color = GlobalVariables.current_ui_theme.get_theme_item\
 	(Theme.DATA_TYPE_STYLEBOX, "normal", "Button").bg_color
 	# Duplicate panel container theme stylebox
-	var new_theme_stylebox: StyleBoxFlat = GlobalVariables.chosen_ui_theme.get_theme_item\
+	var new_theme_stylebox: StyleBoxFlat = GlobalVariables.current_ui_theme.get_theme_item\
 	(Theme.DATA_TYPE_STYLEBOX, "panel", "PanelContainer").duplicate()
 	# Change stylebox background color
 	new_theme_stylebox.bg_color = bg_color
@@ -44,7 +59,7 @@ func create_notification(notification_text: String, extend_duration: bool = fals
 	panel_container.add_theme_stylebox_override("panel", new_theme_stylebox)
 	
 	# Get font color from chosen UI theme
-	var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("label", "Label")
+	var font_color: Color = GlobalVariables.current_ui_theme.get_color("label", "Label")
 	# Change label font color
 	panel_container.add_theme_color_override("font_color", font_color)
 	

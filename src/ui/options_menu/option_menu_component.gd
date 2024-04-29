@@ -10,11 +10,11 @@ extends CanvasLayer
 
 
 ## Apply UI theme to background panel.
-func apply_ui_theme(background_panel: Panel) -> void:
+func apply_current_ui_theme(background_panel: Panel) -> void:
 	# Apply current theme
-	background_panel.theme = GlobalVariables.chosen_ui_theme
+	background_panel.theme = GlobalVariables.current_ui_theme
 	# Create stylebox variant
-	var new_stylebox: StyleBoxFlat = GlobalVariables.create_panel_stylebox_variant()
+	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
 	# Override panel theme stylebox
 	background_panel.add_theme_stylebox_override("panel", new_stylebox)
 

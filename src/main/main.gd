@@ -1,5 +1,14 @@
 ## Main Scene.
 ## 
+## Main scene that will be loaded when the application runs. [br]
+##
+## [br]
+##
+## This script is responsible for window sizing based on screen resolution,
+## loading data, applying the UI theme, and updating the user interface. [br]
+##
+## [br]
+##
 ## Path: [code]res://src/main/main.gd[/code]
 
 
@@ -7,45 +16,47 @@ class_name Main
 extends Node
 
 
-# Called when the node enters the scene tree for the first time.
+## Default window size, used when screen height is below a minimum threshold.
+const WINDOW_SIZE: Vector2i = Vector2i(480, 800)
+
+## Minimum screen height to trigger window resizing.
+const MIN_SCREEN_HEIGHT: int = 1280
+
+
+## Initializes the application by adjusting the window size if needed, 
+## loading saved data or applying the UI theme based on the application's 
+## running state, and updating the UI components.
 func _ready():
-	# Change window size if screen width < 1280
-	change_window_size() 
-	
-	# Load save file if game is not running
-	if GlobalVariables.app_running == false:
-		GlobalVariables.load_data()
-	# Else, apply UI theme
-	else:
-		GlobalVariables.apply_ui_theme()
-	
-	# Update UI
+	_resize_and_center_window_if_needed()
+	_load_data_or_apply_theme()
 	GlobalVariables.update_ui()
 
 
-## Change window size to 480x800 if screen height is less than 1280 pixels 
-## (Used for 1920x1080 monitors). [br]
-## Position window in center of screen after resizing. [br]
+## Resizes and centers the application window if the screen height is less
+## than the minimum screen height, defined by [constant MIN_SCREEN_HEIGHT].
+func _resize_and_center_window_if_needed() -> void:
+	var primary_monitor_id: int = DisplayServer.get_primary_screen()
+	var screen_size = DisplayServer.screen_get_size(primary_monitor_id)
+	
+	if screen_size.y < MIN_SCREEN_HEIGHT:
+		DisplayServer.window_set_size(WINDOW_SIZE)
+		_center_window_on_screen(screen_size)
+
+
+## Centers the window on the screen based on the [constant WINDOW_SIZE].
+func _center_window_on_screen(screen_size: Vector2i):
+	var center_x: int = int((screen_size.x - WINDOW_SIZE.x) * 1.833)
+	var center_y: int = int((screen_size.y - WINDOW_SIZE.y) / 2.0)
+	DisplayServer.window_set_position(Vector2i(center_x, center_y))
+
+
+## Loads saved data if application is not running, or applies the UI theme if it is. [br]
 ##
 ## [br]
 ##
-## [b]Note:[/b] Used for PC.
-func change_window_size():
-	# Get primary screen id/index
-	var primary_monitor_id: int = DisplayServer.get_primary_screen()
-	# Get primary screen size
-	var screen_size: Vector2i = DisplayServer.screen_get_size(primary_monitor_id)
-	# Define desired window size
-	var window_size: Vector2i = Vector2i(480, 800)
-	
-	# Change resolution if primary screen height is less than 1280 pixels
-	if screen_size.y < 1280:
-		# Set desired window size
-		DisplayServer.window_set_size(window_size)
-		# Calculate window center position
-		#var center_x: int = int((screen_size.x - window_size.x) / 2.0)
-		var center_x: int = int((screen_size.x - window_size.x) * 1.833)
-		var center_y: int = int((screen_size.y - window_size.y) / 2.0)
-		
-		# Position window in center
-		DisplayServer.window_set_position(Vector2i(center_x, center_y))
+## This decision is based on the global state variable [member GlobalVariables.is_app_running].
+func _load_data_or_apply_theme():
+	if GlobalVariables.is_app_running == false:
+		GlobalVariables.load_data()
+	else:
+		GlobalVariables.apply_current_ui_theme()

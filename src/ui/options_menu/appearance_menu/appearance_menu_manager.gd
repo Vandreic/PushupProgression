@@ -24,7 +24,7 @@ extends OptionMenuComponent
 ## Create theme options.
 func create_theme_options() -> void:
 	# Create theme option for every theme
-	for theme in GlobalVariables.ui_themes_dict:
+	for theme in GlobalVariables.available_themes:
 		# Define theme name
 		var theme_name: String = "  " + theme.capitalize() + "  "
 		# Add theme to option button
@@ -46,7 +46,7 @@ func reopen_menu() -> void:
 	# Instantiate new appearance menu scene
 	var new_menu: CanvasLayer = load("res://src/ui/options_menu/appearance_menu/appearance_menu.tscn").instantiate()	
 	# Apply theme to new appearance menu
-	new_menu.get_node("%BackgroundPanel").theme = GlobalVariables.chosen_ui_theme
+	new_menu.get_node("%BackgroundPanel").theme = GlobalVariables.current_ui_theme
 	# Add appearance menu scene to tree
 	get_parent().add_child(new_menu)
 	
@@ -67,16 +67,16 @@ func _on_themes_option_button_select(index) -> void:
 	GlobalVariables.selected_theme_index = index
 	
 	# Loop trough themes
-	for theme in GlobalVariables.ui_themes_dict:
+	for theme in GlobalVariables.available_themes:
 		# Define theme name
 		var theme_name: String = "  " + theme.capitalize() + "  "
 		# Get chosen theme
 		if themes_option_button.get_item_text(index) == theme_name:
 			# Update theme
-			GlobalVariables.chosen_ui_theme = GlobalVariables.ui_themes_dict[theme]["theme"]
+			GlobalVariables.current_ui_theme = GlobalVariables.available_themes[theme]["theme"]
 	
 	# Apply theme to UI scene and log change
-	GlobalVariables.apply_ui_theme(true)
+	GlobalVariables.apply_current_ui_theme(true)
 	# Save data
 	GlobalVariables.save_data()
 	
@@ -94,4 +94,4 @@ func _ready() -> void:
 	# Create theme options
 	create_theme_options()
 	# Apply UI theme
-	apply_ui_theme(background_panel)
+	apply_current_ui_theme(background_panel)

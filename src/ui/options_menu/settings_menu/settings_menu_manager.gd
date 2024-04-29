@@ -50,7 +50,7 @@ func _on_close_menu_button_pressed() -> void:
 		# Create log message
 		var log_message: String = "Daily goal updated to: %s" % daily_goal_input.text
 		# Create log
-		GlobalVariables.create_log(log_message)
+		GlobalVariables.create_log_entry(log_message)
 		# Create notification with extended duration
 		GlobalVariables.create_notification(log_message, true)
 	# If no input, pass
@@ -74,7 +74,7 @@ func _on_close_menu_button_pressed() -> void:
 		# Create log message
 		var log_message: String = "Push-ups per session updated to: %s" % pushups_per_session_input.text
 		# Create log
-		GlobalVariables.create_log(log_message)
+		GlobalVariables.create_log_entry(log_message)
 		# Create notification with extended duration
 		GlobalVariables.create_notification(log_message, true)
 	# If no input, pass
@@ -113,7 +113,7 @@ func _on_daily_goal_input_text_changed(input_text: String) -> void:
 		daily_goal_input.add_theme_color_override("font_color", Color.RED)
 	else:
 		# Get chosen UI theme line-edit font color
-		var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("font_color", "LineEdit")
+		var font_color: Color = GlobalVariables.current_ui_theme.get_color("font_color", "LineEdit")
 		# Change line-edit font color
 		daily_goal_input.add_theme_color_override("font_color", font_color)
 
@@ -127,7 +127,7 @@ func _on_pushups_per_session_input_text_changed(input_text: String) -> void:
 		pushups_per_session_input.add_theme_color_override("font_color", Color.RED)
 	else:
 		# Get chosen UI theme line-edit font color
-		var font_color: Color = GlobalVariables.chosen_ui_theme.get_color("font_color", "LineEdit")
+		var font_color: Color = GlobalVariables.current_ui_theme.get_color("font_color", "LineEdit")
 		# Change line-edit font color
 		pushups_per_session_input.add_theme_color_override("font_color", font_color)
 
@@ -145,4 +145,4 @@ func _ready() -> void:
 	# Create placeholder text for input fields
 	create_placeholder_text()
 	# Apply UI theme to background panel
-	apply_ui_theme(background_panel)
+	apply_current_ui_theme(background_panel)

@@ -34,11 +34,11 @@ func update_ui() -> void:
 
 
 ## Apply UI theme.
-func apply_ui_theme() -> void:
+func apply_current_ui_theme() -> void:
 	# Apply chosen UI theme to background panel
-	background_panel.theme = GlobalVariables.chosen_ui_theme
+	background_panel.theme = GlobalVariables.current_ui_theme
 	# Apply chosen UI theme to progress bar
-	current_progress_container.apply_ui_theme()
+	current_progress_container.apply_current_ui_theme()
 
 
 # Called when the node enters the scene tree for the first time.
