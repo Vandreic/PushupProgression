@@ -260,6 +260,19 @@ func create_custom_panel_stylebox() -> StyleBoxFlat:
 	return stylebox
 
 
+## Get name of UI theme from [available_themes] as [String].
+func get_theme_name(theme: Theme) -> String:
+	# Iterate through the dictionary of available themes
+	for theme_key in available_themes:
+		# Match provided theme's instance id with theme instance id from dictionary
+		if theme.get_instance_id() == available_themes[theme_key]["instance_id"]:
+			# Return the name of the matched theme
+			return theme_key
+	
+	# Return an empty string if no match is found
+	return ""
+	
+
 ## Applies the [member current_ui_theme] and optionally logs the change.
 func apply_current_ui_theme(log_ui_change: bool = false) -> void:
 	# Check if create log is true
@@ -271,7 +284,7 @@ func apply_current_ui_theme(log_ui_change: bool = false) -> void:
 				# Create text for log message
 				var _log_text: String = "UI theme changed to: " + theme.capitalize()
 				# Create log message
-				create_log_entry(_log_text)
+				add_log_entry(_log_text)
 			
 	# Apply UI theme to UI scene
 	get_tree().call_group("ui_manager", "apply_current_ui_theme")
@@ -282,15 +295,15 @@ func apply_current_ui_theme(log_ui_change: bool = false) -> void:
 ## [br]
 ##
 ## This function triggers the creation of a log entry using the 
-## [method SaveSystem.create_log_entry]. [br]
+## [method SaveSystem.add_log_entry]. [br]
 ##
 ## [br]
 ##
 ##
-## See [method SaveSystem.create_log_entry] for more details.
-func create_log_entry(log_message: String) -> void:
+## See [method SaveSystem.add_log_entry] for more details.
+func add_log_entry(log_message: String) -> void:
 	# Create log
-	get_tree().call_group("save_system", "create_log_entry", log_message)
+	get_tree().call_group("save_system", "add_log_entry", log_message)
 
 
 ## Displays a notification with an optional extended duration. [br]
