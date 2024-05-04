@@ -1,20 +1,29 @@
-## Save & load progression.
+## Handles the saving, loading, and resetting of user progression data and settings.
 ##
-## A save system to save and load progression data. [br]
-##
-## [br]
-##
-## Progression data is stored in [member GlobalVariables.user_data_dict], 
-## then converted to JSON format and saved to a file. [br] 
-## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
+## This class manages all user progression data and settings, which include daily goals, 
+## session details, and customizable settings, stored in [member GlobalVariables.user_data_dict]. [br]
 ##
 ## [br]
 ##
-## See [method create_user_data_dict] and 
-## [method save_data] for more details. [br]
+## All data is converted into JSON format and saved locally as [code]savedata.json[/code]
+## ([constant SAVE_FILE]) at [code]user://[/code] ([constant SAVE_FILE_PATH]). [br]
 ##
 ## [br]
-## 
+##
+## Usage: [br]
+## - [method save_data]: Saves current state to a file. [br]
+## - [method load_data]: Loads saved data into the application. [br]
+## - [method reset_data]: Resets data based on the specified parameter. 
+## Options include [code]current_day[/code], [code]current_month[/code],
+## [code]current_year[/code], and [code]all[/code], which clear the respective data. [br]
+##
+## [br]
+##
+## File storage: [br]
+## - Save file path is defined by [constant SAVE_FILE_PATH] and [constant SAVE_FILE]. [br]
+##
+## [br]
+##
 ## Path: [code]res://src/utilities/save_system.gd[/code]
 
 
@@ -23,253 +32,213 @@ extends Node
 
 
 ## File-path for storing save file.
-const SAVE_GAME_PATH: String = "user://"
+const SAVE_FILE_PATH: String = "user://"
 ## Name of save file.
-const SAVE_FILE: String = "savedata.save"
+const SAVE_FILE: String = "savedata.json"
 
 
-## Create log message.
-func create_log_entry(log_message: String) -> void:
-	# Get time dictionary from system
-	var datetime_dict: Dictionary = Time.get_time_dict_from_system()
-	# Get current time
-	var hour: String = str(datetime_dict["hour"])
-	var minute: String = str(datetime_dict["minute"])
-	var second: String = str(datetime_dict["second"])
+## Get the current system time formatted as "HH:MM:SS".
+func get_current_system_time() -> String:
+	# Get the current system time formatted as "HH:MM:SS"
+	var current_time_dict: Dictionary = Time.get_time_dict_from_system()
+	return "%02d:%02d:%02d" % [current_time_dict["hour"], current_time_dict["minute"], current_time_dict["second"]]
+
+
+## Adds a log entry to [member GlobalVariables.logs_array].
+func add_log_entry(message: String) -> void:
+	# Get the current system time formatted as "HH:MM:SS"
+	var current_time_dict: Dictionary = Time.get_time_dict_from_system()
+	var time_stamp: String = get_current_system_time()
 	
-	# Convert hour to "00" format
-	if hour.length() < 2:
-		var _new_hour_value: String = "0" + hour
-		hour = _new_hour_value
-		
-	# Convert minute to "00" format
-	if minute.length() < 2:
-		var _new_minute_value: String = "0" + minute
-		minute = _new_minute_value
-
-	# Convert second to "00" format
-	if second.length() < 2:
-		var _new_second_value: String = "0" + second
-		second = _new_second_value
-
-	# Create timestamp
-	var timestamp: String = "[%s:%s:%s] " % [hour, minute, second]
-	# Create full log message
-	var full_log_message: String = timestamp + log_message
-	# Add to logs array
-	GlobalVariables.logs_array.append(full_log_message)
+	# Add the full log entry with a timestamp
+	var log_entry: String = "[%s] %s" % [time_stamp, message]
+	GlobalVariables.logs_array.append(log_entry)
 
 
-## Create [Dictionary] for the current day's data.
-func create_current_day_data_dict() -> Dictionary:
-	# Initialize dictionary for current day
+## Creates a [Dictionary] containing all relevant data for storing the current day's push-up progress. [br]
+##
+## [br]
+##
+## The dictionary include: [br]
+## • [code]daily_pushups_goal[/code] ([int]): The daily goal for push-ups. [br]
+## • [code]pushups_per_session[/code] ([int]): Number of push-ups performed per session. [br]
+## • [code]pushups_remaining_today[/code] ([int]): Remaining push-ups needed to meet the daily goal. [br]
+## • [code]total_pushups_today[/code] ([int]): Total number of push-ups completed throughout the day. [br]
+## • [code]sessions[/code] ([Dictionary]): A nested [Dictionary] that can store detailed session data. [br]
+##
+## [br]
+##
+## All keys except for the [code]sessions[/code] key are directly populated from 
+## the [GlobalVariables] autoload singleton script. The [code]sessions[/code] key
+## is initialized as an empty [Dictionary] intended to be filled with session-specific data.
+func create_data_dict_for_current_day() -> Dictionary:
 	var day_dict: Dictionary = {}
-	# Add daily goal to dictionary
 	day_dict["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Add pushups per session
 	day_dict["pushups_per_session"] = GlobalVariables.pushups_per_session
-	# Add remaining pushups
 	day_dict["pushups_remaining_today"] = GlobalVariables.pushups_remaining_today
-	# Add total pushups for today
 	day_dict["total_pushups_today"] = GlobalVariables.total_pushups_today
-	# Add sessions
 	day_dict["sessions"] = {}
-	# Return created dictionary
 	return day_dict
 
 
-## Create [Dictionary] to store current day's progression data and save it to 
-## [member GlobalVariables.user_data_dict].
-func create_user_data_dict() -> void:
-	create_log_entry("Creating data dictionary.")
+## Initializes and populates the [member GlobalVariables.user_data_dict] with 
+## the current day's progress data and user-specific settings.
+func initialize_user_data_dict() -> void:
+	# Log the start of the dictionary creation process
+	add_log_entry("Creating data dictionary.")
+
+	# Get the current date and time from the system and store it in variables
+	var current_time_dict: Dictionary = Time.get_datetime_dict_from_system()
+	var current_year: int = current_time_dict["year"]
+	var current_month: int = current_time_dict["month"]
+	var current_day: int = current_time_dict["day"]
 	
-	# Get datetime dictionary from system
-	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
-	# Get current year number
-	var current_year: int = datetime_dict["year"]
-	# Get current month number
-	var current_month: int = datetime_dict["month"]
-	# Get current day number
-	var current_day: int = datetime_dict["day"]
-	
-	# Create dictionary for calendar
+	# Initialize a nested dictionary structure to organize data by calendar date
 	var calendar_dict: Dictionary = {}
-	# Create dictionary for current year
 	calendar_dict[current_year] = {}
-	# Create dictinary for current month
 	calendar_dict[current_year][current_month] = {}
-	# Create dictinary for current day
-	calendar_dict[current_year][current_month][current_day] = {}
-	# Create dictionary for the current day's data
-	calendar_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+	calendar_dict[current_year][current_month][current_day] = create_data_dict_for_current_day()
 	
-	# Save calendar dictionary to save data dictionary
+	# Update the global user data dictionary with the new calendar structure
 	GlobalVariables.user_data_dict["calendar"] = calendar_dict
-	# Save daily pushups goal
-	GlobalVariables.user_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Save pushups per session
-	GlobalVariables.user_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
+
+	# Set global settings based on current values, ensuring they are saved and can be reloaded
+	GlobalVariables.user_data_dict["settings"] = {
+		"daily_pushups_goal": GlobalVariables.daily_pushups_goal,
+		"pushups_per_session": GlobalVariables.pushups_per_session
+	}
 	
-	create_log_entry("Data dictionary created successfully.")
+	# Log successful creation of the data dictionary
+	add_log_entry("Data dictionary created successfully.")
 
 
-## Create save file. [br]
+## Opens [constant SAVE_FILE] at the specified path [constant SAVE_FILE_PATH]
+## [br]
 ##
 ## [br]
 ##
-## Save file path: [constant SaveSystem.SAVE_GAME_PATH]
+## Returns: [br]
+## • [code]save_file[/code] ([FileAccess]): If opening the file succeeded, returns the file access object. [br]
+## • [code]open_error_message[/code] ([String]): If opening the file failed, returns an error message.
+func open_save_file(file_access: FileAccess.ModeFlags):
+	# Open save file with provided access
+	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH + SAVE_FILE, file_access)
+	
+	# Return save file if no opening errors, else return open error message
+	if save_file != null:
+		return save_file
+		
+	# Return the error message
+	var open_error_message: String = get_file_opening_error_message_as_string(FileAccess.get_open_error())
+	return open_error_message
+
+
+## Creates a save file at the specified path [constant SAVE_FILE_PATH]. [br]
+##
+## [br]
+##
+## It initializes the [member GlobalVariables.user_data_dict] and stores it as a JSON string in the save file.
 func create_save_file() -> void:
-	# Create log
-	create_log_entry("No existing save file. \
-	Creating new save file, " + SAVE_FILE + ", at " + SAVE_GAME_PATH)
-	# Create notification with extended duration
-	GlobalVariables.create_notification("No existing save file...", true)
+	# Log entry for creating a save file
+	add_log_entry("Creating save file: " + SAVE_FILE + " at " + SAVE_FILE_PATH)
+	# Initialize user data dictionary (Needed to create a new save file)
+	initialize_user_data_dict()
+	# Open the save file for writing
+	var new_save_file = open_save_file(FileAccess.WRITE)
 	
-	# Create new save data dictionary
-	create_user_data_dict()
-	
-	# Create new save file
-	var new_save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
-	
-	# Check for file errors
-	if new_save_file == null:
-		# Get error text
-		var error_text: String = get_file_error_message(FileAccess.get_open_error())
-		# Create log
-		create_log_entry("Error creating new save file. " + error_text)
-		# Create notification text
+	# Log error, notify user, and exit on file open failure
+	if new_save_file is String:
+		add_log_entry("Error creating new save file. " + new_save_file)
 		var notification_text: String = "Error creating new save file\n" + "See logs for more details."
-		# Create notification with extended duration
 		GlobalVariables.create_notification(notification_text, true)
 		return
-	
-	create_log_entry("Converting data to JSON.")
-	# Convert save data dictionary to JSON
+		
+	# Convert the user data dictionary to a JSON string
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
-	create_log_entry("Writing data to " + SAVE_FILE + " at " + SAVE_GAME_PATH)
-	# Store the save data dictionary as a new line in the save file.
+	# Write the JSON string to the save file
 	new_save_file.store_line(json_string)
 	
-	# Create log
-	create_log_entry("New save file created and data saved successfully.")
-	# Create notification with extended duration
+	# Log and notify successful creation of the save file
+	add_log_entry("New save file created and data saved successfully.")
 	GlobalVariables.create_notification("New save file created successfully!", true)
 
 
-## Return an error message as [String] based on [param file_error] value.
-func get_file_error_message(file_error: Error) -> String:
-	# Create error info text
-	var error_info_text: String
+## Generates a user-friendly error message [String] based on the [param file_error] code. [br]
+##
+## [br]
+##
+## Returns: [br]
+## • [code]error_message_text[/code] ([String]): A descriptive error message corresponding to the error code.
+func get_file_opening_error_message_as_string(file_error: Error) -> String:
+	# Define error message text
+	var error_message_text: String = "Error %s: %s"
 	
+	# Match the error code to a user-friendly description
 	match file_error:
-		# File not found
 		Error.ERR_FILE_NOT_FOUND:
-			error_info_text = "Error %s: Save file not found." % Error.FAILED
-		# File on bad drive
+			return error_message_text % [file_error, "File not found."]
 		Error.ERR_FILE_BAD_DRIVE:
-			error_info_text = "Error %s: Save file on bad drive." % Error.ERR_FILE_BAD_DRIVE
-		# File on bad path
+			return error_message_text % [file_error, "Invalid drive."]
 		Error.ERR_FILE_BAD_PATH:
-			error_info_text = "Error %s: Save file on bad path." % Error.ERR_FILE_BAD_PATH
-		# No permission to file
+			return error_message_text % [file_error, "Invalid file path."]
 		Error.ERR_FILE_NO_PERMISSION:
-			error_info_text = "Error %s: No permission to write to save file." % Error.ERR_FILE_NO_PERMISSION
-		# File is already in use
+			return error_message_text % [file_error, "Permission denied."]
 		Error.ERR_FILE_ALREADY_IN_USE:
-			error_info_text = "Error %s: Save file is already in use." % Error.ERR_FILE_ALREADY_IN_USE
-		# Could not open file
+			return error_message_text % [file_error, "File is in use."]
 		Error.ERR_FILE_CANT_OPEN:
-			error_info_text = "Error %s: Could not open save file." % Error.ERR_CANT_OPEN
-		# Could not write to file
+			return error_message_text % [file_error, "Unable to open file."]
 		Error.ERR_FILE_CANT_WRITE:
-			error_info_text = "Error %s: Could not write to save file." % Error.ERR_FILE_CANT_WRITE
-		# Could not read from file
+			return error_message_text % [file_error, "Unable to write to file."]
 		Error.ERR_FILE_CANT_READ:
-			error_info_text = "Error %s: Could not read save file." % Error.ERR_FILE_CANT_READ
-		# File is unrecognized
+			return error_message_text % [file_error, "Unable to read file."]
 		Error.ERR_FILE_UNRECOGNIZED:
-			error_info_text = "Error %s: Save file is unrecognized." % Error.ERR_FILE_UNRECOGNIZED
-		# File is corrupt
+			return error_message_text % [file_error, "Unrecognized file format."]
 		Error.ERR_FILE_CORRUPT:
-			error_info_text = "Error %s: Save file is corrupt." % Error.ERR_FILE_CORRUPT
-		# Unknown file error
+			return error_message_text % [file_error, "Corrupted file."]
 		_:
-			error_info_text = "Error %s: Unknown file error." % file_error
-	
-	# Return error message text
-	return error_info_text
+			return error_message_text % [file_error, "Unknown error."]
 
 
-## Save progression. [br][br]
-## Converts [member GlobalVariables.user_data_dict] to JSON and saves it to a file. [br]
+## Save user-specific settings to [member GlobalVariables.user_data_dict]. [br]
 ##
 ## [br]
 ##
-## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
-##
-## [br]
-##
-## [b]Note[/b]: When converting to JSON, all data types are transformed into JSON strings.
-func save_data() -> void:
-	create_log_entry("Initiating data to save file.")
-	
-	# Get save file
-	var save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.WRITE)
-	
-	# Check for file errors
-	if save_file == null:
-		# Get error text
-		var error_text: String = get_file_error_message(FileAccess.get_open_error())
-		# Create log
-		create_log_entry("Error opening save file. " + error_text)
-		# Create notification text
-		var notification_text: String = "Error opening save file\n" + "See logs for more details."
-		# Create notification with extended duration
-		GlobalVariables.create_notification(notification_text, true)
-		return
-	
-	# Get datetime dictionary from system
-	var datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
-	# Get current year number
-	var current_year: int = datetime_dict["year"]
-	# Get current month number
-	var current_month: int = datetime_dict["month"]
-	# Get current day number
-	var current_day: int = datetime_dict["day"]
-	# Get current hour
-	var current_hour: int = datetime_dict["hour"]
-	# Get current minut
-	var current_minute: int = datetime_dict["minute"]
-	# Get current second
-	var current_second: int = datetime_dict["second"]
-	
-	#region: Save to settings dictionary	
-	# Loop trough themes
-	for theme in GlobalVariables.available_themes:
-		# Get chosen theme (based of instance id)
-		if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
-			# Save theme
-			GlobalVariables.user_data_dict["settings"]["ui_theme"] = theme
-			# Save theme index
-			GlobalVariables.user_data_dict["settings"]["ui_theme_index"] = GlobalVariables.selected_theme_index
-			
-	# Save daily pushups goal
+## Settings include: [br]
+## • [member GlobalVariables.current_ui_theme] [br]
+## • [member GlobalVariables.selected_theme_index] [br]
+## • [member GlobalVariables.daily_pushups_goal] [br]
+## • [member GlobalVariables.pushups_per_session]
+func save_settings_to_user_data_dict() -> void:
+	# Get name of current applied theme
+	var theme_name: String = GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme)
+	# Save settings to user data dictionary
+	GlobalVariables.user_data_dict["settings"]["ui_theme"] = theme_name
+	GlobalVariables.user_data_dict["settings"]["ui_theme_index"] = GlobalVariables.selected_theme_index
 	GlobalVariables.user_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Save pushups per session
 	GlobalVariables.user_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
-	#endregion
-	
-	#region: Save to calendar dictionary
-	# Save daily pushups goal
+
+
+## Save progression data for current day to [member GlobalVariables.user_data_dict]. [br]
+##
+## [br]
+##
+## Progression data include: [br]
+## • [member GlobalVariables.daily_pushups_goal] [br]
+## • [member GlobalVariables.pushups_per_session] [br]
+## • [member GlobalVariables.pushups_remaining_today] [br]
+## • [member GlobalVariables.total_pushups_today]
+func save_progression_for_current_day_to_user_data_dict() -> void:
+	# Get the current date and time from the system and store it in variables
+	var current_datetime_dict: Dictionary = Time.get_datetime_dict_from_system()
+	var current_year: int = current_datetime_dict["year"]
+	var current_month: int = current_datetime_dict["month"]
+	var current_day: int = current_datetime_dict["day"]
+	# Save progression data to user data dictionary
 	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	# Save pushups per session
 	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["pushups_per_session"] = GlobalVariables.pushups_per_session
-	# Save remaining pushups
 	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["pushups_remaining_today"] = GlobalVariables.pushups_remaining_today
-	# Save total pushups
 	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["total_pushups_today"] = GlobalVariables.total_pushups_today
-	#endregion
 	
 	# Check if any sessions
 	if GlobalVariables.sessions_completed_today > 0:
@@ -283,21 +252,51 @@ func save_data() -> void:
 		# Save pushups in session
 		GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session]["pushups"] = GlobalVariables.pushups_per_session
 		
-		# Create timestamp
-		var timestamp: String = "%s:%s:%s" % [current_hour, current_minute, current_second]
+		# Get current system time
+		var time_stamp: String = get_current_system_time()
 		# Save timestamp for session
-		GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session]["time"] = timestamp
+		GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"][current_session]["time"] = time_stamp
+
+
+## Save user progression and settings. [br]
+##
+## [br]
+##
+## Converts [member GlobalVariables.user_data_dict] to JSON format and saves locally
+## as [code]savedata.json[/code] ([constant SAVE_FILE]) at [code]user://[/code] 
+## ([constant SAVE_FILE_PATH]). [br]
+##
+## [br]
+##
+## [b]Note[/b]: When converting to JSON, all data types are transformed into JSON strings.
+func save_data() -> void:
+	add_log_entry("Initiating data to save file.")
 	
-	create_log_entry("Converting data to JSON.")
+	# Open the save file for writing
+	var save_file = open_save_file(FileAccess.WRITE)
+	
+	# Log error, notify user, and exit on file open failure
+	if save_file is String:
+		add_log_entry("Error opening save file. " + save_file)
+		var notification_text: String = "Error opening save file\n" + "See logs for more details."
+		GlobalVariables.create_notification(notification_text, true)
+		return
+	
+	# Save settings to user data dictionary
+	save_settings_to_user_data_dict()
+	# Save progression for current day to user data dictionary
+	save_progression_for_current_day_to_user_data_dict()
+	
+	add_log_entry("Converting data to JSON.")
 	# Convert save data dictionary to JSON
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
-	create_log_entry("Writing data to " + SAVE_FILE + " at " + SAVE_GAME_PATH + ".")
+	add_log_entry("Writing data to " + SAVE_FILE + " at " + SAVE_FILE_PATH + ".")
 	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
 	
 	# Create log
-	create_log_entry("Data saved successfully.")
+	add_log_entry("Data saved successfully.")
 	# Create notification
 	GlobalVariables.create_notification("Saved successfully!")
 
@@ -338,28 +337,28 @@ func load_data_for_current_day(saved_current_day_dict) -> void:
 ##
 ## [br]
 ## 
-## Save file path: [constant SaveSystem.SAVE_GAME_PATH] [br]
+## Save file path: [constant SaveSystem.SAVE_FILE_PATH] [br]
 ##
 ## [br]
 ##
 ## [b]Note:[/b] Converts some keys from JSON strings to Godot data types.
 func load_data() -> void:
-	create_log_entry("Loading data from save file.")
+	add_log_entry("Loading data from save file.")
 	
 	# Create save file, if none exists
-	if not FileAccess.file_exists(SAVE_GAME_PATH + SAVE_FILE):
+	if not FileAccess.file_exists(SAVE_FILE_PATH + SAVE_FILE):
 		create_save_file()
 		return
 	
 	# Load save file
-	var save_file = FileAccess.open(SAVE_GAME_PATH + SAVE_FILE, FileAccess.READ)	
+	var save_file = FileAccess.open(SAVE_FILE_PATH + SAVE_FILE, FileAccess.READ)	
 	
 	# Check for file errors
 	if save_file == null:
 		# Get error text
-		var error_text: String = get_file_error_message(FileAccess.get_open_error())
+		var error_text: String = get_file_opening_error_message_as_string(FileAccess.get_open_error())
 		# Create log
-		create_log_entry("Error opening save file. " + error_text)
+		add_log_entry("Error opening save file. " + error_text)
 		# Create notification text
 		var notification_text: String = "Error opening save file.\n" + "See logs for more details."
 		# Create notification with extended duration
@@ -369,11 +368,11 @@ func load_data() -> void:
 	# Create JSON helper
 	var json = JSON.new()
 	
-	create_log_entry("Receiving data from save file.")
+	add_log_entry("Receiving data from save file.")
 	# Get JSON text from save file
 	var json_string = save_file.get_as_text()
 	
-	create_log_entry("Converting data from save file.")
+	add_log_entry("Converting data from save file.")
 	# Parse (convert) JSON text
 	var save_file_data = JSON.parse_string(json_string)
 	
@@ -383,7 +382,7 @@ func load_data() -> void:
 		var error_message: String = "JSON Parse Error: " + str(json.get_error_message())\
 		+ " in " + str(json_string) + " at line " + str(json.get_error_line())
 		# Create log
-		create_log_entry("Error converting data from save file. " + error_message)
+		add_log_entry("Error converting data from save file. " + error_message)
 		# Create notification text
 		var notification_text: String = "Error converting data from save file\n" + "See logs for more details."
 		# Create notification with extended duration
@@ -470,7 +469,7 @@ func load_data() -> void:
 			# Create dictionary for current day
 			years_dict[current_year][current_month][current_day] = {}
 			# Create dictionary for the current day's data.
-			years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+			years_dict[current_year][current_month][current_day] = create_data_dict_for_current_day()
 			
 		# Create dictionary if none exist for current month
 		elif not save_file_data["calendar"][str(current_year)].has(str(current_month)):
@@ -479,14 +478,14 @@ func load_data() -> void:
 			# Create dictionary for current day
 			years_dict[current_year][current_month][current_day] = {}
 			# Create dictionary for the current day's data.
-			years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+			years_dict[current_year][current_month][current_day] = create_data_dict_for_current_day()
 		
 		# Create dictionary if none exist for current day	
 		elif not save_file_data["calendar"][str(current_year)][str(current_month)].has(str(current_day)):
 			# Create dictionary for current day
 			years_dict[current_year][current_month][current_day] = {}
 			# Create dictionary for the current day's data.
-			years_dict[current_year][current_month][current_day] = create_current_day_data_dict()
+			years_dict[current_year][current_month][current_day] = create_data_dict_for_current_day()
 			
 		# Load saved data, if dictionary for current date exists
 		else:
@@ -496,7 +495,7 @@ func load_data() -> void:
 		GlobalVariables.user_data_dict["calendar"] = years_dict
 		
 		# Create log
-		create_log_entry("Loaded data from save file successfully.")
+		add_log_entry("Loaded data from save file successfully.")
 		# Create notification
 		GlobalVariables.create_notification("Loaded successfully!")
 
@@ -505,9 +504,10 @@ func load_data() -> void:
 ##
 ## [br]
 ##
-## Global values: [member GlobalVariables.total_pushups_today],
-## [member GlobalVariables.sessions_completed_today], and 
-## [member GlobalVariables.pushups_remaining_today]
+## Global values include: [br]
+## • [member GlobalVariables.total_pushups_today] [br]
+## • [member GlobalVariables.sessions_completed_today] [br]
+## • [member GlobalVariables.pushups_remaining_today]
 func reset_global_values() -> void:
 	# Reset total pushups
 	GlobalVariables.total_pushups_today = 0
@@ -521,13 +521,13 @@ func reset_global_values() -> void:
 ##
 ## [br]
 ##
-## [param reset_option] Options: [br]
+## [param reset_option] parameters: [br]
 ## • [code]current_day[/code]: Clears today's progression. [br]
 ## • [code]current_month[/code]: Clears this month's progression. [br]
 ## • [code]current_year[/code]: Clears this year's progression. [br]
 ## • [code]all[/code]: Clears all saved progression.
 func reset_data(reset_option: String) -> void:
-	create_log_entry("Resetting data with option: [" + reset_option + "].\nThis CANNOT be undone!")
+	add_log_entry("Resetting data with option: [" + reset_option + "].\nThis CANNOT be undone!")
 	# Reset global values
 	reset_global_values()
 	
@@ -547,7 +547,7 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day].clear()
 			# Create sessions dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-			create_log_entry("Successfully data reset for current day: %s/%s-%s." % [current_day, current_month, current_year])
+			add_log_entry("Successfully data reset for current day: %s/%s-%s." % [current_day, current_month, current_year])
 		
 		"current_month":
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month].clear()
@@ -555,20 +555,20 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-			create_log_entry("Successfully data reset for current month: /%s-%s." % [current_month, current_year])
+			add_log_entry("Successfully data reset for current month: /%s-%s." % [current_month, current_year])
 			
 		"current_year":
-			create_log_entry("Resetting saved progression for current year.")
+			add_log_entry("Resetting saved progression for current year.")
 			GlobalVariables.user_data_dict["calendar"][current_year].clear()
 			# Create new dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month] = {}
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-			create_log_entry("Successfully data reset for current year: %s." % current_year)
+			add_log_entry("Successfully data reset for current year: %s." % current_year)
 		
 		"all":
-			create_log_entry("Resetting all saved progression.")
+			add_log_entry("Resetting all saved progression.")
 			# Clear saved dictionary
 			GlobalVariables.user_data_dict["calendar"].clear()
 			# Create new dictionary for current date
@@ -577,10 +577,10 @@ func reset_data(reset_option: String) -> void:
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day] = {}
 			# Create sessions dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
-			create_log_entry("Successfully data reset for all saved progression.")
+			add_log_entry("Successfully data reset for all saved progression.")
 		
 		_:
-			create_log_entry("Unsupported reset option: " + reset_option)
+			add_log_entry("Unsupported reset option: " + reset_option)
 
 	# Create notification
 	GlobalVariables.create_notification("Reset successfully!")

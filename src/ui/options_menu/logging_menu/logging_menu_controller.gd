@@ -34,7 +34,7 @@ func apply_current_ui_theme() -> void:
 
 
 ## Create UI for logs messages
-func create_log_entrys_ui() -> void:
+func add_log_entrys_ui() -> void:
 	# Loop trough all logs inside logs array
 	for log in GlobalVariables.logs_array:
 		# Duplicate base log node
@@ -66,7 +66,7 @@ func _ready() -> void:
 	# Connect pressed button signals
 	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
 	# Setup logs messages (UI)
-	create_log_entrys_ui()
+	add_log_entrys_ui()
 	# Apply UI theme
 	apply_current_ui_theme()
 	# Update app running flag
