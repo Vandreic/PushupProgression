@@ -139,6 +139,12 @@ const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
 ## Path to the logging menu scene.
 const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
 
+## Path to themes files
+const LIGHT_BLUE_THEME_PATH: String = "res://scenes/ui/themes/light_blue_theme.tres"
+const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://scenes/ui/themes/light_blue_material_design_theme.tres"
+const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://scenes/ui/themes/dark_blue_material_design_theme.tres"
+
+
 ## Indicates whether the app is currently running.
 var is_app_running: bool = false
 
@@ -176,8 +182,8 @@ var logs_array: Array = []
 ## Dictionary of available UI themes and their properties.
 var available_themes: Dictionary = {
 	"light_blue": {
-		"theme": preload("res://assets/themes/light_blue_theme.tres"),
-		"instance_id": preload("res://assets/themes/light_blue_theme.tres").get_instance_id(),
+		"theme": preload(LIGHT_BLUE_THEME_PATH),
+		"instance_id": preload(LIGHT_BLUE_THEME_PATH).get_instance_id(),
 		"border": true,
 		"color": {
 			"primary_container": "#f1f0f7",
@@ -191,8 +197,8 @@ var available_themes: Dictionary = {
 	},
 	
 	"light_blue_material_design": {
-		"theme": preload("res://assets/themes/light_blue_material_design_theme.tres"),
-		"instance_id": preload("res://assets/themes/light_blue_material_design_theme.tres").get_instance_id(),
+		"theme": preload(LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH),
+		"instance_id": preload(LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH).get_instance_id(),
 		"border": false,
 		"color": {
 			"primary_container": "#dae2ff",
@@ -206,8 +212,8 @@ var available_themes: Dictionary = {
 	},
 	
 	"dark_blue_material_design": {
-		"theme": preload("res://assets/themes/dark_blue_material_design_theme.tres"),
-		"instance_id": preload("res://assets/themes/dark_blue_material_design_theme.tres").get_instance_id(),
+		"theme": preload(DARK_BLUE_MATERIAL_DESIGN_THEME_PATH),
+		"instance_id": preload(DARK_BLUE_MATERIAL_DESIGN_THEME_PATH).get_instance_id(),
 		"border": true,
 		"color": {
 			"primary_container": "#121318",

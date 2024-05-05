@@ -288,16 +288,14 @@ func save_data() -> void:
 	save_progression_for_current_day_to_user_data_dict()
 	
 	add_log_entry("Converting data to JSON.")
-	# Convert save data dictionary to JSON
+	# Convert user data dictionary to JSON text
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
 	add_log_entry("Writing data to " + SAVE_FILE + " at " + SAVE_FILE_PATH + ".")
 	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
-	
-	# Create log
+	1
 	add_log_entry("Data saved successfully.")
-	# Create notification
 	GlobalVariables.create_notification("Saved successfully!")
 
 

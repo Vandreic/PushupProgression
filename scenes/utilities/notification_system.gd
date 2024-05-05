@@ -12,7 +12,7 @@ extends Node
 
 
 ## Notification scene.
-const NOTIFICATION_SCENE: PackedScene = preload("res://src/ui/notification/notification.tscn")
+const NOTIFICATION_SCENE: PackedScene = preload("res://scenes/ui/notification/notification.tscn")
 
 ## Notification animation player.
 @onready var notification_animation_player: AnimationPlayer = %NotificationAnimationPlayer
