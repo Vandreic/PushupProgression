@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/options_menu/appearance_menu/appearance_menu_manager.gd[/code]
+## Path: [code]res://scenes/options_menu/appearance_menu/appearance_menu_manager.gd[/code]
 
 
 class_name AppearanceMenuManager
@@ -44,7 +44,7 @@ func reopen_menu() -> void:
 	self.visible = false
 	
 	# Instantiate new appearance menu scene
-	var new_menu: CanvasLayer = load("res://src/ui/options_menu/appearance_menu/appearance_menu.tscn").instantiate()	
+	var new_menu: CanvasLayer = load(GlobalVariables.APPEARANCE_MENU_SCENE_PATH).instantiate()	
 	# Apply theme to new appearance menu
 	new_menu.get_node("%BackgroundPanel").theme = GlobalVariables.current_ui_theme
 	# Add appearance menu scene to tree

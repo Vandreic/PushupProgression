@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/popup_confirm_box/popup_confirm_box_manager.gd[/code]
+## Path: [code]res://scenes/popup_confirm_box/popup_confirm_box_manager.gd[/code]
 
 
 class_name PopupConfirmBoxManager

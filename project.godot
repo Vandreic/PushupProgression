@@ -13,7 +13,7 @@ config_version=5
 config/name="Push-Up Progression"
 config/description="An app for tracking push-up progress and reaching daily goals, built with Godot."
 config/version="1.4.0"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://assets/app_icon/app_icon.png"
 config/windows_native_icon="res://assets/app_icon/windows_icon.ico"
@@ -33,16 +33,16 @@ window/handheld/orientation=1
 [file_customization]
 
 folder_colors={
+"res://scenes/log_console/": "green",
+"res://scenes/main/utilities/": "pink",
+"res://scenes/notification/": "orange",
+"res://scenes/options_menu/": "green",
+"res://scenes/options_menu/appearance_menu/": "green",
+"res://scenes/options_menu/reset_options_menu/": "green",
+"res://scenes/options_menu/settings_menu/": "green",
+"res://scenes/popup_confirm_box/": "yellow",
 "res://scenes/ui/": "blue",
-"res://scenes/ui/notification/": "orange",
-"res://scenes/ui/options_menu/": "green",
-"res://scenes/ui/options_menu/appearance_menu/": "green",
-"res://scenes/ui/options_menu/logging_menu/": "green",
-"res://scenes/ui/options_menu/reset_options_menu/": "green",
-"res://scenes/ui/options_menu/settings_menu/": "green",
-"res://scenes/ui/popup_confirm_box/": "yellow",
-"res://scenes/ui/themes/": "red",
-"res://scenes/utilities/": "pink"
+"res://themes/": "red"
 }
 
 [input_devices]

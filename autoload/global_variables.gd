@@ -12,7 +12,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://global/global_variables.gd[/code] [br]
+## Path: [code]res://autoload/global_variables.gd[/code] [br]
 ## 
 ## [br]
 ##
@@ -134,15 +134,37 @@ extends Node
 
 
 ## Path to the main menu scene.
-const MAIN_SCENE_PATH: String = "res://src/main/main.tscn"
+const MAIN_SCENE_PATH: String = "res://scenes/main/main.tscn"
 
-## Path to the logging menu scene.
-const LOGGING_MENU_SCENE_PATH: String = "res://src/ui/options_menu/logging_menu/logging_menu.tscn"
+## Path to the log console scene.
+const LOG_CONSOLE_SCENE_PATH: String = "res://scenes/log_console/log_console.tscn"
 
-## Path to themes files
-const LIGHT_BLUE_THEME_PATH: String = "res://scenes/ui/themes/light_blue_theme.tres"
-const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://scenes/ui/themes/light_blue_material_design_theme.tres"
-const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://scenes/ui/themes/dark_blue_material_design_theme.tres"
+## Path to the options menu scene.
+const OPTIONS_MENU_SCENE_PATH: String = "res://scenes/options_menu/options_menu.tscn"
+
+## Path to the appearance menu scene.
+const APPEARANCE_MENU_SCENE_PATH: String = "res://scenes/options_menu/appearance_menu/appearance_menu.tscn"
+
+## Path to the reset options menu scene.
+const RESET_OPTIONS_MENU_SCENE_PATH: String = "res://scenes/options_menu/reset_options_menu/reset_options_menu.tscn"
+
+## Path to the settings menu scene
+const SETTINGS_MENU_SCENE_PATH: String = "res://scenes/options_menu/settings_menu/settings_menu.tscn"
+
+## Path to the notification scene.
+const NOTIFICATION_SCENE_PATH: String = "res://scenes/notification/notification.tscn"
+
+## Path to the pop-up confirm box scene.
+const POPUP_CONFIRM_BOX_SCENE_PATH: String = "res://scenes/popup_confirm_box/popup_confirm_box.tscn"
+
+## Path to the [code]light_blue[/code] theme file.
+const LIGHT_BLUE_THEME_PATH: String = "res://themes/light_blue_theme.tres"
+
+## Path to the [code]light_blue_material_design[/code] theme file.
+const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://themes/light_blue_material_design_theme.tres"
+
+## Path to the [code]dark_blue_material_design[/code] theme file.
+const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://themes/dark_blue_material_design_theme.tres"
 
 
 ## Indicates whether the app is currently running.

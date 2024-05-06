@@ -24,7 +24,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/utilities/save_system.gd[/code]
+## Path: [code]res://scenes/main/utilities/save_system.gd[/code]
 
 
 class_name SaveSystem
@@ -36,6 +36,8 @@ const SAVE_FILE_PATH: String = "user://"
 ## Name of save file.
 const SAVE_FILE: String = "savedata.json"
 
+## Absolute, native OS path corresponding to the localized [code]user://[/code] ([constant SAVE_FILE_PATH]).
+var native_os_save_file_path: String = ProjectSettings.globalize_path(SAVE_FILE_PATH+SAVE_FILE)
 
 ## Get the current system time formatted as "HH:MM:SS".
 func get_current_system_time() -> String:
@@ -105,7 +107,9 @@ func initialize_user_data_dict() -> void:
 	# Set global settings based on current values, ensuring they are saved and can be reloaded
 	GlobalVariables.user_data_dict["settings"] = {
 		"daily_pushups_goal": GlobalVariables.daily_pushups_goal,
-		"pushups_per_session": GlobalVariables.pushups_per_session
+		"pushups_per_session": GlobalVariables.pushups_per_session,
+		"ui_theme": GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme),
+		"ui_theme_index": GlobalVariables.selected_theme_index
 	}
 	
 	# Log successful creation of the data dictionary
@@ -140,7 +144,7 @@ func open_save_file(file_access: FileAccess.ModeFlags):
 ## It initializes the [member GlobalVariables.user_data_dict] and stores it as a JSON string in the save file.
 func create_save_file() -> void:
 	# Log entry for creating a save file
-	add_log_entry("Creating save file: " + SAVE_FILE + " at " + SAVE_FILE_PATH)
+	add_log_entry("Creating save file \"%s\" at \"%s\"." % [SAVE_FILE, native_os_save_file_path])
 	# Initialize user data dictionary (Needed to create a new save file)
 	initialize_user_data_dict()
 	# Open the save file for writing
@@ -210,13 +214,20 @@ func get_file_opening_error_message_as_string(file_error: Error) -> String:
 ## • [member GlobalVariables.daily_pushups_goal] [br]
 ## • [member GlobalVariables.pushups_per_session]
 func save_settings_to_user_data_dict() -> void:
+	
+	print("Save settings to user data.")
+	print(GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme))
+	print(GlobalVariables.selected_theme_index)
+	
 	# Get name of current applied theme
 	var theme_name: String = GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme)
 	# Save settings to user data dictionary
-	GlobalVariables.user_data_dict["settings"]["ui_theme"] = theme_name
-	GlobalVariables.user_data_dict["settings"]["ui_theme_index"] = GlobalVariables.selected_theme_index
-	GlobalVariables.user_data_dict["settings"]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	GlobalVariables.user_data_dict["settings"]["pushups_per_session"] = GlobalVariables.pushups_per_session
+	GlobalVariables.user_data_dict["settings"] = {
+		"ui_theme" = theme_name,
+		"ui_theme_index" = GlobalVariables.selected_theme_index,
+		"daily_pushups_goal" = GlobalVariables.daily_pushups_goal,
+		"pushups_per_session" = GlobalVariables.pushups_per_session
+	}
 
 
 ## Save progression data for current day to [member GlobalVariables.user_data_dict]. [br]
@@ -275,12 +286,16 @@ func save_data() -> void:
 	# Open the save file for writing
 	var save_file = open_save_file(FileAccess.WRITE)
 	
+	print("1 ??")
+	
 	# Log error, notify user, and exit on file open failure
 	if save_file is String:
 		add_log_entry("Error opening save file. " + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
+	
+	print("2 ??")
 	
 	# Save settings to user data dictionary
 	save_settings_to_user_data_dict()
@@ -292,6 +307,7 @@ func save_data() -> void:
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
 	add_log_entry("Writing data to " + SAVE_FILE + " at " + SAVE_FILE_PATH + ".")
+	add_log_entry("Writing data to \"%s\" at \"%s\"." % [SAVE_FILE, native_os_save_file_path])
 	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
 	1

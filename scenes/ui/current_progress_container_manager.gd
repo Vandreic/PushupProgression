@@ -6,7 +6,7 @@
 ##
 ## [br]
 ## 
-## Path: [code]res://src/ui/current_progress_container_manager.gd[/code]
+## Path: [code]res://scenes/ui/current_progress_container_manager.gd[/code]
 
 
 class_name CurrentProgressContainerManager

@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/options_menu/options_menu_manager_script.gd[/code]
+## Path: [code]res://scenes/options_menu/options_menu_manager.gd[/code]
 
 
 class_name OptionsMenuManager
@@ -34,7 +34,7 @@ extends OptionMenuComponent
 ## Opens the settings menu.
 func _on_settings_button_pressed() -> void:
 	# Instantiate settings menu scene
-	var settings_menu: CanvasLayer = load("res://src/ui/options_menu/settings_menu/settings_menu.tscn").instantiate()	
+	var settings_menu: CanvasLayer = load(GlobalVariables.SETTINGS_MENU_SCENE_PATH).instantiate()	
 	# Add scene to tree
 	get_parent().add_child(settings_menu)
 	# Close options menu
@@ -45,7 +45,7 @@ func _on_settings_button_pressed() -> void:
 ## Opens the appearance menu.
 func _on_appearance_button_pressed() -> void:
 	# Instantiate appearance menu scene
-	var appearance_menu: CanvasLayer = load("res://src/ui/options_menu/appearance_menu/appearance_menu.tscn").instantiate()	
+	var appearance_menu: CanvasLayer = load(GlobalVariables.APPEARANCE_MENU_SCENE_PATH).instantiate()	
 	# Add scene to tree
 	get_parent().add_child(appearance_menu)
 	# Close options menu
@@ -56,7 +56,7 @@ func _on_appearance_button_pressed() -> void:
 ## Opens the reset options menu.
 func _on_reset_menu_button_pressed() -> void:
 	# Instantiate reset options menu scene
-	var options_menu: CanvasLayer = load("res://src/ui/options_menu/reset_options_menu/reset_options_menu.tscn").instantiate()
+	var options_menu: CanvasLayer = load(GlobalVariables.RESET_OPTIONS_MENU_SCENE_PATH).instantiate()
 	# Add scene to tree
 	get_parent().add_child(options_menu)
 	# Close options menu
@@ -67,7 +67,7 @@ func _on_reset_menu_button_pressed() -> void:
 ## Changes scene to the logging menu scene.
 func _on_logging_menu_button_pressed() -> void:
 	# Change to logging menu scene
-	get_tree().change_scene_to_file(GlobalVariables.LOGGING_MENU_SCENE_PATH)
+	get_tree().change_scene_to_file(GlobalVariables.LOG_CONSOLE_SCENE_PATH)
 
 
 ## Handles [member OptionsMenuManager.close_menu_button] button press: 

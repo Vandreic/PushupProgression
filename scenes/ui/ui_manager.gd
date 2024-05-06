@@ -6,7 +6,7 @@
 ##
 ## [br]
 ## 
-## Path: [code]res://src/ui/ui_manager.gd[/code]
+## Path: [code]res://scenes/ui/ui_manager.gd[/code]
 
 
 class_name UIManager

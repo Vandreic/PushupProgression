@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/notification/notification_manager.gd[/code]
+## Path: [code]res://scenes/notification/notification_manager.gd[/code]
 
 
 class_name NotificationManager

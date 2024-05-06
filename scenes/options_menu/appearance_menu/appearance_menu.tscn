@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://d1h136wrd67xo"]
 
-[ext_resource type="Script" path="res://scenes/ui/options_menu/appearance_menu/appearance_menu_manager.gd" id="1_553jh"]
-[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://scenes/ui/themes/light_blue_theme.tres" id="1_ynj2t"]
+[ext_resource type="Script" path="res://scenes/options_menu/appearance_menu/appearance_menu_manager.gd" id="1_553jh"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://themes/light_blue_theme.tres" id="1_ynj2t"]
 
 [node name="AppearanceMenu" type="CanvasLayer"]
 script = ExtResource("1_553jh")

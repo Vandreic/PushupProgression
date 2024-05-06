@@ -6,7 +6,7 @@
 ##
 ## [br]
 ## 
-## Path: [code]res://src/ui/previous_progress_container_manager.gd[/code]
+## Path: [code]res://scenes/ui/previous_progress_container_manager.gd[/code]
 
 
 class_name PreviousProgressContainerManager

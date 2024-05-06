@@ -9,7 +9,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/main/main.gd[/code]
+## Path: [code]res://scenes/main/main.gd[/code]
 
 
 class_name Main
@@ -30,7 +30,7 @@ func _ready():
 	_resize_and_center_window_if_needed()
 	_load_data_or_apply_theme()
 	GlobalVariables.update_ui()
-
+	
 
 ## Resizes and centers the application window if the screen height is less
 ## than the minimum screen height, defined by [constant MIN_SCREEN_HEIGHT].

@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/reset_options_menu/reset_options_menu_manager.gd[/code]
+## Path: [code]res://scenes/options_menu/reset_options_menu/reset_options_menu_manager.gd[/code]
 
 #TODO: Add reset option for current week
 
@@ -35,7 +35,7 @@ extends OptionMenuComponent
 ## Opens a confirmation popup box for user choices.
 func open_popup_confirm_box(reset_option: String) -> void:
 	# Instantiate popup confirm box scene
-	var popup_box: CanvasLayer = load("res://src/ui/popup_confirm_box/popup_confirm_box.tscn").instantiate()
+	var popup_box: CanvasLayer = load(GlobalVariables.POPUP_CONFIRM_BOX_SCENE_PATH).instantiate()
 	# Add scene to tree (Needed before modifying)
 	get_parent().add_child(popup_box)
 	

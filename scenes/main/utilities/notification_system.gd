@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/utilities/notification_system.gd[/code]
+## Path: [code]res://scenes/main/utilities/notification_system.gd[/code]
 
 
 class_name NotificationSystem
@@ -12,7 +12,7 @@ extends Node
 
 
 ## Notification scene.
-const NOTIFICATION_SCENE: PackedScene = preload("res://scenes/ui/notification/notification.tscn")
+const NOTIFICATION_SCENE: PackedScene = preload(GlobalVariables.NOTIFICATION_SCENE_PATH)
 
 ## Notification animation player.
 @onready var notification_animation_player: AnimationPlayer = %NotificationAnimationPlayer

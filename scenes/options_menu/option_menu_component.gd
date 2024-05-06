@@ -2,7 +2,7 @@
 ##
 ## Base script for components with-in options menu.
 ## 
-## Path: [code]res://src/ui/options_menu/base_option_menu.gd[/code]
+## Path: [code]res://scenes/options_menu/option_menu_component.gd[/code]
 
 
 class_name OptionMenuComponent

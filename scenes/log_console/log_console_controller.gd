@@ -1,10 +1,10 @@
-## Logging Menu Controller.
+## Log Console Controller.
 ## 
-## Creates log messages and controls the behavior of logging menu. [br]
+## Creates log messages and controls the behavior of log console. [br]
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/options_menu/logging_menu/logging_menu_controller.gd[/code]
+## Path: [code]res://scenes/log_console/log_console_controller.gd[/code]
 
 
 class_name LoggingMenuController

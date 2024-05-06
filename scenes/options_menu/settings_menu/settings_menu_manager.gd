@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://src/ui/options_menu/settings_menu/settings_menu_manager_script.gd[/code]
+## Path: [code]res://scenes/options_menu/settings_menu/settings_menu_manager.gd[/code]
 
 
 #TODO: Restrict input fields to only digits
