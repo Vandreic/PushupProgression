@@ -36,6 +36,7 @@ const SAVE_FILE_PATH: String = "user://"
 ## Name of save file.
 const SAVE_FILE: String = "savedata.json"
 
+
 ## Absolute, native OS path corresponding to the localized [code]user://[/code] ([constant SAVE_FILE_PATH]).
 var native_os_save_file_path: String = ProjectSettings.globalize_path(SAVE_FILE_PATH+SAVE_FILE)
 
@@ -74,12 +75,13 @@ func add_log_entry(message: String) -> void:
 ## the [GlobalVariables] autoload singleton script. The [code]sessions[/code] key
 ## is initialized as an empty [Dictionary] intended to be filled with session-specific data.
 func create_data_dict_for_current_day() -> Dictionary:
-	var day_dict: Dictionary = {}
-	day_dict["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	day_dict["pushups_per_session"] = GlobalVariables.pushups_per_session
-	day_dict["pushups_remaining_today"] = GlobalVariables.pushups_remaining_today
-	day_dict["total_pushups_today"] = GlobalVariables.total_pushups_today
-	day_dict["sessions"] = {}
+	var day_dict: Dictionary = {
+		"daily_pushups_goal" = GlobalVariables.daily_pushups_goal,
+		"pushups_per_session" = GlobalVariables.pushups_per_session,
+		"pushups_remaining_today" = GlobalVariables.pushups_remaining_today,
+		"total_pushups_today" = GlobalVariables.total_pushups_today,
+		"sessions" = {}
+	}
 	return day_dict
 
 
@@ -213,12 +215,7 @@ func get_file_opening_error_message_as_string(file_error: Error) -> String:
 ## • [member GlobalVariables.selected_theme_index] [br]
 ## • [member GlobalVariables.daily_pushups_goal] [br]
 ## • [member GlobalVariables.pushups_per_session]
-func save_settings_to_user_data_dict() -> void:
-	
-	print("Save settings to user data.")
-	print(GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme))
-	print(GlobalVariables.selected_theme_index)
-	
+func save_settings_to_user_data_dict() -> void:	
 	# Get name of current applied theme
 	var theme_name: String = GlobalVariables.get_theme_name(GlobalVariables.current_ui_theme)
 	# Save settings to user data dictionary
@@ -246,10 +243,12 @@ func save_progression_for_current_day_to_user_data_dict() -> void:
 	var current_month: int = current_datetime_dict["month"]
 	var current_day: int = current_datetime_dict["day"]
 	# Save progression data to user data dictionary
-	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["daily_pushups_goal"] = GlobalVariables.daily_pushups_goal
-	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["pushups_per_session"] = GlobalVariables.pushups_per_session
-	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["pushups_remaining_today"] = GlobalVariables.pushups_remaining_today
-	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["total_pushups_today"] = GlobalVariables.total_pushups_today
+	GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day] = {
+		"daily_pushups_goal" = GlobalVariables.daily_pushups_goal,
+		"pushups_per_session" = GlobalVariables.pushups_per_session,
+		"pushups_remaining_today" = GlobalVariables.pushups_remaining_today,		
+		"total_pushups_today" = GlobalVariables.total_pushups_today
+	}
 	
 	# Check if any sessions
 	if GlobalVariables.sessions_completed_today > 0:
@@ -286,16 +285,12 @@ func save_data() -> void:
 	# Open the save file for writing
 	var save_file = open_save_file(FileAccess.WRITE)
 	
-	print("1 ??")
-	
 	# Log error, notify user, and exit on file open failure
 	if save_file is String:
 		add_log_entry("Error opening save file. " + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
-	
-	print("2 ??")
 	
 	# Save settings to user data dictionary
 	save_settings_to_user_data_dict()
@@ -310,7 +305,7 @@ func save_data() -> void:
 	add_log_entry("Writing data to \"%s\" at \"%s\"." % [SAVE_FILE, native_os_save_file_path])
 	# Store the save data dictionary as a new line in the save file
 	save_file.store_line(json_string)
-	1
+	
 	add_log_entry("Data saved successfully.")
 	GlobalVariables.create_notification("Saved successfully!")
 
@@ -592,10 +587,7 @@ func reset_data(reset_option: String) -> void:
 			# Create sessions dictionary for current date
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day]["sessions"] = {}
 			add_log_entry("Successfully data reset for all saved progression.")
-		
-		_:
-			add_log_entry("Unsupported reset option: " + reset_option)
-
+	
 	# Create notification
 	GlobalVariables.create_notification("Reset successfully!")
 	# Save data
