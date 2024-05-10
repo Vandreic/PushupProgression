@@ -303,17 +303,10 @@ func get_theme_name(theme: Theme) -> String:
 
 ## Applies the [member current_ui_theme] and optionally logs the change.
 func apply_current_ui_theme(log_ui_change: bool = false) -> void:
-	# Check if create log is true
+	# Log change if true
 	if log_ui_change == true:
-		# Loop trough themes
-		for theme in GlobalVariables.available_themes:
-			# Get chosen theme (based of instance id)
-			if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
-				# Create text for log message
-				var _log_text: String = "UI theme changed to: " + theme.capitalize()
-				# Create log message
-				add_log_entry(_log_text)
-			
+		add_log_entry("UI theme changed to: %s." % get_theme_name(current_ui_theme).capitalize())
+		
 	# Apply UI theme to UI scene
 	get_tree().call_group("ui_manager", "apply_current_ui_theme")
 

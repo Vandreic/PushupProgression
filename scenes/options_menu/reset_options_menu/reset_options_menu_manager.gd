@@ -8,7 +8,6 @@
 
 #TODO: Add reset option for current week
 
-
 class_name ResetOptionsMenuManager
 extends OptionMenuComponent
 
