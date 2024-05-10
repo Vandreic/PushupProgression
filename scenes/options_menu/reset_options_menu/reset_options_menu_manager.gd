@@ -96,6 +96,7 @@ func _on_close_menu_button_pressed() -> void:
 	close_menu(self)
 
 
+# TODO: Disable buttons if no saved progression data
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Connect pressed button signals

@@ -1,6 +1,6 @@
 ## Handles the saving, loading, and resetting of user progression data and settings.
 ##
-## This class manages all user progression data and settings, which include daily goals, 
+## Manages all user progression data and settings, which include daily goals, 
 ## session details, and customizable settings, stored in [member GlobalVariables.user_data_dict]. [br]
 ##
 ## [br]
@@ -11,9 +11,9 @@
 ## [br]
 ##
 ## Usage: [br]
-## • [method save_data]: Saves current state to a file. [br]
+## • [method save_data]: Saves current data to a file. [br]
 ## • [method load_data]: Loads saved data into the application. [br]
-## • [method reset_data]: Resets data based on the specified parameter. 
+## • [method reset_data]: Resets progress data based on the specified parameter. 
 ## Options include [code]current_day[/code], [code]current_month[/code],
 ## [code]current_year[/code], and [code]all[/code], which clear the respective data. [br]
 ## • [method add_log_entry]: Adds a log entry to [member GlobalVariables.logs_array]. [br]
@@ -49,10 +49,6 @@ var native_os_save_file_path: String = ProjectSettings.globalize_path(SAVE_FILE_
 ## Converts [member GlobalVariables.user_data_dict] to JSON format and saves locally
 ## as [code]savedata.json[/code] ([constant SAVE_FILE]) at [code]user://[/code] 
 ## ([constant SAVE_FILE_PATH]). [br]
-##
-## [br]
-##
-## [b]Note[/b]: When converting to JSON, all data types are transformed into JSON strings.
 func save_data() -> void:
 	add_log_entry("Opening save file...")
 	# Open the save file for writing
@@ -70,15 +66,15 @@ func save_data() -> void:
 	_save_progression_for_current_day()
 	
 	# Convert the user data dictionary to a JSON string
-	add_log_entry("Converting data to JSON.")
+	add_log_entry("Converting data to JSON...")
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
 	# Write the JSON string to the save file as a new line
-	add_log_entry("Writing data to \"%s\" at \"%s\"." % [SAVE_FILE, native_os_save_file_path])
+	add_log_entry("Writing data to \"%s\" at \"%s\"..." % [SAVE_FILE, native_os_save_file_path])
 	save_file.store_line(json_string)
 	
 	# Log and notify user
-	add_log_entry("Data saved successfully.")
+	add_log_entry("Data saved successfully!")
 	GlobalVariables.create_notification("Saved successfully!")
 
 
@@ -98,11 +94,14 @@ func load_data() -> void:
 	
 	# Create save file, if none exists and exit
 	if not FileAccess.file_exists(SAVE_FILE_PATH + SAVE_FILE):
+		var _message: String = "No existing save file found."
+		add_log_entry(_message)
+		GlobalVariables.create_notification(_message, true)
 		_create_save_file()
 		return
 	
 	# Open the save file for reading
-	var save_file = _open_save_file(FileAccess.READ)
+	var save_file = _open_save_file(FileAccess.READ) # Returns  error message if file fails to open
 	
 	# Log error, notify user, and exit on file open failure
 	if save_file is String:
@@ -115,11 +114,11 @@ func load_data() -> void:
 	var json = JSON.new()
 	
 	# Get JSON text from save file
-	add_log_entry("Receiving data from save file.")
+	add_log_entry("Receiving JSON data from save file...")
 	var json_string = save_file.get_as_text()
 	
-	# Convert JSON text
-	add_log_entry("Converting data from save file.")
+	# Convert JSON text to string
+	add_log_entry("Converting JSON data to Godot string...")
 	var save_file_data = JSON.parse_string(json_string)
 	
 	# Log error, notify user, and exit on JSON convertion error
@@ -130,13 +129,14 @@ func load_data() -> void:
 		GlobalVariables.create_notification(notification_text, true)
 		return
 	
-	# If save data is dictionary, load settings and convert save data
+	# If save data is dictionary, load user progression and settings
 	if save_file_data is Dictionary:
 		# Load settings from save file
 		_load_settings(save_file_data["settings"])
 		
-		# Format 'calendar' dictionary key from save file from JSON to Godot data types
-		var calendar_dict: Dictionary = format_progression_data(save_file_data["calendar"])
+		
+		# Convert the "calendar" key from the save file into a structured dictionary
+		var calendar_dict: Dictionary = _convert_calendar_json_to_dict(save_file_data["calendar"])
 		
 		# Save calendar dictionary to user data dictionary
 		GlobalVariables.user_data_dict["calendar"] = calendar_dict["calendar"]
@@ -151,14 +151,13 @@ func load_data() -> void:
 		if calendar_dict["calendar"].has(current_year):
 			if calendar_dict["calendar"][current_year].has(current_month):
 				if calendar_dict["calendar"][current_year][current_month].has(current_day):
-					# Load saved progress data for current day
 					_load_progression_for_current_day(calendar_dict["calendar"][current_year][current_month][current_day])
 				# Else, ensure calendar structure for current day
 				else:
 					_ensure_calendar_structure(current_year, current_month, current_day)
 		
 		# Add log and notify user
-		add_log_entry("Loaded data from save file successfully.")
+		add_log_entry("Loaded data from save file successfully!")
 		GlobalVariables.create_notification("Loaded successfully!")
 
 
@@ -185,27 +184,22 @@ func reset_data(reset_option: String) -> void:
 	# Log message template
 	var log_message: String = "Successfully data reset for current "
 	
-	# Check chosen reset option
+	# Clear progress from user data dictionary based on provided option
 	match reset_option:
 		"current_day":
-			# Reset progression for current day
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day].clear()
-			add_log_entry(log_message + "day: %s/%s-%s." % [current_day, current_month, current_year])
-		
+			add_log_entry(log_message + "day: %02d/%02d-%s." % [current_day, current_month, current_year])
 		"current_month":
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month].clear()
-			add_log_entry(log_message + "month: %s-%s." % [current_month, current_year])
-			
+			add_log_entry(log_message + "month: %02d-%s." % [current_month, current_year])
 		"current_year":
 			GlobalVariables.user_data_dict["calendar"][current_year].clear()
 			add_log_entry(log_message + "year: %s." % current_year)
-		
 		"all":
-			# Clear saved dictionary
 			GlobalVariables.user_data_dict["calendar"].clear()
-			add_log_entry("Successfully data reset for all saved progression.")
+			add_log_entry("Successfully data reset for all saved progression!")
 	
-	# Ensure calendar structure
+	# Ensure calendar structure for current day
 	_ensure_calendar_structure(current_year, current_month, current_day)
 	GlobalVariables.create_notification("Reset successfully!")
 	# Save data and update UI
@@ -222,7 +216,12 @@ func add_log_entry(message: String) -> void:
 	GlobalVariables.logs_array.append(log_entry)
 
 
-## Get the current system time formatted as "HH:MM:SS".
+## Get the current system time formatted as [code]HH:MM:SS[/code]. [br]
+##
+## [br]
+##
+## Returns: [br]
+## • ([String]): Current system time formatted as [code]HH:MM:SS[/code]. [br]
 func _get_current_system_time() -> String:
 	var current_time_dict: Dictionary = Time.get_time_dict_from_system()
 	return "%02d:%02d:%02d" % [current_time_dict["hour"], current_time_dict["minute"], current_time_dict["second"]]
@@ -255,7 +254,7 @@ func _create_save_file() -> void:
 	new_save_file.store_line(json_string)
 	
 	# Log and notify user
-	add_log_entry("New save file created and data saved successfully.")
+	add_log_entry("New save file created and data saved successfully!")
 	GlobalVariables.create_notification("New save file created successfully!", true)
 
 
@@ -302,6 +301,11 @@ func _ensure_calendar_structure(year: int, month: int, day: int) -> void:
 ##
 ## [br]
 ##
+## Returns: [br]
+## • [code]day_dict[/code] ([Dictionary]): [Dictionary] for storing the current day's push-up progress. [br]
+##
+## [br]
+##
 ## The dictionary include: [br]
 ## • [code]daily_pushups_goal[/code] ([int]): The daily goal for push-ups. [br]
 ## • [code]pushups_per_session[/code] ([int]): Number of push-ups performed per session. [br]
@@ -326,22 +330,21 @@ func _create_data_dict_for_current_day() -> Dictionary:
 	return day_dict
 
 
-## Opens [constant SAVE_FILE] at the specified path [constant SAVE_FILE_PATH] [br]
+## Opens save file ([constant SAVE_FILE]) with the given [enum FileAccess.ModeFlags], [param file_access]. [br]
 ##
 ## [br]
 ##
 ## Returns: [br]
-## • [code]save_file[/code] ([FileAccess]): If opening the file succeeded, returns the file access object. [br]
-## • [code]open_error_message[/code] ([String]): If opening the file failed, returns an error message.
+## • [code]save_file[/code] ([FileAccess]): The [FileAccess] object if the file opening was successful. [br]
+## • [code]open_error_message[/code] ([String]): An error message if the file opening failed.
 func _open_save_file(file_access: FileAccess.ModeFlags):
-	# Open save file with provided access
+	# Open save file with provided access mode
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH + SAVE_FILE, file_access)
 	
 	# Return save file if no opening errors, else return open error message
 	if save_file != null:
 		return save_file
-		
-	# Return the error message
+	
 	var open_error_message: String = _get_file_opening_error_message_as_text(FileAccess.get_open_error())
 	return open_error_message
 
@@ -382,11 +385,24 @@ func _get_file_opening_error_message_as_text(file_error: Error) -> String:
 			return error_message_text % [file_error, "Unknown error."]
 
 
-## Formats [code]calendar[/code] [Dictionary] key from [GlobalVariables.SAVE_FILE] from JSON text to
-## Godot data types in a [Dictionary] to be saved in [GlobalVariables.user_data_dict].
-func format_progression_data(data_dict) -> Dictionary:
+## Converts the [code]calendar[/code] key from the save file JSON text to a [Dictionary]. [br]
+##
+## [br]
+##
+## Return: [br]
+## - [Dictionary]: A formatted dictionary containing all saved calendar progressions, 
+##   structured like the [code]calendar[/code] key in [member GlobalVariables.user_data_dict]. [br]
+##
+## [br]
+##
+## Converts the [code]calendar[/code] key from the save file, which is in JSON
+## format, into a [Dictionary] with Godot data types following the same structure
+## as [code]calendar[/code] key within [member GlobalVariables.user_data_dict]. [br]
+func _convert_calendar_json_to_dict(data_dict) -> Dictionary:
 	# Return empty dictionary, is save data is not dictionary
 	if data_dict is not Dictionary:
+		add_log_entry("Warning! \"%s\" is not a Dictionary. \
+		Unable to convert saved progress data from save file to dictionary.")
 		return {}
 	
 	# Create calendar dictionary
@@ -511,7 +527,7 @@ func _load_settings(saved_settings_dict: Dictionary) -> void:
 ##
 ## [br]
 ##
-## [param saved_current_day_dict] includes: [br]
+## [param saved_current_day_dict] include: [br]
 ## • [code]pushups_remaining_today[/code] ([int]): Remaining push-ups needed to meet the daily goal. [br]
 ## • [code]total_pushups_today[/code] ([int]): Total number of push-ups completed throughout the day. [br]
 ## • [code]sessions[/code] ([Dictionary]): A nested [Dictionary] storing detailed session data. [br]

@@ -7,7 +7,7 @@
 export.cfg
 export_presets.cfg
 
-# Ignore optional task management addon folder
+# Ignore optional task manager addon
 addons/Todo_Manager/
 
 # Imported translations (automatically generated from CSV files)
@@ -19,3 +19,6 @@ data_*/
 mono_crash.*.json
 .DS_Store
 android/
+
+# Ignore Visual Studio Code
+.vscode/*
