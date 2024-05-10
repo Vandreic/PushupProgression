@@ -1,7 +1,0 @@
-Minor:
-- Added logging system for saving and loading
-- Added notification system
-
-Features:
-- View log messages for better insight into saving and loading processes
-- Display notifications for save/load and settings updates
