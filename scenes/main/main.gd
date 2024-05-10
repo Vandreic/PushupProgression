@@ -4,8 +4,8 @@
 ##
 ## [br]
 ##
-## This script is responsible for window sizing based on screen resolution,
-## loading data, applying the UI theme, and updating the user interface. [br]
+## Responsible for window sizing based on screen resolution, loading data, 
+## applying the UI theme, and updating the user interface. [br]
 ##
 ## [br]
 ##
