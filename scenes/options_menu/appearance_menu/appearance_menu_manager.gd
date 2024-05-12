@@ -76,7 +76,7 @@ func _on_themes_option_button_select(index) -> void:
 			GlobalVariables.current_ui_theme = GlobalVariables.available_themes[theme]["theme"]
 	
 	# Apply theme to UI scene and log change
-	GlobalVariables.apply_current_ui_theme(true)
+	GlobalVariables.apply_ui_theme(true)
 	# Save data
 	GlobalVariables.save_data()
 	
@@ -94,4 +94,4 @@ func _ready() -> void:
 	# Create theme options
 	create_theme_options()
 	# Apply UI theme
-	apply_current_ui_theme(background_panel)
+	apply_ui_theme(background_panel)

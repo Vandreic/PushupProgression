@@ -30,7 +30,7 @@ var selected_reset_option: String
 
 
 ## Apply UI theme.
-func apply_current_ui_theme() -> void:
+func apply_ui_theme() -> void:
 	# Apply current theme
 	background_panel_container.theme = GlobalVariables.current_ui_theme
 	# Create stylebox variant
@@ -71,4 +71,4 @@ func _ready() -> void:
 	cancel_button.pressed.connect(_on_cancel_button_pressed)
 	confirm_button.pressed.connect(_on_confirm_button_pressed)
 	# Apply UI theme
-	apply_current_ui_theme()
+	apply_ui_theme()

@@ -24,7 +24,7 @@ signal notification_removed
 
 
 ## Apply UI theme.
-func apply_current_ui_theme() -> void:
+func apply_ui_theme() -> void:
 	# Apply current theme
 	background_panel_container.theme = GlobalVariables.current_ui_theme
 	# Create stylebox variant
@@ -67,7 +67,7 @@ func remove_ui() -> void:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# Apply UI theme
-	apply_current_ui_theme()
+	apply_ui_theme()
 	# Hide notification UI as default
 	hide_ui()
 	# Check if extend duration is true

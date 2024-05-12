@@ -111,4 +111,4 @@ func _ready() -> void:
 		reset_current_day_button.disabled = true
 	
 	# Apply UI theme to background panel
-	apply_current_ui_theme(background_panel)
+	apply_ui_theme(background_panel)

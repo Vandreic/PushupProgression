@@ -515,7 +515,7 @@ func _load_settings(saved_settings_dict: Dictionary) -> void:
 	for theme in GlobalVariables.available_themes:
 		if saved_settings_dict["ui_theme"] == theme:
 			GlobalVariables.current_ui_theme = GlobalVariables.available_themes[theme]["theme"]
-			GlobalVariables.apply_current_ui_theme()
+			GlobalVariables.apply_ui_theme()
 			
 	# Load daily pushups goal
 	GlobalVariables.daily_pushups_goal = int(saved_settings_dict["daily_pushups_goal"])

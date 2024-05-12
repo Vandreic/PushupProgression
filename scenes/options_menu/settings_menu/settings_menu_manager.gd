@@ -145,4 +145,4 @@ func _ready() -> void:
 	# Create placeholder text for input fields
 	create_placeholder_text()
 	# Apply UI theme to background panel
-	apply_current_ui_theme(background_panel)
+	apply_ui_theme(background_panel)

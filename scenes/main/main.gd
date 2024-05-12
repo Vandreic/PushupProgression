@@ -59,4 +59,4 @@ func _load_data_or_apply_theme():
 	if GlobalVariables.is_app_running == false:
 		GlobalVariables.load_data()
 	else:
-		GlobalVariables.apply_current_ui_theme()
+		GlobalVariables.apply_ui_theme()
