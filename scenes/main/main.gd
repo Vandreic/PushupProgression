@@ -45,6 +45,8 @@ func _resize_and_center_window_if_needed() -> void:
 
 ## Centers the window on the screen based on the [constant WINDOW_SIZE].
 func _center_window_on_screen(screen_size: Vector2i):
+	# Calculate center_x differently to ensure the window is centered when using two monitors.
+	# If calculated the same way as center_y, the window will not be centered correctly.
 	var center_x: int = int((screen_size.x - WINDOW_SIZE.x) * 1.833)
 	var center_y: int = int((screen_size.y - WINDOW_SIZE.y) / 2.0)
 	DisplayServer.window_set_position(Vector2i(center_x, center_y))

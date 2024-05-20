@@ -1,8 +1,6 @@
 ## Options Menu Button Manager.
 ##
-## [br]
-##
-## Opens the options menu. [br]
+## Handles the options menu button functionality.. [br]
 ##
 ## [br]
 ## 
@@ -13,15 +11,17 @@ class_name OptionsMenuButtonManager
 extends TextureButton
 
 
-## On options menu button pressed.
+## Signal handler for when the options menu button is pressed. [br]
+##
+## [br]
+##
+## Loads the options menu scene and adds it to the scene tree.
 func _on_options_menu_button_pressed() -> void:
-	# Instantiate options menu scene
 	var options_menu: CanvasLayer = load(GlobalVariables.OPTIONS_MENU_SCENE_PATH).instantiate()
-	# Add scene to tree (Needed before modifying)
 	get_parent().get_parent().add_child(options_menu)
 
 
-# Called when the node enters the scene tree for the first time.
+## Sets up button connection when the node is ready.
 func _ready() -> void:
 	# Connect pressed button signal
 	self.pressed.connect(_on_options_menu_button_pressed)

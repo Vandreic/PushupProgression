@@ -1,13 +1,13 @@
 ## Log Console Controller.
 ## 
-## Creates log messages and controls the behavior of log console. [br]
+## Creates log messages and controls the behavior of the log console. [br]
 ##
 ## [br]
 ##
 ## Path: [code]res://scenes/log_console/log_console_controller.gd[/code]
 
 
-class_name LoggingMenuController
+class_name LogConsoleController
 extends Control
 
 
@@ -15,59 +15,52 @@ extends Control
 @onready var background_panel: Panel = %BackgroundPanel
 
 ## Container for logs.
-@onready var logs_container: VBoxContainer = %LogsContainer
+@onready var log_container: VBoxContainer = %LogContainer
 
-## Base log label. Used to create new logs.
-@onready var base_log_label: Label = %BaseLogLabel
+## Template for new log labels.
+@onready var log_template: Label = %LogTemplate
 
 ## Close logging menu button.
-@onready var close_menu_button: Button = %CloseMenuButton
+@onready var close_button: Button = %CloseButton
 
-## Total logs counter.
-var total_logs_counter: int = 1
-
-
-## Apply UI theme.
-func apply_ui_theme() -> void:
-	# Apply chosen UI theme to background panel
-	background_panel.theme = GlobalVariables.current_ui_theme
+## Total log counter.
+var log_count: int = 1
 
 
-## Create UI for logs messages
-func add_log_entrys_ui() -> void:
-	# Loop trough all logs inside logs array
-	for log in GlobalVariables.logs_array:
-		# Duplicate base log node
-		var log_label: Label = base_log_label.duplicate()
-		# Update node name
-		log_label.name = "LogLabel" + str(total_logs_counter)
-		# Update log text
-		log_label.text = log
-		# Add to container
-		logs_container.add_child(log_label)
-		# Update log counter
-		total_logs_counter += 1
-	
-	# Delete base log node
-	logs_container.remove_child(base_log_label)
-	base_log_label.queue_free()
+## Sets up button connection, applies current UI theme, and populates log console
+## when the node is ready.
+func _ready() -> void:
+	close_button.pressed.connect(_on_close_button_pressed)
+	_apply_ui_theme()
+	_populate_log_ui()
+	# Update app running flag
+	GlobalVariables.is_app_running = true
 
 
-## On [member LoggingMenuController.close_menu_button] pressed.
-func _on_close_menu_button_pressed() -> void:
-	# Change to main scene
+## Signal handler for when the [member close_button] is pressed. [br]
+##
+## [br]
+##
+## Changes to main scene.
+func _on_close_button_pressed() -> void:
 	get_tree().change_scene_to_file(GlobalVariables.MAIN_SCENE_PATH)
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	# Apply UI theme
-	apply_ui_theme()
-	# Connect pressed button signals
-	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
-	# Setup logs messages (UI)
-	add_log_entrys_ui()
-	# Apply UI theme
-	apply_ui_theme()
-	# Update app running flag
-	GlobalVariables.is_app_running = true
+## Apply the current UI theme.
+func _apply_ui_theme() -> void:
+	# Apply current UI theme to background panel
+	background_panel.theme = GlobalVariables.current_ui_theme
+
+
+## Create the UI for log messages.
+func _populate_log_ui() -> void:
+	for log_message in GlobalVariables.log_messages:
+		var log_label: Label = log_template.duplicate()
+		log_label.name = "LogLabel" + str(log_count)
+		log_label.text = log_message
+		log_container.add_child(log_label)
+		log_count += 1
+
+	log_container.remove_child(log_template)
+	log_template.queue_free()
+	
