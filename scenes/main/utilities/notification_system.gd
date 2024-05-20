@@ -1,6 +1,7 @@
-## Notification System.
-## 
-## Manages the display of user notifications with optional extended durations. [br]
+## Manages the queue of notifications to be displayed.
+##
+## Uses an [AnimationPlayer] node to queue notifications and ensure they are 
+## shown one at a time. [br]
 ##
 ## [br]
 ##
@@ -19,14 +20,14 @@ extends Node
 ## Preloaded scene for creating notification instances.
 const NOTIFICATION_SCENE: PackedScene = preload(GlobalVariables.NOTIFICATION_SCENE_PATH)
 
-## Animation player for notification animations (Used to display and hide notifications).
-@onready var notification_animation_player: AnimationPlayer = %NotificationAnimationPlayer
-
 ## Queue for storing pending notifications.
 var notifications_queue: Array = []
 
 ## Currently displayed notification.
 var current_notification: CanvasLayer = null
+
+## Animation player for notification animations (Used to display and hide notifications).
+@onready var notification_animation_player: AnimationPlayer = %NotificationAnimationPlayer
 
 
 ## Creates and queues a notification with optional extended duration. [br]
@@ -58,7 +59,7 @@ func create_notification(notification_text: String, extend_duration: bool = fals
 		notifications_queue.append(notification_node)
 
 
-## Displays the current notification ([member current_notification]).
+## Displays the current notification based on [member current_notification].
 func _show_notification() -> void:
 	add_child(current_notification)
 	# Signal for displaying next notification in queue
@@ -66,7 +67,7 @@ func _show_notification() -> void:
 	current_notification.show_ui()
 
 
-## Handles displaying the next notification from the queue ([member notifications_queue]).
+## Handles displaying the next notification from the queue based on [member notifications_queue].
 func _show_next_notification() -> void:
 	# Reset current notification
 	current_notification = null

@@ -6,7 +6,7 @@
 ## [br]
 ##
 ## Usage: [br]
-## • [method apply_ui_theme]: Applies the current UI theme selected in 
+## • [method apply_ui_theme]: Applies the current UI theme based of 
 ## [member GlobalVariables.current_ui_theme]. [br]
 ## • [method update_ui]: Refreshes  UI elements to reflect the latest changes. [br]
 ##
@@ -32,7 +32,7 @@ extends Node
 @onready var app_version: Label = %AppVersion
 
 
-# Called when the node enters the scene tree for the first time.
+## Initialize application version label.
 func _ready():
 	# Initialize app version
 	app_version.text = "version " + str(ProjectSettings.get_setting("application/config/version"))
@@ -42,11 +42,9 @@ func _ready():
 func update_ui() -> void:
 	# Update all UI elements in current progress container
 	current_progress_container.update_ui()
-	# Update all UI elements in previous progress container
-	previous_progress_container.update_ui()
 
 
-## Apply UI theme based of [member GlobalVariables.current_ui_theme].
+## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func apply_ui_theme() -> void:
 	background_panel.theme = GlobalVariables.current_ui_theme
 	current_progress_container.apply_ui_theme()

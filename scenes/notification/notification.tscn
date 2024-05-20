@@ -29,10 +29,10 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "values": [{
 "args": [],
-"method": &"hide_ui"
+"method": &"_hide_ui"
 }, {
 "args": [],
-"method": &"remove_ui"
+"method": &"_remove_ui"
 }]
 }
 
@@ -54,6 +54,7 @@ anchor_bottom = 0.975
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_4ve1q")
+metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="BackgroundPanelContainer"]
 layout_mode = 2

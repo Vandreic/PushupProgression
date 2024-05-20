@@ -52,7 +52,8 @@ func _center_window_on_screen(screen_size: Vector2i):
 	DisplayServer.window_set_position(Vector2i(center_x, center_y))
 
 
-## Loads saved data if application is not running, or applies the UI theme if it is. [br]
+## Loads saved data if application is not running, or applies the UI theme based
+## on [member GlobalVariables.current_ui_theme] if it is. [br]
 ##
 ## [br]
 ##

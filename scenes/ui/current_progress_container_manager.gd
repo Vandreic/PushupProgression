@@ -37,12 +37,12 @@ extends VBoxContainer
 @onready var add_pushups_button: Button = %AddPushupsButton
 
 
-## Sets up button connection when the node is ready.
+## Setup button connection when the node is ready.
 func _ready() -> void:
 	add_pushups_button.pressed.connect(_on_add_pushups_button_pressed)
 
 
-## Applies the current UI theme to the progress bar based on [member GlobalVariables.current_ui_theme].
+## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func apply_ui_theme() -> void:
 	for theme in GlobalVariables.available_themes:
 		if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
@@ -51,7 +51,7 @@ func apply_ui_theme() -> void:
 			progress_bar.texture_progress = GlobalVariables.available_themes[theme]["progress_bar"]["progress"]
 
 
-## Updates all UI elements within the container.
+## Update all UI elements within the container.
 func update_ui() -> void:
 	_update_progress_bar()
 	_update_total_pushups_text()
@@ -60,7 +60,7 @@ func update_ui() -> void:
 	apply_ui_theme()
 
 
-## Updates the progress bar and its value label.
+## Update the progress bar and its value label.
 func _update_progress_bar() -> void:
 	var new_progress_bar_value = GlobalVariables.total_pushups_today * 100 / GlobalVariables.daily_pushups_goal
 	progress_bar.value = new_progress_bar_value
@@ -71,7 +71,7 @@ func _update_progress_bar() -> void:
 		progress_value_label.text = str(new_progress_bar_value) + "%!"
 
 
-## Updates the label for total push-ups completed today.
+## Update the label for total push-ups completed today.
 func _update_total_pushups_text() -> void:
 	var progress_text = "Total push-ups today: " + str(GlobalVariables.total_pushups_today)
 	progress_label.text = progress_text
