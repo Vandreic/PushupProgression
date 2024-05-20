@@ -55,17 +55,17 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Appearance"
 
-[node name="ResetMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-text = "Reset progress"
-
 [node name="LoggingMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 text = "Show logs"
+
+[node name="ResetMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Reset progress"
 
 [node name="CloseMenuButton" type="Button" parent="FullWindow/BackgroundPanel/VBoxContainer"]
 unique_name_in_owner = true

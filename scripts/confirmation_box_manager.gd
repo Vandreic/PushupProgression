@@ -59,7 +59,7 @@ func _close_confirmation_box() -> void:
 ##
 ## [br]
 ##
-## Calls [method _close_confirmation_box].
+## Removes the confirmation box from the tree.
 func _on_cancel_button_pressed() -> void:
 	_close_confirmation_box()
 

@@ -158,13 +158,13 @@ const NOTIFICATION_SCENE_PATH: String = "res://scenes/notification.tscn"
 const CONFIRMATION_BOX_SCENE_PATH: String = "res://scenes/confirmation_box.tscn"
 
 ## Path to the [code]light_blue[/code] theme file.
-const LIGHT_BLUE_THEME_PATH: String = "res://themes/light_blue_theme.tres"
+const LIGHT_BLUE_THEME_PATH: String = "res://assets/themes/light_blue_theme.tres"
 
 ## Path to the [code]light_blue_material_design[/code] theme file.
-const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://themes/light_blue_material_design_theme.tres"
+const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/light_blue_material_design_theme.tres"
 
 ## Path to the [code]dark_blue_material_design[/code] theme file.
-const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://themes/dark_blue_material_design_theme.tres"
+const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/dark_blue_material_design_theme.tres"
 
 
 ## Indicates whether the app is currently running.

@@ -8,7 +8,7 @@
 
 
 class_name OptionsMenuManager
-extends OptionMenuComponent
+extends CanvasLayer
 
 
 ## Background panel.
@@ -30,6 +30,19 @@ extends OptionMenuComponent
 @onready var close_menu_button: Button = %CloseMenuButton
 
 
+## Sets up button connections and applies current UI when the node is ready.
+func _ready() -> void:
+	# Connect pressed button signals
+	settings_button.pressed.connect(_on_settings_button_pressed)
+	appearance_button.pressed.connect(_on_appearance_button_pressed)
+	reset_menu_button.pressed.connect(_on_reset_menu_button_pressed)
+	logging_menu_button.pressed.connect(_on_logging_menu_button_pressed)
+	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
+	
+	# Apply UI theme to background panel
+	_apply_ui_theme(background_panel)
+	
+
 ## Handles [member OptionsMenuManager.settings_button] button press: 
 ## Opens the settings menu.
 func _on_settings_button_pressed() -> void:
@@ -38,7 +51,7 @@ func _on_settings_button_pressed() -> void:
 	# Add scene to tree
 	get_parent().add_child(settings_menu)
 	# Close options menu
-	close_menu(self)
+	_close_menu(self)
 
 
 ## Handles [member OptionsMenuManager.appearance_button] button press: 
@@ -49,18 +62,18 @@ func _on_appearance_button_pressed() -> void:
 	# Add scene to tree
 	get_parent().add_child(appearance_menu)
 	# Close options menu
-	close_menu(self)
+	_close_menu(self)
 
 
 ## Handles [member OptionsMenuManager.reset_menu_button] button press: 
 ## Opens the reset options menu.
-func _on_reset_menu_button_pressed() -> void:
+func _on_reset_menu_button_pressed() -> void:	
 	# Instantiate reset options menu scene
 	var options_menu: CanvasLayer = load(GlobalVariables.RESET_OPTIONS_MENU_SCENE_PATH).instantiate()
 	# Add scene to tree
 	get_parent().add_child(options_menu)
 	# Close options menu
-	close_menu(self)
+	_close_menu(self)
 
 
 ## Handles [member OptionsMenuManager.logging_menu_button] button press: 
@@ -74,17 +87,19 @@ func _on_logging_menu_button_pressed() -> void:
 ## Closes options menu (Removes options menu scene from tree).
 func _on_close_menu_button_pressed() -> void:
 	# Close options menu
-	close_menu(self)
+	_close_menu(self)
 
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	# Connect pressed button signals
-	settings_button.pressed.connect(_on_settings_button_pressed)
-	appearance_button.pressed.connect(_on_appearance_button_pressed)
-	reset_menu_button.pressed.connect(_on_reset_menu_button_pressed)
-	logging_menu_button.pressed.connect(_on_logging_menu_button_pressed)
-	close_menu_button.pressed.connect(_on_close_menu_button_pressed)
+## Removes scene from tree.
+func _close_menu(menu_scene: CanvasLayer) -> void:
+	# Delete scene from tree
+	get_parent().remove_child(menu_scene)
+	queue_free()
+
+
+## Applies the UI theme based on [member GlobalVariables.current_ui_theme]. [br]
+func _apply_ui_theme(background_panel) -> void:
+	background_panel.theme = GlobalVariables.current_ui_theme
+	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
+	background_panel.add_theme_stylebox_override("panel", new_stylebox)
 	
-	# Apply UI theme to background panel
-	apply_ui_theme(background_panel)

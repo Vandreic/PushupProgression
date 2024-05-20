@@ -24,7 +24,7 @@ var extend_duration: bool = false
 @onready var animation_player: AnimationPlayer = %AnimationPlayer
 
 
-## Initial setup when the node enters the scene tree.
+## Applies UI theme, hides UI, and extends display duration if needed.
 func _ready():
 	_apply_ui_theme()
 	_hide_ui()
