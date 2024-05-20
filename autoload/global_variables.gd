@@ -134,28 +134,28 @@ extends Node
 
 
 ## Path to the main menu scene.
-const MAIN_SCENE_PATH: String = "res://scenes/main/main.tscn"
+const MAIN_SCENE_PATH: String = "res://scenes/main.tscn"
 
 ## Path to the log console scene.
-const LOG_CONSOLE_SCENE_PATH: String = "res://scenes/log_console/log_console.tscn"
+const LOG_CONSOLE_SCENE_PATH: String = "res://scenes/log_console.tscn"
 
 ## Path to the options menu scene.
 const OPTIONS_MENU_SCENE_PATH: String = "res://scenes/options_menu/options_menu.tscn"
 
 ## Path to the appearance menu scene.
-const APPEARANCE_MENU_SCENE_PATH: String = "res://scenes/options_menu/appearance_menu/appearance_menu.tscn"
+const APPEARANCE_MENU_SCENE_PATH: String = "res://scenes/options_menu/options/appearance_menu.tscn"
 
 ## Path to the reset options menu scene.
-const RESET_OPTIONS_MENU_SCENE_PATH: String = "res://scenes/options_menu/reset_options_menu/reset_options_menu.tscn"
+const RESET_OPTIONS_MENU_SCENE_PATH: String = "res://scenes/options_menu/options/reset_options_menu.tscn"
 
 ## Path to the settings menu scene
-const SETTINGS_MENU_SCENE_PATH: String = "res://scenes/options_menu/settings_menu/settings_menu.tscn"
+const SETTINGS_MENU_SCENE_PATH: String = "res://scenes/options_menu/options/settings_menu.tscn"
 
 ## Path to the notification scene.
-const NOTIFICATION_SCENE_PATH: String = "res://scenes/notification/notification.tscn"
+const NOTIFICATION_SCENE_PATH: String = "res://scenes/notification.tscn"
 
 ## Path to the confirmation box scene.
-const CONFIRMATION_BOX_SCENE_PATH: String = "res://scenes/confirmation_box/confirmation_box.tscn"
+const CONFIRMATION_BOX_SCENE_PATH: String = "res://scenes/confirmation_box.tscn"
 
 ## Path to the [code]light_blue[/code] theme file.
 const LIGHT_BLUE_THEME_PATH: String = "res://themes/light_blue_theme.tres"

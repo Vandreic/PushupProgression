@@ -54,7 +54,7 @@ func _apply_ui_theme() -> void:
 
 ## Create the UI for log messages.
 func _populate_log_ui() -> void:
-	for log_message in GlobalVariables.log_messages:
+	for log_message in GlobalVariables.logs_array:
 		var log_label: Label = log_template.duplicate()
 		log_label.name = "LogLabel" + str(log_count)
 		log_label.text = log_message

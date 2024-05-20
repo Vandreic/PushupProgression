@@ -37,17 +37,16 @@ func _ready() -> void:
 	# Apply UI theme
 	_apply_ui_theme()
 
+## Updates the information text inside the confirmation box.
+func update_info_text(text: String) -> void:	
+	info_text_label.text = text	+ "\n\n" + "Press \"Confirm\" to procced."
+
 
 ## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func _apply_ui_theme() -> void:
 	background_panel_container.theme = GlobalVariables.current_ui_theme
 	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
 	background_panel_container.add_theme_stylebox_override("panel", new_stylebox)
-
-
-## Updates the information text inside the confirmation box.
-func _update_info_text(text: String) -> void:	
-	info_text_label.text = text	+ "\n\n" + "Press \"Confirm\" to procced."
 
 
 ## Removes the confirmation box from the tree.
