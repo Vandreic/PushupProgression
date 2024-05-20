@@ -31,12 +31,12 @@ extends OptionMenuComponent
 @onready var close_menu_button: Button = %CloseMenuButton
 
 
-## Opens a confirmation popup box for user choices.
-func open_popup_confirm_box(reset_option: String) -> void:
+## Opens a confirmation box for user choices.
+func open_confirmation_box(reset_option: String) -> void:
 	# Instantiate popup confirm box scene
-	var popup_box: CanvasLayer = load(GlobalVariables.POPUP_CONFIRM_BOX_SCENE_PATH).instantiate()
+	var confirmation_box: CanvasLayer = load(GlobalVariables.CONFIRMATION_BOX_SCENE_PATH).instantiate()
 	# Add scene to tree (Needed before modifying)
-	get_parent().add_child(popup_box)
+	get_parent().add_child(confirmation_box)
 	
 	# Create info text
 	var info_text: String
@@ -48,16 +48,16 @@ func open_popup_confirm_box(reset_option: String) -> void:
 		% reset_option.capitalize().to_lower()
 	
 	# Update popup box info text
-	popup_box.update_info_text(info_text)
+	confirmation_box.update_info_text(info_text)
 	# Store reset option
-	popup_box.selected_reset_option = reset_option
+	confirmation_box.selected_reset_option = reset_option
 
 
 ## Handles [member ResetOptionsMenuManager.reset_current_day_button] button press: 
 ## Clears today's progression.
 func _on_reset_current_day_button_pressed() -> void:
 	# Opens a confirmation box with the chosen reset option
-	open_popup_confirm_box("current_day")
+	open_confirmation_box("current_day")
 	# Close reset options menu
 	close_menu(self)
 
@@ -66,7 +66,7 @@ func _on_reset_current_day_button_pressed() -> void:
 ## Clears this month's progression.
 func _on_reset_current_month_button_pressed() -> void:
 	# Opens a confirmation box with the chosen reset option
-	open_popup_confirm_box("current_month")
+	open_confirmation_box("current_month")
 	# Close reset options menu
 	close_menu(self)
 
@@ -75,7 +75,7 @@ func _on_reset_current_month_button_pressed() -> void:
 ## Clears this year's progression.
 func _on_reset_current_year_button_pressed() -> void:
 	# Opens a confirmation box with the chosen reset option
-	open_popup_confirm_box("current_year")
+	open_confirmation_box("current_year")
 	# Close reset options menu
 	close_menu(self)
 
@@ -84,7 +84,7 @@ func _on_reset_current_year_button_pressed() -> void:
 ## Clears all saved progression.
 func _on_reset_all_button_pressed() -> void:
 	# Opens a confirmation box with the chosen reset option
-	open_popup_confirm_box("all")
+	open_confirmation_box("all")
 	# Close reset options menu
 	close_menu(self)
 

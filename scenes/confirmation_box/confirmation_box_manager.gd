@@ -1,0 +1,77 @@
+## Manages the confirmation dialog for user confirmations.
+## 
+## Controls the behavior of confirmation box. [br]
+##
+## [br]
+##
+## Path: [code]res://scenes/popup_confirm_box/popup_confirm_box_manager.gd[/code]
+
+
+class_name ConfirmationBoxManager
+extends CanvasLayer
+
+
+## String for storing selected reset option. [br][br]
+## Gets defined when confirmation box is created.
+## See [member ResetOptionsMenuManager.open_popup_confirm_box] for more details.
+var selected_reset_option: String
+
+## Background panel container.
+@onready var background_panel_container: PanelContainer = %BackgroundPanelContainer
+
+## Info label text.
+@onready var info_text_label: Label = %InfoTextLabel
+
+## Confirm button.
+@onready var confirm_button: Button = %ConfirmButton
+
+## Cancel button.
+@onready var cancel_button: Button = %CancelButton
+
+
+## Initial setup when the node enters the scene tree.
+func _ready() -> void:
+	# Connect pressed button signals
+	cancel_button.pressed.connect(_on_cancel_button_pressed)
+	confirm_button.pressed.connect(_on_confirm_button_pressed)
+	# Apply UI theme
+	_apply_ui_theme()
+
+
+## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
+func _apply_ui_theme() -> void:
+	background_panel_container.theme = GlobalVariables.current_ui_theme
+	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
+	background_panel_container.add_theme_stylebox_override("panel", new_stylebox)
+
+
+## Updates the information text inside the confirmation box.
+func _update_info_text(text: String) -> void:	
+	info_text_label.text = text	+ "\n\n" + "Press \"Confirm\" to procced."
+
+
+## Removes the confirmation box from the tree.
+func _close_confirmation_box() -> void:
+	get_parent().remove_child(self)
+	queue_free()
+
+
+## Signal handler for when the [member cancel_button] is pressed. [br]
+##
+## [br]
+##
+## Calls [method _close_confirmation_box].
+func _on_cancel_button_pressed() -> void:
+	_close_confirmation_box()
+
+
+## Signal handler for when the [member confirm_button] is pressed. [br]
+##
+## [br]
+##
+## Saves data and closes confirmation box.
+func _on_confirm_button_pressed() -> void:	
+	# Reset data based of reset_option value
+	get_tree().call_group("save_system", "reset_data", selected_reset_option)
+	# Close confirmation box
+	_close_confirmation_box()

@@ -154,8 +154,8 @@ const SETTINGS_MENU_SCENE_PATH: String = "res://scenes/options_menu/settings_men
 ## Path to the notification scene.
 const NOTIFICATION_SCENE_PATH: String = "res://scenes/notification/notification.tscn"
 
-## Path to the pop-up confirm box scene.
-const POPUP_CONFIRM_BOX_SCENE_PATH: String = "res://scenes/popup_confirm_box/popup_confirm_box.tscn"
+## Path to the confirmation box scene.
+const CONFIRMATION_BOX_SCENE_PATH: String = "res://scenes/confirmation_box/confirmation_box.tscn"
 
 ## Path to the [code]light_blue[/code] theme file.
 const LIGHT_BLUE_THEME_PATH: String = "res://themes/light_blue_theme.tres"

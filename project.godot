@@ -37,6 +37,7 @@ enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg")
 [file_customization]
 
 folder_colors={
+"res://scenes/confirmation_box/": "yellow",
 "res://scenes/log_console/": "green",
 "res://scenes/main/utilities/": "pink",
 "res://scenes/notification/": "orange",
@@ -44,7 +45,6 @@ folder_colors={
 "res://scenes/options_menu/appearance_menu/": "green",
 "res://scenes/options_menu/reset_options_menu/": "green",
 "res://scenes/options_menu/settings_menu/": "green",
-"res://scenes/popup_confirm_box/": "yellow",
 "res://scenes/ui/": "blue",
 "res://themes/": "red"
 }
