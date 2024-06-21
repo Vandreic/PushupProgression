@@ -1,10 +1,10 @@
 ## Options Menu Button Manager.
 ##
-## Handles the options menu button functionality.. [br]
+## Handles the options menu button functionality. [br]
 ##
 ## [br]
 ## 
-## Path: [code]res://scenes/ui/options_menu_button_manager.gd[/code]
+## Path: [code]res://scripts/ui/options_menu_button_manager.gd[/code]
 
 
 class_name OptionsMenuButtonManager

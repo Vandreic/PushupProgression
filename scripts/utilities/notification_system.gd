@@ -10,7 +10,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/main/utilities/notification_system.gd[/code]
+## Path: [code]res://scripts/utilities/notification_system.gd[/code]
 
 
 class_name NotificationSystem

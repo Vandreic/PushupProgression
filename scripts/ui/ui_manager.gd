@@ -12,7 +12,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/ui/ui_manager.gd[/code]
+## Path: [code]res://scripts/ui/ui_manager.gd[/code]
 
 
 class_name UIManager
@@ -36,6 +36,10 @@ extends Node
 func _ready():
 	# Initialize app version
 	app_version.text = "version " + str(ProjectSettings.get_setting("application/config/version"))
+	
+	#FIXME
+	GlobalSignalBus.update_ui.connect(update_ui)
+	GlobalSignalBus.apply_ui_theme.connect(apply_ui_theme)
 
 
 ## Update UI elements.
@@ -46,5 +50,5 @@ func update_ui() -> void:
 
 ## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func apply_ui_theme() -> void:
-	background_panel.theme = GlobalVariables.current_ui_theme
+	background_panel.theme = Data.current_ui_theme
 	current_progress_container.apply_ui_theme()

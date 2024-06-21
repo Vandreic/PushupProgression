@@ -52,7 +52,8 @@ func _ready() -> void:
 func _open_confirmation_box(reset_option: String) -> void:
 	# Instantiate and add confirmation box
 	var confirmation_box: CanvasLayer = load(GlobalVariables.CONFIRMATION_BOX_SCENE_PATH).instantiate()
-	get_parent().get_parent().get_parent().add_child(confirmation_box)
+	#get_parent().get_parent().get_parent().add_child(confirmation_box)
+	get_parent().get_parent().get_parent().get_parent().get_parent().add_child(confirmation_box)
 	
 	# Update confirmation box info text
 	var info_text: String = "Resetting %s will permanently delete all associated\

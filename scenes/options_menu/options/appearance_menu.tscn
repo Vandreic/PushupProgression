@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cqow367gyees7"]
 
-[ext_resource type="PackedScene" uid="uid://cwaf57q1jy301" path="res://scenes/options_menu/options/option_menu_template.tscn" id="1_cypvn"]
+[ext_resource type="PackedScene" uid="uid://cwaf57q1jy301" path="res://scenes/options_menu/option_menu_template.tscn" id="1_cypvn"]
 [ext_resource type="Script" path="res://scripts/options_menu/options/appearance_menu_manager.gd" id="2_2ylae"]
 
 [node name="OptionMenuTemplate" instance=ExtResource("1_cypvn")]
@@ -26,3 +26,6 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
+
+[node name="ButtonsContainer" parent="FullWindow/BackgroundPanel" index="2"]
+anchor_top = 0.825

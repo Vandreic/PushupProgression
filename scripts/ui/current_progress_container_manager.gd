@@ -12,7 +12,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/ui/current_progress_container_manager.gd[/code]
+## Path: [code]res://scripts/ui/current_progress_container_manager.gd[/code]
 
 class_name CurrentProgressContainerManager
 extends VBoxContainer
@@ -101,7 +101,7 @@ func _update_add_pushups_button_text() -> void:
 ##
 ## [br]
 ##
-## Adds push-ups and updates the UI.
+## Adds push-ups, saves data, and updates the UI.
 func _on_add_pushups_button_pressed() -> void:
 	GlobalVariables.total_pushups_today += GlobalVariables.pushups_per_session
 	GlobalVariables.pushups_remaining_today -= GlobalVariables.pushups_per_session

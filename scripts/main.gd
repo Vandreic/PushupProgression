@@ -9,7 +9,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/main/main.gd[/code]
+## Path: [code]res://scripts/main.gd[/code]
 
 
 class_name Main
@@ -27,10 +27,13 @@ const MIN_SCREEN_HEIGHT: int = 1280
 ## loading saved data or applying the UI theme based on the application's 
 ## running state, and updating the UI components.
 func _ready():
+	
+	SceneManager.change_scene("scene")
+	
 	_resize_and_center_window_if_needed()
 	_load_data_or_apply_theme()
-	GlobalVariables.update_ui()
-	
+	GlobalSignalBus.update_ui.emit()
+
 
 ## Resizes and centers the application window if the screen height is less
 ## than the minimum screen height, defined by [constant MIN_SCREEN_HEIGHT].
@@ -59,7 +62,10 @@ func _center_window_on_screen(screen_size: Vector2i):
 ##
 ## This decision is based on the global state variable [member GlobalVariables.is_app_running].
 func _load_data_or_apply_theme():
-	if GlobalVariables.is_app_running == false:
-		GlobalVariables.load_data()
+	pass
+	#FIXME
+	if Data.is_app_running == false:
+		GlobalSignalBus.load_data()
 	else:
-		GlobalVariables.apply_ui_theme()
+		GlobalSignalBus.apply_ui_theme()
+		

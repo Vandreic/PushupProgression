@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://b8m5sfw05s6ty"]
 
-[ext_resource type="Script" path="res://scripts/main/main.gd" id="1_ui10i"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_ui10i"]
 [ext_resource type="PackedScene" uid="uid://bv2v88irqyogj" path="res://scenes/ui.tscn" id="2_06dc6"]
-[ext_resource type="Script" path="res://scripts/main/utilities/save_system.gd" id="3_vaodl"]
-[ext_resource type="Script" path="res://scripts/main/utilities/notification_system.gd" id="4_caoxb"]
+[ext_resource type="Script" path="res://scripts/utilities/save_system.gd" id="3_vaodl"]
+[ext_resource type="Script" path="res://scripts/utilities/notification_system.gd" id="4_caoxb"]
 
 [sub_resource type="Animation" id="Animation_pjprj"]
 resource_name = "show_notification"

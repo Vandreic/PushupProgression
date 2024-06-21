@@ -4,7 +4,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/log_console/log_console_controller.gd[/code]
+## Path: [code]res://scripts/log_console_controller.gd[/code]
 
 
 class_name LogConsoleController
@@ -54,7 +54,7 @@ func _apply_ui_theme() -> void:
 
 ## Create the UI for log messages.
 func _populate_log_ui() -> void:
-	for log_message in GlobalVariables.logs_array:
+	for log_message in Data.get_logs_array():
 		var log_label: Label = log_template.duplicate()
 		log_label.name = "LogLabel" + str(log_count)
 		log_label.text = log_message

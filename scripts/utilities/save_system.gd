@@ -25,7 +25,7 @@
 ##
 ## [br]
 ##
-## Path: [code]res://scenes/main/utilities/save_system.gd[/code]
+## Path: [code]res://scripts/utilities/save_system.gd[/code]
 
 
 class_name SaveSystem
@@ -50,13 +50,13 @@ var native_os_save_file_path: String = ProjectSettings.globalize_path(SAVE_FILE_
 ## as [code]savedata.json[/code] ([constant SAVE_FILE]) at [code]user://[/code] 
 ## ([constant SAVE_FILE_PATH]). [br]
 func save_data() -> void:
-	add_log_entry("Opening save file...")
+	GlobalSignalBus.add_log_entry.emit("Opening save file...")
 	# Open the save file for writing
 	var save_file = _open_save_file(FileAccess.WRITE)
 	
 	# Log error, notify user, and exit on file open failure
 	if save_file is String:
-		add_log_entry("Error opening save file. " + save_file)
+		GlobalSignalBus.add_log_entry.emit("Error opening save file. " + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
@@ -66,15 +66,15 @@ func save_data() -> void:
 	_save_progression_for_current_day()
 	
 	# Convert the user data dictionary to a JSON string
-	add_log_entry("Converting data to JSON...")
+	GlobalSignalBus.add_log_entry.emit("Converting data to JSON...")
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
 	# Write the JSON string to the save file as a new line
-	add_log_entry("Writing data to \"%s\" at \"%s\"..." % [SAVE_FILE, native_os_save_file_path])
+	GlobalSignalBus.add_log_entry.emit("Writing data to \"%s\" at \"%s\"..." % [SAVE_FILE, native_os_save_file_path])
 	save_file.store_line(json_string)
 	
 	# Log and notify user
-	add_log_entry("Data saved successfully!")
+	GlobalSignalBus.add_log_entry.emit("Data saved successfully!")
 	GlobalVariables.create_notification("Saved successfully!")
 
 
@@ -90,12 +90,12 @@ func save_data() -> void:
 ##
 ## If no save file exsists, create a save file using [method create_save_file] and exit function.
 func load_data() -> void:
-	add_log_entry("Opening save file...")
+	GlobalSignalBus.add_log_entry.emit("Opening save file...")
 	
 	# Create save file, if none exists and exit
 	if not FileAccess.file_exists(SAVE_FILE_PATH + SAVE_FILE):
 		var _message: String = "No existing save file found."
-		add_log_entry(_message)
+		GlobalSignalBus.add_log_entry.emit(_message)
 		GlobalVariables.create_notification(_message, true)
 		_create_save_file()
 		return
@@ -105,7 +105,7 @@ func load_data() -> void:
 	
 	# Log error, notify user, and exit on file open failure
 	if save_file is String:
-		add_log_entry("Error opening save file. " + save_file)
+		GlobalSignalBus.add_log_entry.emit("Error opening save file. " + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
@@ -114,17 +114,17 @@ func load_data() -> void:
 	var json = JSON.new()
 	
 	# Get JSON text from save file
-	add_log_entry("Receiving JSON data from save file...")
+	GlobalSignalBus.add_log_entry.emit("Receiving JSON data from save file...")
 	var json_string = save_file.get_as_text()
 	
 	# Convert JSON text to string
-	add_log_entry("Converting JSON data to Godot string...")
+	GlobalSignalBus.add_log_entry.emit("Converting JSON data to Godot string...")
 	var save_file_data = JSON.parse_string(json_string)
 	
 	# Log error, notify user, and exit on JSON convertion error
 	if save_file_data == null:
 		var error_message: String = "JSON Parse Error: %s in %s at line %s" % [json.get_error_message(), json_string, json.get_error_line()]
-		add_log_entry("Error converting data from save file. " + error_message)
+		GlobalSignalBus.add_log_entry.emit("Error converting data from save file. " + error_message)
 		var notification_text: String = "Error converting data from save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
@@ -157,8 +157,21 @@ func load_data() -> void:
 					_ensure_calendar_structure(current_year, current_month, current_day)
 		
 		# Add log and notify user
-		add_log_entry("Loaded data from save file successfully!")
+		GlobalSignalBus.add_log_entry.emit("Loaded data from save file successfully!")
 		GlobalVariables.create_notification("Loaded successfully!")
+
+
+
+## Get the current system time formatted as [code]HH:MM:SS[/code]. [br]
+##
+## [br]
+##
+## Returns: [br]
+## • ([String]): Current system time formatted as [code]HH:MM:SS[/code].
+func _get_current_system_time() -> String:
+	var time_dict: Dictionary = Time.get_time_dict_from_system()
+	return "%02d:%02d:%02d" % [time_dict["hour"], time_dict["minute"], time_dict["second"]]
+
 
 
 ## Resets progression data based on the provided [param reset_option]. [br]
@@ -171,7 +184,7 @@ func load_data() -> void:
 ## • [code]current_year[/code]: Clears this year's progression. [br]
 ## • [code]all[/code]: Clears all saved progression.
 func reset_data(reset_option: String) -> void:
-	add_log_entry("Resetting data with option: [" + reset_option + "].\nThis CANNOT be undone!")
+	GlobalSignalBus.add_log_entry.emit("Resetting data with option: [" + reset_option + "].\nThis CANNOT be undone!")
 	# Reset global values
 	_reset_global_values()
 	
@@ -188,16 +201,16 @@ func reset_data(reset_option: String) -> void:
 	match reset_option:
 		"current_day":
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month][current_day].clear()
-			add_log_entry(log_message + "day: %02d/%02d-%s." % [current_day, current_month, current_year])
+			GlobalSignalBus.add_log_entry.emit(log_message + "day: %02d/%02d-%s." % [current_day, current_month, current_year])
 		"current_month":
 			GlobalVariables.user_data_dict["calendar"][current_year][current_month].clear()
-			add_log_entry(log_message + "month: %02d-%s." % [current_month, current_year])
+			GlobalSignalBus.add_log_entry.emit(log_message + "month: %02d-%s." % [current_month, current_year])
 		"current_year":
 			GlobalVariables.user_data_dict["calendar"][current_year].clear()
-			add_log_entry(log_message + "year: %s." % current_year)
+			GlobalSignalBus.add_log_entry.emit(log_message + "year: %s." % current_year)
 		"all":
 			GlobalVariables.user_data_dict["calendar"].clear()
-			add_log_entry("Successfully data reset for all saved progression!")
+			GlobalSignalBus.add_log_entry.emit("Successfully data reset for all saved progression!")
 	
 	# Ensure calendar structure for current day
 	_ensure_calendar_structure(current_year, current_month, current_day)
@@ -207,24 +220,7 @@ func reset_data(reset_option: String) -> void:
 	GlobalVariables.update_ui()
 
 
-## Adds a log entry to [member GlobalVariables.logs_array].
-func add_log_entry(message: String) -> void:
-	# Get the current system time formatted as "HH:MM:SS"
-	var time_stamp: String = _get_current_system_time()
-	# Add the full log entry with a timestamp
-	var log_entry: String = "[%s] %s" % [time_stamp, message]
-	GlobalVariables.logs_array.append(log_entry)
 
-
-## Get the current system time formatted as [code]HH:MM:SS[/code]. [br]
-##
-## [br]
-##
-## Returns: [br]
-## • ([String]): Current system time formatted as [code]HH:MM:SS[/code]. [br]
-func _get_current_system_time() -> String:
-	var current_time_dict: Dictionary = Time.get_time_dict_from_system()
-	return "%02d:%02d:%02d" % [current_time_dict["hour"], current_time_dict["minute"], current_time_dict["second"]]
 
 
 ## Creates a save file at the specified path [constant SAVE_FILE_PATH]. [br]
@@ -233,7 +229,7 @@ func _get_current_system_time() -> String:
 ##
 ## It initializes the [member GlobalVariables.user_data_dict] and stores it as a JSON string in the save file.
 func _create_save_file() -> void:
-	add_log_entry("Creating save file \"%s\" at \"%s\"..." % [SAVE_FILE, native_os_save_file_path])
+	GlobalSignalBus.add_log_entry.emit("Creating save file \"%s\" at \"%s\"..." % [SAVE_FILE, native_os_save_file_path])
 	# Initialize user data dictionary (Needed to create a new save file)
 	_initialize_user_data_dict()
 	# Open the save file for writing
@@ -241,27 +237,27 @@ func _create_save_file() -> void:
 	
 	# Log error, notify user, and exit on file open failure
 	if new_save_file is String:
-		add_log_entry("Error creating new save file. \"%s\"." % new_save_file)
+		GlobalSignalBus.add_log_entry.emit("Error creating new save file. \"%s\"." % new_save_file)
 		var notification_text: String = "Error creating new save file\n" + "See logs for more details."
 		GlobalVariables.create_notification(notification_text, true)
 		return
 		
 	# Convert the user data dictionary to a JSON string
-	add_log_entry("Converting data to JSON...")
+	GlobalSignalBus.add_log_entry.emit("Converting data to JSON...")
 	var json_string = JSON.stringify(GlobalVariables.user_data_dict, "\t")
 	
 	# Write the JSON string to the save file as a new line
 	new_save_file.store_line(json_string)
 	
 	# Log and notify user
-	add_log_entry("New save file created and data saved successfully!")
+	GlobalSignalBus.add_log_entry.emit("New save file created and data saved successfully!")
 	GlobalVariables.create_notification("New save file created successfully!", true)
 
 
 ## Initializes and populates the [member GlobalVariables.user_data_dict] with 
 ## the current day's progress data and user-specific settings.
 func _initialize_user_data_dict() -> void:
-	add_log_entry("Creating data dictionary...")
+	GlobalSignalBus.add_log_entry.emit("Creating data dictionary...")
 	
 	# Get current date as dictionary from system
 	var current_date_dict: Dictionary = Time.get_date_dict_from_system()
@@ -276,7 +272,7 @@ func _initialize_user_data_dict() -> void:
 		"ui_theme_index": GlobalVariables.selected_theme_index
 	}
 	
-	add_log_entry("Data dictionary created successfully.")
+	GlobalSignalBus.add_log_entry.emit("Data dictionary created successfully.")
 
 
 ## Ensures a proper hierarchical calendar structure within [member GlobalVariables.user_data_dict]. [br]
@@ -401,7 +397,7 @@ func _get_file_opening_error_message_as_text(file_error: Error) -> String:
 func _convert_calendar_json_to_dict(data_dict) -> Dictionary:
 	# Return empty dictionary, is save data is not dictionary
 	if data_dict is not Dictionary:
-		add_log_entry("Warning! \"%s\" is not a Dictionary. \
+		GlobalSignalBus.add_log_entry.emit("Warning! \"%s\" is not a Dictionary. \
 		Unable to convert saved progress data from save file to dictionary.")
 		return {}
 	

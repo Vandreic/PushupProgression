@@ -20,7 +20,9 @@ config/windows_native_icon="res://assets/app_icon/windows_icon.ico"
 
 [autoload]
 
-GlobalVariables="*res://autoload/global_variables.gd"
+SceneManager="*res://autoload/scene_manager.gd"
+Data="*res://autoload/data.gd"
+GlobalSignalBus="*res://autoload/global_signal_bus.gd"
 
 [display]
 
@@ -39,6 +41,7 @@ enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg")
 folder_colors={
 "res://assets/": "yellow",
 "res://autoload/": "purple",
+"res://docs/": "gray",
 "res://scenes/": "blue",
 "res://scripts/": "green"
 }
