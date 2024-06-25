@@ -1,13 +1,7 @@
-## Manages global signals used across the app. Loaded using autoload.
+## Manages global signals used across the app.
 ##
 ## Manages global signals used across the app working like a centrailized reposetory
-## storing all the signals used troughout the app. This is to make the code more
-## scalable and make sure scripts can function independently of other scripts. [br]
-##
-## [br]
-##
-## This script is autoloaded and can be called from everywhere in the code using:
-## [code]GlobalSignalBus[/code]
+## storing all the signals used troughout the app.
 
 
 extends Node
@@ -40,8 +34,17 @@ signal create_notification(notification_text: String, extend_duration: bool)
 signal add_log_entry(message: String)
 
 
-signal update_ui
+signal ui_theme_changed
 
-signal apply_ui_theme
 
-signal load_data
+signal update_ui_requested
+
+signal apply_ui_theme_requested
+
+signal save_data_requested
+
+signal load_data_requested
+
+signal reset_data_requested(selected_reset_option: String)
+
+signal pushups_added

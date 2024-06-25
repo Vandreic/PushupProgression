@@ -38,7 +38,7 @@ func _ready() -> void:
 	reset_all_button.pressed.connect(_on_reset_all_button_pressed)
 	
 	# Disable "reset current day" button if no sessions
-	if GlobalVariables.sessions_completed_today <= 0:
+	if Data.sessions_completed_today <= 0:
 		reset_current_day_button.disabled = true
 
 
@@ -50,11 +50,6 @@ func _ready() -> void:
 ## • [param reset_option] ([String]): The reset option selected by the user. See
 ## [method SaveSystem.reset_data] for more details.
 func _open_confirmation_box(reset_option: String) -> void:
-	# Instantiate and add confirmation box
-	var confirmation_box: CanvasLayer = load(GlobalVariables.CONFIRMATION_BOX_SCENE_PATH).instantiate()
-	#get_parent().get_parent().get_parent().add_child(confirmation_box)
-	get_parent().get_parent().get_parent().get_parent().get_parent().add_child(confirmation_box)
-	
 	# Update confirmation box info text
 	var info_text: String = "Resetting %s will permanently delete all associated\
 	 data and cannot be undone." % reset_option.capitalize().to_lower()
@@ -62,10 +57,8 @@ func _open_confirmation_box(reset_option: String) -> void:
 	if reset_option == "all":
 		info_text = "Resetting all data will permanently delete all saved progression and cannot be undone."
 	
-	confirmation_box.update_info_text(info_text)
-	# Store reset option with-in the confirmation box
-	confirmation_box.selected_reset_option = reset_option
-
+	SceneManager.open_confirmation_box_requested.emit(info_text, reset_option)
+	
 
 ## Signal handler for when the [member reset_current_day_button] is pressed. [br]
 ##

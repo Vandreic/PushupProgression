@@ -27,12 +27,9 @@ const MIN_SCREEN_HEIGHT: int = 1280
 ## loading saved data or applying the UI theme based on the application's 
 ## running state, and updating the UI components.
 func _ready():
-	
-	SceneManager.change_scene("scene")
-	
 	_resize_and_center_window_if_needed()
 	_load_data_or_apply_theme()
-	GlobalSignalBus.update_ui.emit()
+	EventBus.update_ui_requested.emit()
 
 
 ## Resizes and centers the application window if the screen height is less
@@ -62,10 +59,7 @@ func _center_window_on_screen(screen_size: Vector2i):
 ##
 ## This decision is based on the global state variable [member GlobalVariables.is_app_running].
 func _load_data_or_apply_theme():
-	pass
-	#FIXME
 	if Data.is_app_running == false:
-		GlobalSignalBus.load_data()
+		EventBus.load_data_requested.emit()
 	else:
-		GlobalSignalBus.apply_ui_theme()
-		
+		EventBus.apply_ui_theme_requested.emit()

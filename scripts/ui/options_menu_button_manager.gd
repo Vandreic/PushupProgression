@@ -17,8 +17,7 @@ extends TextureButton
 ##
 ## Loads the options menu scene and adds it to the scene tree.
 func _on_options_menu_button_pressed() -> void:
-	var options_menu: CanvasLayer = load(GlobalVariables.OPTIONS_MENU_SCENE_PATH).instantiate()
-	get_parent().get_parent().add_child(options_menu)
+	SceneManager.add_scene_requested.emit("OptionsMenu")
 
 
 ## Sets up button connection when the node is ready.

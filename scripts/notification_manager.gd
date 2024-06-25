@@ -41,14 +41,14 @@ func show_ui() -> void:
 
 ## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func _apply_ui_theme() -> void:
-	background_panel_container.theme = GlobalVariables.current_ui_theme
+	background_panel_container.theme = Data.current_ui_theme
 	
 	# Create stylebox variant
-	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
+	var new_stylebox: StyleBoxFlat = Data.create_custom_panel_stylebox()
 	 # Check if the current theme has borders enabled and apply them
-	for theme in GlobalVariables.available_themes:
-		if GlobalVariables.current_ui_theme.get_instance_id() == GlobalVariables.available_themes[theme]["instance_id"]:
-			if GlobalVariables.available_themes[theme]["border"] == true:
+	for theme in Data.available_themes:
+		if theme == Data.get_theme_name(Data.current_ui_theme):
+			if Data.available_themes[theme]["border"] == true:
 				new_stylebox.set_border_width_all(3)
 	
 	# Override panel theme stylebox

@@ -39,10 +39,8 @@ func _ready() -> void:
 ## 
 ## Opens the settings menu.
 func _on_settings_button_pressed() -> void:
-	var settings_menu: CanvasLayer = load(GlobalVariables.SETTINGS_MENU_SCENE_PATH).instantiate()	
-	get_parent().add_child(settings_menu)
-	
-	
+	SceneManager.close_options_menu_requested.emit()
+	SceneManager.add_scene_requested.emit("Settings")
 
 
 ## Signal handler for when the [member appearance_button] is pressed. [br]
@@ -51,12 +49,8 @@ func _on_settings_button_pressed() -> void:
 ## 
 ## Opens the appearance menu.
 func _on_appearance_button_pressed() -> void:
-	var appearance_menu: CanvasLayer = load(GlobalVariables.APPEARANCE_MENU_SCENE_PATH).instantiate()	
-	get_parent().add_child(appearance_menu)
-	# Close menu
-	
-	get_parent().remove_child(self)
-	queue_free()
+	SceneManager.close_options_menu_requested.emit()
+	SceneManager.add_scene_requested.emit("Appearance")
 
 
 ## Signal handler for when the [member logging_menu_button] is pressed. [br]
@@ -65,7 +59,7 @@ func _on_appearance_button_pressed() -> void:
 ## 
 ## Changes the scene to the logging menu scene.ene.
 func _on_logging_menu_button_pressed() -> void:
-	get_tree().change_scene_to_file(GlobalVariables.LOG_CONSOLE_SCENE_PATH)
+	SceneManager.change_scene_requested.emit("LogConsole")
 
 
 ## Signal handler for when the [member reset_menu_button] is pressed. [br]
@@ -74,9 +68,5 @@ func _on_logging_menu_button_pressed() -> void:
 ## 
 ## Opens the reset options menu.
 func _on_reset_menu_button_pressed() -> void:	
-	var options_menu: CanvasLayer = load(GlobalVariables.RESET_OPTIONS_MENU_SCENE_PATH).instantiate()
-	get_parent().add_child(options_menu)
-	# Close menu
-	
-	get_parent().remove_child(self)
-	queue_free()
+	SceneManager.close_options_menu_requested.emit()
+	SceneManager.add_scene_requested.emit("ResetOptions")

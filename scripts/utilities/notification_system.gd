@@ -17,9 +17,6 @@ class_name NotificationSystem
 extends Node
 
 
-## Preloaded scene for creating notification instances.
-const NOTIFICATION_SCENE: PackedScene = preload(GlobalVariables.NOTIFICATION_SCENE_PATH)
-
 ## Queue for storing pending notifications.
 var notifications_queue: Array = []
 
@@ -28,6 +25,11 @@ var current_notification: CanvasLayer = null
 
 ## Animation player for notification animations (Used to display and hide notifications).
 @onready var notification_animation_player: AnimationPlayer = %NotificationAnimationPlayer
+
+
+## Connect to [EventBus]'s signals when node is ready.
+func _ready() -> void:
+	EventBus.create_notification.connect(_create_notification)
 
 
 ## Creates and queues a notification with optional extended duration. [br]
@@ -42,8 +44,8 @@ var current_notification: CanvasLayer = null
 ## [br]
 ##
 ## See [method NotificationManager._ready] for more details.
-func create_notification(notification_text: String, extend_duration: bool = false) -> void:
-	var notification_node: CanvasLayer = NOTIFICATION_SCENE.instantiate()
+func _create_notification(notification_text: String, extend_duration: bool = false) -> void:
+	var notification_node: CanvasLayer = SceneManager.NOTIFICATION_SCENE.instantiate() as CanvasLayer
 	notification_node.get_node("%NotificationLabel").text = notification_text
 	
 	# Apply extended duration if requested

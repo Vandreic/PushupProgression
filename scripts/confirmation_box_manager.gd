@@ -39,14 +39,14 @@ func _ready() -> void:
 
 
 ## Updates the information text inside the confirmation box.
-func update_info_text(text: String) -> void:	
+func update_info_text(text: String) -> void:
 	info_text_label.text = text	+ "\n\n" + "Press \"Confirm\" to procced."
 
 
-## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
+## Applies the UI theme based on [member Data.current_ui_theme].
 func _apply_ui_theme() -> void:
-	background_panel_container.theme = GlobalVariables.current_ui_theme
-	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
+	background_panel_container.theme = Data.current_ui_theme
+	var new_stylebox: StyleBoxFlat = Data.create_custom_panel_stylebox()
 	background_panel_container.add_theme_stylebox_override("panel", new_stylebox)
 
 
@@ -65,6 +65,8 @@ func _on_cancel_button_pressed() -> void:
 ##
 ## Saves data and closes confirmation box.
 func _on_confirm_button_pressed() -> void:	
+	EventBus.reset_data_requested.emit(selected_reset_option)
+	
 	# Reset data based of reset_option value
 	get_tree().call_group("save_system", "reset_data", selected_reset_option)
 	# Close confirmation box

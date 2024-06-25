@@ -43,8 +43,8 @@ func _ready() -> void:
 ## Create placeholder text for input fields.
 func _create_placeholder_text() -> void:
 	var _placeholder_text: String = "Current: %d"
-	daily_goal_input.placeholder_text = _placeholder_text % GlobalVariables.daily_pushups_goal
-	pushups_per_session_input.placeholder_text = _placeholder_text % GlobalVariables.pushups_per_session
+	daily_goal_input.placeholder_text = _placeholder_text % Data.daily_pushups_goal
+	pushups_per_session_input.placeholder_text = _placeholder_text % Data.pushups_per_session
 
 
 ## Signal handler for when the [member daily_goal_input] changes. [br]
@@ -57,7 +57,7 @@ func _on_daily_goal_input_text_changed(input_text: String) -> void:
 	var is_valid_input = regex.search(input_text)
 	# Update to theme font color if valid input
 	if is_valid_input:
-		var font_color: Color = GlobalVariables.current_ui_theme.get_color("font_color", "LineEdit")
+		var font_color: Color = Data.current_ui_theme.get_color("font_color", "LineEdit")
 		daily_goal_input.add_theme_color_override("font_color", font_color)
 	# Change to red font color if invalid input
 	else:
@@ -74,7 +74,7 @@ func _on_pushups_per_session_input_text_changed(input_text: String) -> void:
 	var is_valid_input = regex.search(input_text)
 	# Update to theme font color if valid input
 	if is_valid_input:
-		var font_color: Color = GlobalVariables.current_ui_theme.get_color("font_color", "LineEdit")
+		var font_color: Color = Data.current_ui_theme.get_color("font_color", "LineEdit")
 		pushups_per_session_input.add_theme_color_override("font_color", font_color)
 	# Change to red font color if invalid input
 	else:
@@ -92,8 +92,8 @@ func _on_close_menu_button_pressed() -> void:
 	
 	# Save data and update UI if valid input
 	if regex.search(daily_goal_input.text) or regex.search(pushups_per_session_input.text):
-		GlobalVariables.save_data()
-		GlobalVariables.update_ui()
+		EventBus.save_data_requested.emit()
+		EventBus.update_ui_requested.emit()
 
 
 ## Validates and updates the daily goal input.
@@ -102,15 +102,15 @@ func _validate_and_update_daily_goal() -> void:
 	var daily_goal_input_text = regex.search(daily_goal_input.text)
 	# Update daily goal, if digits
 	if daily_goal_input_text:
-		GlobalVariables.daily_pushups_goal = int(daily_goal_input.text)
+		Data.daily_pushups_goal = int(daily_goal_input.text)
 		var log_message: String = "Daily goal updated to: %s" % daily_goal_input.text
-		GlobalVariables.add_log_entry(log_message)
-		GlobalVariables.create_notification(log_message, true)
+		Data.add_log_entry(log_message)
+		EventBus.create_notification.emit(log_message, true)
 	# Notify user if invalid input
 	elif not daily_goal_input.text.is_empty():
 		var notification_text: String = "Invalid value for daily goal: %s\n\
 		Only digits allowed." % daily_goal_input.text
-		GlobalVariables.create_notification(notification_text, true)
+		EventBus.create_notification.emit(notification_text, true)
 
 
 ## Validates and updates the push-ups per session input.
@@ -119,12 +119,12 @@ func _validate_and_update_pushups_per_session() -> void:
 	var pushups_per_session_input_text = regex.search(pushups_per_session_input.text)
 	# Update push-ups per session, if digits
 	if pushups_per_session_input_text:
-		GlobalVariables.pushups_per_session = int(pushups_per_session_input.text)
+		Data.pushups_per_session = int(pushups_per_session_input.text)
 		var log_message: String = "Push-ups per session updated to: %s" % pushups_per_session_input.text
-		GlobalVariables.add_log_entry(log_message)
-		GlobalVariables.create_notification(log_message, true)
+		Data.add_log_entry(log_message)
+		EventBus.create_notification.emit(log_message, true)
 	# Notify user if invalid input
 	elif not pushups_per_session_input.text.is_empty():
 		var notification_text: String = "Invalid value for push-ups per session: %s\n\
 		Only digits allowed." % pushups_per_session_input.text
-		GlobalVariables.create_notification(notification_text, true)
+		EventBus.create_notification.emit(notification_text, true)

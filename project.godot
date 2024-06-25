@@ -22,7 +22,7 @@ config/windows_native_icon="res://assets/app_icon/windows_icon.ico"
 
 SceneManager="*res://autoload/scene_manager.gd"
 Data="*res://autoload/data.gd"
-GlobalSignalBus="*res://autoload/global_signal_bus.gd"
+EventBus="*res://autoload/event_bus.gd"
 
 [display]
 

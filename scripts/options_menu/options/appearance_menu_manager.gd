@@ -28,12 +28,12 @@ func _ready() -> void:
 
 ## Creates theme options for the [member themes_option_button].
 func _create_theme_options() -> void:
-	for theme in GlobalVariables.available_themes:
+	for theme in Data.available_themes:
 		var theme_name: String = theme.capitalize()
 		themes_option_button.add_item(theme.capitalize())
 	
 	# Select current theme
-	themes_option_button.select(GlobalVariables.selected_theme_index)
+	themes_option_button.select(Data.selected_theme_index)
 
 
 ## Signal handler for when an option inside the [member themes_option_button] is
@@ -50,17 +50,17 @@ func _create_theme_options() -> void:
 ## Updates the selected theme index, applies the selected theme to the UI, 
 ## saves the data, and re-opens the appearance menu with the new theme.
 func _on_themes_option_button_select(index: int) -> void:
-	GlobalVariables.selected_theme_index = index
+	Data.selected_theme_index = index
 	
 	# Apply new theme
-	for theme in GlobalVariables.available_themes:
+	for theme in Data.available_themes:
 		var theme_name: String = theme.capitalize()
 		if themes_option_button.get_item_text(index) == theme.capitalize():
-			GlobalVariables.current_ui_theme = GlobalVariables.available_themes[theme]["theme"]
+			Data.current_ui_theme = Data.available_themes[theme]["theme"]
 	
 	# Apply and log theme change and save data
-	GlobalVariables.apply_ui_theme(true)
-	GlobalVariables.save_data()
+	EventBus.apply_ui_theme_requested.emit()
+	EventBus.save_data_requested.emit()
 	
 	# Re-open appearance menu with new applied theme
 	_reopen_menu()
@@ -68,16 +68,4 @@ func _on_themes_option_button_select(index: int) -> void:
 
 ## Re-open appearance menu with new applied theme.
 func _reopen_menu() -> void:
-	# Change current scene name and hide
-	var current_appearance_menu: CanvasLayer = get_parent().get_parent()
-	var _name: String = "Deleted" + current_appearance_menu.name
-	current_appearance_menu.name = _name
-	current_appearance_menu.visible = false
-	
-	# Instantiate and add new appearance menu scene
-	var new_appearance_menu: CanvasLayer = load(GlobalVariables.APPEARANCE_MENU_SCENE_PATH).instantiate()	
-	current_appearance_menu.get_parent().add_child(new_appearance_menu)
-	
-	# Remove current scene from tree
-	current_appearance_menu.get_parent().remove_child(current_appearance_menu)
-	current_appearance_menu.queue_free()
+	SceneManager.reload_current_scene_requested.emit("Appearance")

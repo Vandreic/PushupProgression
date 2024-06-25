@@ -32,10 +32,10 @@ func _ready() -> void:
 
 ## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
 func _apply_ui_theme() -> void:
-	background_panel.theme = GlobalVariables.current_ui_theme
-	background_panel_container.theme = GlobalVariables.current_ui_theme
+	background_panel.theme = Data.current_ui_theme
+	background_panel_container.theme = Data.current_ui_theme
 	
-	var new_stylebox: StyleBoxFlat = GlobalVariables.create_custom_panel_stylebox()
+	var new_stylebox: StyleBoxFlat = Data.create_custom_panel_stylebox()
 	background_panel.add_theme_stylebox_override("panel", new_stylebox)
 	background_panel_container.add_theme_stylebox_override("panel", new_stylebox)
 

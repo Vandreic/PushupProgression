@@ -34,7 +34,7 @@ func _ready() -> void:
 	_apply_ui_theme()
 	_populate_log_ui()
 	# Update app running flag
-	GlobalVariables.is_app_running = true
+	Data.is_app_running = true
 
 
 ## Signal handler for when the [member close_button] is pressed. [br]
@@ -43,13 +43,13 @@ func _ready() -> void:
 ##
 ## Changes to main scene.
 func _on_close_button_pressed() -> void:
-	get_tree().change_scene_to_file(GlobalVariables.MAIN_SCENE_PATH)
+	SceneManager.change_scene_requested.emit("Main")
 
 
 ## Apply the current UI theme.
 func _apply_ui_theme() -> void:
 	# Apply current UI theme to background panel
-	background_panel.theme = GlobalVariables.current_ui_theme
+	background_panel.theme = Data.current_ui_theme
 
 
 ## Create the UI for log messages.

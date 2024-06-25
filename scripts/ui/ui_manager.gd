@@ -36,10 +36,19 @@ extends Node
 func _ready():
 	# Initialize app version
 	app_version.text = "version " + str(ProjectSettings.get_setting("application/config/version"))
+	_connect_signals()
+
+
+## Connects to [EventBus]'s signals and other signals.
+func _connect_signals() -> void:
+	EventBus.update_ui_requested.connect(update_ui)
+	EventBus.apply_ui_theme_requested.connect(apply_ui_theme)
 	
-	#FIXME
-	GlobalSignalBus.update_ui.connect(update_ui)
-	GlobalSignalBus.apply_ui_theme.connect(apply_ui_theme)
+	EventBus.ui_theme_changed.connect(_on_ui_theme_changed)
+
+
+func _on_ui_theme_changed() -> void:
+	current_progress_container.update_ui()
 
 
 ## Update UI elements.
