@@ -1,50 +1,103 @@
-## Manages global signals used across the app.
-##
-## Manages global signals used across the app working like a centrailized reposetory
-## storing all the signals used troughout the app.
-
-
 extends Node
 
+## Manages global signals used across the app.
+##
+## This class acts as a centralized repository, storing all the global signals 
+## used throughout the app. [br]
+## It allows different scripts to connect to and emit these signals globally 
+## since the script is autoloaded as [code]EventBus[/code]. [br]
+##
+## [br]
+##
+## Path: [code]res://autoload/event_bus.gd[/code]
 
-## Signal to createa a notification. [br]
+
+
+
+## Signal to request creating a notification. [br]
+##
+## [br]
+##
+## Emitted when a notification needs to be created. [br]
 ##
 ## [br]
 ##
 ## Parameters: [br]
 ## • [param notification_text] ([String]): Text to display in the notification. [br]
-## • [param extend_duration] ([bool]): If [code]true[/code], doubles the display duration.
-## Default: [code]false[/code] [br]
+## • [param extend_duration] ([bool]): If [code]true[/code], doubles the display duration. [br]
 ##
 ## [br]
 ##
-## See [member NotificationSystem.create_notification] for more details.
-signal create_notification(notification_text: String, extend_duration: bool)
+## See [method NotificationSystem._on_create_notification_requested] for more details.
+signal create_notification_requested(notification_text: String, extend_duration: bool)
 
-## Signal to add a log entry to [member logs_array] [br]
+## Signal to request applying UI theme based of [member Data.current_ui_theme]. [br]
+##
+## [br]
+##
+## Emitted when a UI theme needs to be applied. [br]
+##
+## [br]
+##
+## See [method UIManager._on_apply_ui_theme_requested] for more details.
+signal apply_ui_theme_requested
+
+## Signal to request updating the UI. [br]
+##
+## [br]
+##
+## Emitted when the UI needs to be updated. [br]
+##
+## [br]
+##
+## See [method UIManager._on_update_ui_requested] for more details.
+signal update_ui_requested
+
+## Signal to request saving data. [br]
+##
+## [br]
+##
+## Emitted when progression data and settings needs to be saved. [br]
+##
+## [br]
+##
+## See [method SaveSystem._on_save_data_requested] for more details.
+signal save_data_requested
+
+## Signal to request loading data. [br]
+##
+## [br]
+##
+## Emitted when progression data and settings needs to be loaded. [br]
+##
+## [br]
+##
+## See [method SaveSystem._on_load_data_requested] for more details.
+signal load_data_requested
+
+## Signal to request resetting data. [br]
+##
+## [br]
+##
+## Emitted when progression data needs to be reset. [br]
 ##
 ## [br]
 ##
 ## Parameters: [br]
-## • [param message] ([String]): Text for log message. [br]
+## • [param selected_reset_option] ([String]): The selected option for data reset. [br]
 ##
 ## [br]
 ##
-## See [member Data.add_log_entry] for more details.
-signal add_log_entry(message: String)
-
-
-signal ui_theme_changed
-
-
-signal update_ui_requested
-
-signal apply_ui_theme_requested
-
-signal save_data_requested
-
-signal load_data_requested
-
+## See [method SaveSystem._on_reset_data_requested] for more details.
 signal reset_data_requested(selected_reset_option: String)
 
+## Signal to notify pushups added. [br]
+##
+## [br]
+##
+## Emitted when pushups are added to the count. [br]
+##
+## [br]
+##
+## See [method Data._on_pushups_added] for more details.
 signal pushups_added

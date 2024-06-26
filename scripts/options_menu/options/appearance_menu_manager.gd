@@ -58,14 +58,9 @@ func _on_themes_option_button_select(index: int) -> void:
 		if themes_option_button.get_item_text(index) == theme.capitalize():
 			Data.current_ui_theme = Data.available_themes[theme]["theme"]
 	
-	# Apply and log theme change and save data
+	# Update ui theme and save changes
 	EventBus.apply_ui_theme_requested.emit()
 	EventBus.save_data_requested.emit()
 	
 	# Re-open appearance menu with new applied theme
-	_reopen_menu()
-	
-
-## Re-open appearance menu with new applied theme.
-func _reopen_menu() -> void:
 	SceneManager.reload_current_scene_requested.emit("Appearance")

@@ -1,3 +1,7 @@
+class_name Main
+extends Node
+
+
 ## Main Scene.
 ## 
 ## Main scene that will be loaded when the application runs. [br]
@@ -10,10 +14,6 @@
 ## [br]
 ##
 ## Path: [code]res://scripts/main.gd[/code]
-
-
-class_name Main
-extends Node
 
 
 ## Default window size, used when screen height is below a minimum threshold.
@@ -53,13 +53,14 @@ func _center_window_on_screen(screen_size: Vector2i):
 
 
 ## Loads saved data if application is not running, or applies the UI theme based
-## on [member GlobalVariables.current_ui_theme] if it is. [br]
+## on [member Data.current_ui_theme] if it is. [br]
 ##
 ## [br]
 ##
-## This decision is based on the global state variable [member GlobalVariables.is_app_running].
+## This decision is based on the global state variable [member Data.is_app_running].
 func _load_data_or_apply_theme():
 	if Data.is_app_running == false:
 		EventBus.load_data_requested.emit()
 	else:
 		EventBus.apply_ui_theme_requested.emit()
+		

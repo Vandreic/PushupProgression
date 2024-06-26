@@ -6,7 +6,7 @@
 ## [br]
 ##
 ## Usage: [br]
-## • [method create_notification]: Creates and shows a notification. [br]
+## • [method _on_create_notification_requested]: Creates and shows a notification. [br]
 ##
 ## [br]
 ##
@@ -29,7 +29,7 @@ var current_notification: CanvasLayer = null
 
 ## Connect to [EventBus]'s signals when node is ready.
 func _ready() -> void:
-	EventBus.create_notification.connect(_create_notification)
+	EventBus.create_notification_requested.connect(_on_create_notification_requested)
 
 
 ## Creates and queues a notification with optional extended duration. [br]
@@ -43,8 +43,12 @@ func _ready() -> void:
 ##
 ## [br]
 ##
-## See [method NotificationManager._ready] for more details.
-func _create_notification(notification_text: String, extend_duration: bool = false) -> void:
+## See [method NotificationManager._ready] for more details. [br]
+##
+## [br]
+##
+## Connects to [signal EventBus.create_notification_requested].
+func _on_create_notification_requested(notification_text: String, extend_duration: bool = false) -> void:
 	var notification_node: CanvasLayer = SceneManager.NOTIFICATION_SCENE.instantiate() as CanvasLayer
 	notification_node.get_node("%NotificationLabel").text = notification_text
 	

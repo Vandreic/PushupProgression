@@ -21,22 +21,22 @@ const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/dark_b
 # **********************************
 
 ## Daily goal for the number of push-ups.
-static var daily_pushups_goal: int = 100
+var daily_pushups_goal: int = 100
 
 ## Number of push-ups to complete per session.
-static var pushups_per_session: int = 10
+var pushups_per_session: int = 10
 
 ## Total number of push-ups completed today.
-static var total_pushups_today: int = 0
+var total_pushups_today: int = 0
 
 ## Number of push-up sessions completed today.
-static var sessions_completed_today: int = 0
+var sessions_completed_today: int = 0
 
 ## Number of remaining push-ups to reach today's goal.
-static var pushups_remaining_today: int = 0
+var pushups_remaining_today: int = 0
 
 ## Dictionary for storing user settings and progression data.
-static var user_data_dict: Dictionary = {
+var user_data_dict: Dictionary = {
 	# Stores user settings
 	"settings": {
 		"daily_pushups_goal": 0,
@@ -54,13 +54,13 @@ static var user_data_dict: Dictionary = {
 # **********************************
 
 ## Indicates whether the app is currently running.
-static var is_app_running: bool = false
+var is_app_running: bool = false
 
 ## Array of log messages.
-static var logs_array: Array = []
+var logs_array: Array = []
 
 ## Dictionary of available UI themes and their properties.
-static var available_themes: Dictionary = {
+var available_themes: Dictionary = {
 	"light_blue": {
 		"theme": preload(LIGHT_BLUE_THEME_PATH),
 		"instance_id": preload(LIGHT_BLUE_THEME_PATH).get_instance_id(),
@@ -106,10 +106,10 @@ static var available_themes: Dictionary = {
 }
 
 ## Currently active UI theme. Default is light_blue.
-static var current_ui_theme: Theme = available_themes["light_blue"]["theme"]
+var current_ui_theme: Theme = available_themes["light_blue"]["theme"]
 
 ## Index of the currently selected theme.
-static var selected_theme_index: int
+var selected_theme_index: int
 
 
 # **********************************
@@ -128,13 +128,14 @@ func _ready() -> void:
 ## This function duplicates a [Panel]'s [StyleBox] from the [member current_ui_theme] 
 ## and modifies its appearance according to the theme settings such as 
 ## background color, border width, and corner radius.
-static func create_custom_panel_stylebox() -> StyleBoxFlat:
+func create_custom_panel_stylebox() -> StyleBoxFlat:
 	# Duplicate panel theme stylebox from currently applied theme
 	var stylebox: StyleBoxFlat = current_ui_theme.get_stylebox("panel", "Panel").duplicate()
 	
 	# Update theme properties to match new applied theme
 	for theme in available_themes:
 		if theme == get_theme_name(current_ui_theme):
+			# Add rounded corners
 			stylebox.bg_color = Color(available_themes[theme]["color"]["primary_container"])
 			stylebox.set_corner_radius_all(25)
 			
@@ -154,7 +155,7 @@ static func create_custom_panel_stylebox() -> StyleBoxFlat:
 ## Returns: [br]
 ## • [code]theme_key[/code] ([String]): The theme name. [br]
 ## • [code]""[/code] ([String]): Empty string if no matching theme.
-static func get_theme_name(theme: Theme) -> String:
+func get_theme_name(theme: Theme) -> String:
 	for theme_key in available_themes:
 		# Match provided theme's instance id with theme instance id from dictionary
 		if theme.get_instance_id() == available_themes[theme_key]["instance_id"]:
@@ -165,22 +166,22 @@ static func get_theme_name(theme: Theme) -> String:
 
 
 ## Get the current system time formatted as [code]HH:MM:SS[/code].
-static func get_current_system_time() -> String:
+func get_current_system_time() -> String:
 	var time_dict: Dictionary = Time.get_time_dict_from_system()
 	return "%02d:%02d:%02d" % [time_dict["hour"], time_dict["minute"], time_dict["second"]]
 
 
 ## Add log entry to [member logs_array]
-static func add_log_entry(log_message: String) -> void:
+func add_log_entry(log_message: String) -> void:
 	logs_array.append("[%s] %s" % [get_current_system_time(), log_message])
 
 
 ## Return [member logs_array].
-static func get_logs_array() -> Array:
+func get_logs_array() -> Array:
 	return logs_array
 
 
-static func on_pushups_added() -> void:
+func _on_pushups_added() -> void:
 	total_pushups_today += pushups_per_session
 	
 	pushups_remaining_today = daily_pushups_goal - total_pushups_today

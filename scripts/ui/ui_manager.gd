@@ -26,7 +26,7 @@ extends Node
 @onready var current_progress_container: VBoxContainer = %CurrentProgressContainer
 
 ## Container for UI elements displaying the previous progress.
-@onready var previous_progress_container: HBoxContainer = %PreviousProgressContainer
+#@onready var previous_progress_container: HBoxContainer = %PreviousProgressContainer
 
 ## Application version label.
 @onready var app_version: Label = %AppVersion
@@ -41,23 +41,24 @@ func _ready():
 
 ## Connects to [EventBus]'s signals and other signals.
 func _connect_signals() -> void:
-	EventBus.update_ui_requested.connect(update_ui)
-	EventBus.apply_ui_theme_requested.connect(apply_ui_theme)
-	
-	EventBus.ui_theme_changed.connect(_on_ui_theme_changed)
+	EventBus.update_ui_requested.connect(_on_update_ui_requested)
+	EventBus.apply_ui_theme_requested.connect(_on_apply_ui_theme_requested)
 
-
-func _on_ui_theme_changed() -> void:
+## Applies UI theme based of [member Data.current_ui_theme] to UI components with-in the scene. [br]
+##
+## [br]
+##
+## Connects to [signal EventBus.apply_ui_theme_requested].
+func _on_apply_ui_theme_requested() -> void:
+	background_panel.theme = Data.current_ui_theme
 	current_progress_container.update_ui()
 
 
-## Update UI elements.
-func update_ui() -> void:
+## Update UI elements. [br]
+##
+## [br]
+##
+## Connects to [signal EventBus.update_ui_requested].
+func _on_update_ui_requested() -> void:
 	# Update all UI elements in current progress container
 	current_progress_container.update_ui()
-
-
-## Applies the UI theme based on [member GlobalVariables.current_ui_theme].
-func apply_ui_theme() -> void:
-	background_panel.theme = Data.current_ui_theme
-	current_progress_container.apply_ui_theme()

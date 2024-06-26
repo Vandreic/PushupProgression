@@ -48,20 +48,20 @@ script = ExtResource("1_bopgf")
 unique_name_in_owner = true
 anchors_preset = -1
 anchor_left = 0.3
-anchor_top = 0.94
+anchor_top = 0.9
 anchor_right = 0.7
-anchor_bottom = 0.975
+anchor_bottom = 0.95
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 theme = ExtResource("2_4ve1q")
 metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="BackgroundPanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 7
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 7
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
 [node name="NotificationLabel" type="Label" parent="BackgroundPanelContainer/MarginContainer"]
 unique_name_in_owner = true

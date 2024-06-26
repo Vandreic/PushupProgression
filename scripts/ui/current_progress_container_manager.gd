@@ -62,7 +62,7 @@ func update_ui() -> void:
 
 ## Update the progress bar and its value label.
 func _update_progress_bar() -> void:
-	var new_progress_bar_value = Data.total_pushups_today * 100 / Data.daily_pushups_goal
+	var new_progress_bar_value = Data.total_pushups_today * 100.0 / Data.daily_pushups_goal
 	progress_bar.value = new_progress_bar_value
 	progress_value_label.text = str(new_progress_bar_value) + "%"
 

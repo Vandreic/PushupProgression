@@ -1,23 +1,86 @@
-## Manages scenes and handles scene switching functionality.
-#FIXME
-
-
 extends Node
 
 
-## Signal emitted when a scene change is requested.
+## Handles scene transitions and various UI-related requests in the application.
+##
+## This class manages scene changes, UI scene additions, and reloading of the 
+## current scene. It also handles special UI requests such as opening confirmation
+## boxes and closing the options menu. The SceneManager uses predefined paths for
+## each scene and signals to coordinate these changes. [br]
+##
+## [br]
+##
+## Path: [code]res://autoload/scene_manager.gd[/code]
+
+
+## Signal to request changing the scene. [br]
+##
+## [br]
+##
+## Emitted when a scene change is requested. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [param scene_name] ([String]): The name of the scene to change to. [br]
+##
+## [br]
+##
+## See [method _on_change_scene_requested] for more details.
 signal change_scene_requested(scene_name: String)
 
-## Signal emitted when adding an UI scene is requested.
+## Signal to request adding a UI scene. [br]
+##
+## [br]
+##
+## Emitted when adding a UI scene is requested. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [param scene_name] ([String]): The name of the UI scene to add. [br]
+##
+## [br]
+##
+## See [method _on_add_scene_requested] for more details.
 signal add_scene_requested(scene_name: String)
 
-## Signal emitted when reloading current scene is requested.
+## Signal to request reloading the current scene. [br]
+##
+## [br]
+##
+## Emitted when reloading the current scene is requested. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [param scene_name] ([String]): The name of the scene to reload. [br]
+##
+## [br]
+##
+## See [method _on_reload_current_scene_requested] for more details.
 signal reload_current_scene_requested(scene_name: String)
 
-## Signal emitted when closing options menu is requested.
+## Signal to request closing the options menu. [br]
+##
+## [br]
+##
+## Emitted when closing the options menu is requested. [br]
+##
+## [br]
+##
+## See [method _on_close_options_menu_requested] for more details.
 signal close_options_menu_requested
 
-## Signal emitted when adding a pop-up confirmation box.
+## Signal to request opening a confirmation box. [br]
+##
+## [br]
+##
+## Emitted when adding a pop-up confirmation box. [br]
+##
+## [br]
+##
+## See [method _on_open_confirmation_box_requested] for more details.
 signal open_confirmation_box_requested
 
 
@@ -40,6 +103,7 @@ var scene_dict: Dictionary = {
 }
 
 
+## Connects the signals to their respective handlers when node is ready.
 func _ready() -> void:
 	change_scene_requested.connect(_on_change_scene_requested)
 	add_scene_requested.connect(_on_add_scene_requested)
@@ -49,10 +113,31 @@ func _ready() -> void:
 	open_confirmation_box_requested.connect(_on_open_confirmation_box_requested)
 	
 
+## Handler for the [signal change_scene_requested] signal. [br]
+##
+## [br]
+##
+## This method is called when a scene change is requested.
+## It defers the actual scene change to avoid potential issues with the current frame. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [code]scene_name[/code] ([String]): The name of the scene to change to.
 func _on_change_scene_requested(scene_name: String) -> void:
 	call_deferred("_deferred_change_scene", scene_name)
 
 
+## Deferred handler for changing the scene. [br]
+##
+## [br]
+##
+## This method performs the actual scene change after ensuring the scene exists. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [code]scene_name[/code] ([String]): The name of the scene to change to.
 func _deferred_change_scene(scene_name: String) -> void:
 	# If chosen scene does not exists in scene_dict, notify user and return 
 	if not scene_dict.has(scene_name):
@@ -67,6 +152,16 @@ func _deferred_change_scene(scene_name: String) -> void:
 	get_tree().set_current_scene(new_scene)
 
 
+## Handler for the [signal add_scene_requested] signal. [br]
+##
+## [br]
+##
+## This method is called when a UI scene addition is requested. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [code]scene_name[/code] ([String]): The name of the UI scene to add.
 func _on_add_scene_requested(scene_name: String) -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	
@@ -81,6 +176,16 @@ func _on_add_scene_requested(scene_name: String) -> void:
 	ui_node.add_child(new_scene)
 
 
+## Handler for the [signal reload_current_scene_requested] signal. [br]
+##
+## [br]
+##
+## This method is called when reloading the current scene is requested. [br]
+##
+## [br]
+##
+## Parameters: [br]
+## • [code]scene_name[/code] ([String]): The name of the scene to reload.
 func _on_reload_current_scene_requested(scene_name: String) -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	
@@ -98,7 +203,12 @@ func _on_reload_current_scene_requested(scene_name: String) -> void:
 	# Add new scene (Reloads current scene)
 	call_deferred("_on_add_scene_requested", scene_name)
 	
-	
+
+## Handler for the [signal close_options_menu_requested] signal. [br]
+##
+## [br]
+##
+## This method is called when closing the options menu is requested.
 func _on_close_options_menu_requested() -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	var options_menu: CanvasLayer = ui_node.get_node("OptionsMenu")
@@ -106,6 +216,11 @@ func _on_close_options_menu_requested() -> void:
 	options_menu.queue_free()
 
 
+## Handler for the [signal open_confirmation_box_requested] signal. [br]
+##
+## [br]
+##
+## This method is called when opening a confirmation box is requested.
 func _on_open_confirmation_box_requested(info_text: String, reset_option: String) -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	var confirmation_box: CanvasLayer = load(scene_dict["ConfirmationBox"]).instantiate()
@@ -119,6 +234,13 @@ func _on_open_confirmation_box_requested(info_text: String, reset_option: String
 	ui_node.add_child(confirmation_box)
 
 
+## Retrieves the "UI" node from the "Main" node in the scene tree. [br]
+##
+## [br]
+##
+## Returns: [br]
+## • [CanvasLayer]: The [code]UI[/code] node that stores all the game UI, 
+## or [code]null[/code] if not found.
 func _get_ui_scene_as_node() -> CanvasLayer:
 	if not get_tree().root.has_node("Main"):
 		print("\"Main\" node not found in scene tree.")

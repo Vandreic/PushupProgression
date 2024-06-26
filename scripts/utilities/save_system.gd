@@ -283,7 +283,7 @@ static func _create_data_dict_for_current_day() -> Dictionary:
 ## Returns: [br]
 ## • [code]save_file[/code] ([FileAccess]): The [FileAccess] object if the file opening was successful. [br]
 ## • [code]open_error_message[/code] ([String]): An error message if the file opening failed.
-static func _open_save_file(file_access: FileAccess.ModeFlags):
+static func _open_save_file(file_access: FileAccess.ModeFlags = FileAccess.ModeFlags.READ):
 	# Open save file with provided access mode
 	var save_file: FileAccess = FileAccess.open(SAVE_FILE_PATH + SAVE_FILE, file_access)
 	
