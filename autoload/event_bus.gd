@@ -1,17 +1,20 @@
 extends Node
 
-## Manages global signals used across the app.
-##
-## This class acts as a centralized repository, storing all the global signals 
-## used throughout the app. [br]
-## It allows different scripts to connect to and emit these signals globally 
-## since the script is autoloaded as [code]EventBus[/code]. [br]
+
+## Manages global signals used across the app. [br]
 ##
 ## [br]
 ##
-## Path: [code]res://autoload/event_bus.gd[/code]
-
-
+## This autoloaded script stores and manages global signals, allowing different
+## scripts to connect and emit these signals globally. [br]
+##
+## [br]
+## 
+## It is accessed globally as [code]EventBus[/code]. [br]
+##
+## [br]
+##
+## [b]Path:[/b] [code]res://autoload/event_bus.gd[/code]
 
 
 ## Signal to request creating a notification. [br]
@@ -31,7 +34,7 @@ extends Node
 ## See [method NotificationSystem._on_create_notification_requested] for more details.
 signal create_notification_requested(notification_text: String, extend_duration: bool)
 
-## Signal to request applying UI theme based of [member Data.current_ui_theme]. [br]
+## Signal to request applying UI theme based on [member Data.current_ui_theme]. [br]
 ##
 ## [br]
 ##
@@ -57,7 +60,7 @@ signal update_ui_requested
 ##
 ## [br]
 ##
-## Emitted when progression data and settings needs to be saved. [br]
+## Emitted when progression data and settings need to be saved. [br]
 ##
 ## [br]
 ##
@@ -68,7 +71,7 @@ signal save_data_requested
 ##
 ## [br]
 ##
-## Emitted when progression data and settings needs to be loaded. [br]
+## Emitted when progression data and settings need to be loaded. [br]
 ##
 ## [br]
 ##

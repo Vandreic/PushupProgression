@@ -1,16 +1,21 @@
 extends Node
 
 
-## Handles scene transitions and various UI-related requests in the application.
-##
-## This class manages scene changes, UI scene additions, and reloading of the 
-## current scene. It also handles special UI requests such as opening confirmation
-## boxes and closing the options menu. The SceneManager uses predefined paths for
-## each scene and signals to coordinate these changes. [br]
+## Handles scene transitions and various UI-related requests. [br]
 ##
 ## [br]
 ##
-## Path: [code]res://autoload/scene_manager.gd[/code]
+## This autoloaded script manages scene changes, UI additions, and scene reloading.
+## It also handles special UI requests like opening confirmation boxes and closing
+## the options menu, using predefined paths and signals to coordinate these changes. [br]
+##
+## [br]
+##
+## It is accessed globally as [code]SceneManager[/code]. [br]
+##
+## [br]
+##
+## [b]Path:[/b] [code]res://autoload/scene_manager.gd[/code]
 
 
 ## Signal to request changing the scene. [br]
@@ -108,10 +113,9 @@ func _ready() -> void:
 	change_scene_requested.connect(_on_change_scene_requested)
 	add_scene_requested.connect(_on_add_scene_requested)
 	reload_current_scene_requested.connect(_on_reload_current_scene_requested)
-	
 	close_options_menu_requested.connect(_on_close_options_menu_requested)
 	open_confirmation_box_requested.connect(_on_open_confirmation_box_requested)
-	
+
 
 ## Handler for the [signal change_scene_requested] signal. [br]
 ##
@@ -139,10 +143,11 @@ func _on_change_scene_requested(scene_name: String) -> void:
 ## Parameters: [br]
 ## • [code]scene_name[/code] ([String]): The name of the scene to change to.
 func _deferred_change_scene(scene_name: String) -> void:
-	# If chosen scene does not exists in scene_dict, notify user and return 
+	# If chosen scene does not exist in scene_dict, notify user and return
 	if not scene_dict.has(scene_name):
-		#FIXME
-		print("No such scene registred.")
+		var _message: String = "Invalid scene name! No scene \"%s\" found in scene_dict." % scene_name
+		EventBus.create_notification_requested.emit(_message, false)
+		print(_message)
 		return
 	
 	var new_scene: Node = load(scene_dict[scene_name]).instantiate()
@@ -165,10 +170,10 @@ func _deferred_change_scene(scene_name: String) -> void:
 func _on_add_scene_requested(scene_name: String) -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	
-	# If chosen scene does not exists in scene_dict, notify user and return 
+	# If chosen scene does not exist in scene_dict, notify user and return
 	if not scene_dict.has(scene_name):
 		#FIXME
-		print("No scene named \"%s\" registred." % scene_name)
+		print("No scene named \"%s\" registered." % scene_name)
 		return
 	
 	var new_scene: Node = load(scene_dict[scene_name]).instantiate()
@@ -189,10 +194,10 @@ func _on_add_scene_requested(scene_name: String) -> void:
 func _on_reload_current_scene_requested(scene_name: String) -> void:
 	var ui_node: CanvasLayer = _get_ui_scene_as_node()
 	
-	# If chosen scene does not exists in scene_dict, notify user and return 
+	# If chosen scene does not exist in scene_dict, notify user and return
 	if not scene_dict.has(scene_name):
 		#FIXME
-		print("No scene named \"%s\" registred." % scene_name)
+		print("No scene named \"%s\" registered." % scene_name)
 		return
 	
 	# Remove current scene
@@ -202,7 +207,7 @@ func _on_reload_current_scene_requested(scene_name: String) -> void:
 	
 	# Add new scene (Reloads current scene)
 	call_deferred("_on_add_scene_requested", scene_name)
-	
+
 
 ## Handler for the [signal close_options_menu_requested] signal. [br]
 ##
@@ -228,7 +233,7 @@ func _on_open_confirmation_box_requested(info_text: String, reset_option: String
 	# Update info text inside box when node is ready
 	confirmation_box.ready.connect(confirmation_box.update_info_text.bind(info_text))
 	confirmation_box.ready.connect(confirmation_box._apply_ui_theme)
-	# Store reset option with-in the confirmation box
+	# Store reset option within the confirmation box
 	confirmation_box.selected_reset_option = reset_option
 	
 	ui_node.add_child(confirmation_box)
@@ -254,4 +259,3 @@ func _get_ui_scene_as_node() -> CanvasLayer:
 	
 	var ui_node: CanvasLayer = main_node.get_node("UI")
 	return ui_node
-	

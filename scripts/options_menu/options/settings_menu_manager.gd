@@ -105,12 +105,12 @@ func _validate_and_update_daily_goal() -> void:
 		Data.daily_pushups_goal = int(daily_goal_input.text)
 		var log_message: String = "Daily goal updated to: %s" % daily_goal_input.text
 		Data.add_log_entry(log_message)
-		EventBus.create_notification.emit(log_message, true)
+		EventBus.create_notification_requested.emit(log_message, true)
 	# Notify user if invalid input
 	elif not daily_goal_input.text.is_empty():
 		var notification_text: String = "Invalid value for daily goal: %s\n\
 		Only digits allowed." % daily_goal_input.text
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)
 
 
 ## Validates and updates the push-ups per session input.
@@ -122,9 +122,9 @@ func _validate_and_update_pushups_per_session() -> void:
 		Data.pushups_per_session = int(pushups_per_session_input.text)
 		var log_message: String = "Push-ups per session updated to: %s" % pushups_per_session_input.text
 		Data.add_log_entry(log_message)
-		EventBus.create_notification.emit(log_message, true)
+		EventBus.create_notification_requested.emit(log_message, true)
 	# Notify user if invalid input
 	elif not pushups_per_session_input.text.is_empty():
 		var notification_text: String = "Invalid value for push-ups per session: %s\n\
 		Only digits allowed." % pushups_per_session_input.text
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)

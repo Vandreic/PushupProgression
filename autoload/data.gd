@@ -1,5 +1,20 @@
-
 extends Node
+
+
+## Manages and stores all app data. [br]
+##
+## [br]
+##
+## This autoloaded script acts as a centralized repository for all app data,
+## such as user settings, daily pushup goals, and progress. [br]
+##
+## [br]
+## 
+## It is accessed globally as [code]Data[/code]. [br]
+##
+## [br]
+##
+## [b]Path:[/b] [code]res://autoload/data.gd[/code]
 
 
 # **********************************
@@ -14,7 +29,6 @@ const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/light
 
 ## Path to the dark blue material design theme file.
 const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/dark_blue_material_design_theme.tres"
-
 
 # **********************************
 # *           Save Data            *
@@ -47,7 +61,6 @@ var user_data_dict: Dictionary = {
 	# Stores data for each day
 	"calendar": {}
 }
-
 
 # **********************************
 # *            Game Data           *
@@ -111,14 +124,13 @@ var current_ui_theme: Theme = available_themes["light_blue"]["theme"]
 ## Index of the currently selected theme.
 var selected_theme_index: int
 
-
 # **********************************
 # *            Functions           *
 # **********************************
 
 ## Connects to [EventBus]'s signals.
 func _ready() -> void:
-	EventBus.pushups_added.connect(on_pushups_added)
+	EventBus.pushups_added.connect(_on_pushups_added)
 
 
 ## Creates a [StyleBoxFlat] for a [Panel] based on the [member current_ui_theme]. [br]
@@ -171,22 +183,32 @@ func get_current_system_time() -> String:
 	return "%02d:%02d:%02d" % [time_dict["hour"], time_dict["minute"], time_dict["second"]]
 
 
-## Add log entry to [member logs_array]
+## Appends a log message to [member logs_array] with a timestamp.
 func add_log_entry(log_message: String) -> void:
 	logs_array.append("[%s] %s" % [get_current_system_time(), log_message])
 
 
-## Return [member logs_array].
+## Returns [member logs_array]. [br]
+##
+## [br]
+##
+## Returns the array of log messages.
 func get_logs_array() -> Array:
 	return logs_array
 
 
+## Handles the addition of push-ups to the total count. [br]
+##
+## [br]
+##
+## Updates the total push-ups completed today, increments the session count,
+## and adjusts the remaining push-ups to reach the daily goal.
+## Ensures the remaining push-ups do not go below zero.
 func _on_pushups_added() -> void:
 	total_pushups_today += pushups_per_session
+	sessions_completed_today += 1
 	
 	pushups_remaining_today = daily_pushups_goal - total_pushups_today
 	# Set remaining push-ups to 0, if daily goal is reached
 	if pushups_remaining_today <= 0:
 		pushups_remaining_today = 0
-
-	sessions_completed_today += 1

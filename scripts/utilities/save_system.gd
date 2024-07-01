@@ -65,7 +65,7 @@ static func _on_save_data_requested() -> void:
 	if save_file is String:
 		Data.add_log_entry("Error opening save file. " + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)
 		return
 	
 	# Save data to user data dict
@@ -82,7 +82,7 @@ static func _on_save_data_requested() -> void:
 	
 	# Log and notify user
 	Data.add_log_entry("Data saved successfully!")
-	EventBus.create_notification.emit("Saved successfully!", false)
+	EventBus.create_notification_requested.emit("Saved successfully!", false)
 
 
 ## Load saved user progression and settings. [br]
@@ -103,7 +103,7 @@ static func _on_load_data_requested() -> void:
 	if not FileAccess.file_exists(SAVE_FILE_PATH + SAVE_FILE):
 		var _message: String = "No existing save file found."
 		Data.add_log_entry(_message)
-		EventBus.create_notification.emit(_message, true)
+		EventBus.create_notification_requested.emit(_message, true)
 		_create_save_file()
 		return
 	
@@ -114,7 +114,7 @@ static func _on_load_data_requested() -> void:
 	if save_file is String:
 		Data.add_log_entry("Error opening save file.\n" + save_file)
 		var notification_text: String = "Error opening save file\n" + "See logs for more details."
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)
 		return
 
 	# Create JSON helper
@@ -135,7 +135,7 @@ static func _on_load_data_requested() -> void:
 		Data.add_log_entry("Error converting data from save file. " + error_message)
 		
 		var notification_text: String = "Error converting data from save file\n" + "See logs for more details."
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)
 		return
 	
 	# If save data is dictionary, load user progression and settings
@@ -166,7 +166,7 @@ static func _on_load_data_requested() -> void:
 		
 		# Add log and notify user
 		Data.add_log_entry("Loaded data from save file successfully!")
-		EventBus.create_notification.emit("Loaded successfully!", false)
+		EventBus.create_notification_requested.emit("Loaded successfully!", false)
 
 
 ## Creates a save file at the specified path [constant SAVE_FILE_PATH]. [br]
@@ -188,7 +188,7 @@ static func _create_save_file() -> void:
 	if new_save_file is String:
 		Data.add_log_entry("Error creating new save file.\n%s" % new_save_file)
 		var notification_text: String = "Error creating new save file\n" + "See logs for more details."
-		EventBus.create_notification.emit(notification_text, true)
+		EventBus.create_notification_requested.emit(notification_text, true)
 		return
 		
 	# Convert the user data dictionary to a JSON string
@@ -200,7 +200,7 @@ static func _create_save_file() -> void:
 	
 	# Log and notify user
 	Data.add_log_entry("New save file created and data saved successfully!")
-	EventBus.create_notification.emit("New save file created successfully!", true)
+	EventBus.create_notification_requested.emit("New save file created successfully!", true)
 
 
 ## Initializes and populates the [member GlobalVariables.user_data_dict] with 
@@ -543,7 +543,7 @@ static func _on_reset_data_requested(reset_option: String) -> void:
 	
 	# Initialize user data dictionary for current day
 	_initialize_data_dict_for_current_day(current_year, current_month, current_day)
-	EventBus.create_notification.emit("Reset successfully!", false)
+	EventBus.create_notification_requested.emit("Reset successfully!", false)
 	# Save data and update UI
 	_on_save_data_requested()
 	EventBus.update_ui_requested.emit()
