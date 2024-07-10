@@ -13,14 +13,16 @@ config_version=5
 config/name="Push-Up Progression"
 config/description="An app for tracking push-up progress and reaching daily goals, built with Godot."
 config/version="1.4.0"
-run/main_scene="res://src/main/main.tscn"
+run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://assets/app_icon/app_icon.png"
 config/windows_native_icon="res://assets/app_icon/windows_icon.ico"
 
 [autoload]
 
-GlobalVariables="*res://global/global_variables.gd"
+SceneManager="*res://autoload/scene_manager.gd"
+Data="*res://autoload/data.gd"
+EventBus="*res://autoload/event_bus.gd"
 
 [display]
 
@@ -30,19 +32,18 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
-"res://global/": "red",
-"res://src/main/": "red",
-"res://src/ui/": "blue",
-"res://src/ui/options_menu/": "green",
-"res://src/ui/options_menu/appearance_menu/": "orange",
-"res://src/ui/options_menu/logging_menu/": "teal",
-"res://src/ui/options_menu/reset_options_menu/": "orange",
-"res://src/ui/options_menu/settings_menu/": "orange",
-"res://src/ui/popup_confirm_box/": "yellow",
-"res://src/utilities/": "red"
+"res://assets/": "yellow",
+"res://autoload/": "purple",
+"res://docs/": "gray",
+"res://scenes/": "blue",
+"res://scripts/": "green"
 }
 
 [input_devices]
@@ -54,3 +55,4 @@ pointing/emulate_touch_from_mouse=true
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+limits/global_shader_variables/buffer_size=4096

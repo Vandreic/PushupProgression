@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci0huwenmki2d"]
+
+[ext_resource type="PackedScene" uid="uid://cwaf57q1jy301" path="res://scenes/options_menu/option_menu_template.tscn" id="1_efuk3"]
+[ext_resource type="Script" path="res://scripts/options_menu/options/settings_menu_manager.gd" id="2_xfdu5"]
+
+[node name="OptionMenuTemplate" instance=ExtResource("1_efuk3")]
+
+[node name="BackgroundPanel" parent="FullWindow" index="0"]
+anchor_bottom = 0.7
+script = ExtResource("2_xfdu5")
+
+[node name="TitleLabel" parent="FullWindow/BackgroundPanel" index="0"]
+text = "Settings"
+
+[node name="SettingsContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel" index="1"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.25
+anchor_right = 1.0
+anchor_bottom = 0.75
+theme_override_constants/separation = 40
+
+[node name="DailyGoalContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel/SettingsContainer" index="0"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="DailyGoalLabel" type="Label" parent="FullWindow/BackgroundPanel/SettingsContainer/DailyGoalContainer" index="0"]
+layout_mode = 2
+text = "Daily goal"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DailyGoalInput" type="LineEdit" parent="FullWindow/BackgroundPanel/SettingsContainer/DailyGoalContainer" index="1"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Current: 100"
+alignment = 1
+clear_button_enabled = true
+
+[node name="PushupsPerSessionContainer" type="VBoxContainer" parent="FullWindow/BackgroundPanel/SettingsContainer" index="1"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="PushupsPerSessionLabel" type="Label" parent="FullWindow/BackgroundPanel/SettingsContainer/PushupsPerSessionContainer" index="0"]
+layout_mode = 2
+text = "Push-ups per session"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PushupsPerSessionInput" type="LineEdit" parent="FullWindow/BackgroundPanel/SettingsContainer/PushupsPerSessionContainer" index="1"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Current: 10"
+alignment = 1
+clear_button_enabled = true
+
+[node name="ButtonsContainer" parent="FullWindow/BackgroundPanel" index="2"]
+anchor_top = 0.825
