@@ -1,13 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bv2v88irqyogj"]
+[gd_scene load_steps=9 format=3 uid="uid://bv2v88irqyogj"]
 
 [ext_resource type="Script" path="res://scripts/ui/ui_manager.gd" id="1_8wh5j"]
 [ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_7x34e"]
 [ext_resource type="Script" path="res://scripts/ui/current_progress_container_manager.gd" id="2_kyyc0"]
-[ext_resource type="Texture2D" uid="uid://bkyegktxfpngs" path="res://assets/progress_icon/light_blue_theme/progress_bar_under.png" id="2_miyvb"]
-[ext_resource type="Texture2D" uid="uid://clnjxrmu15ktl" path="res://assets/progress_icon/light_blue_theme/progress_bar_over.png" id="3_03rnj"]
-[ext_resource type="Texture2D" uid="uid://15mw4dsfjh8j" path="res://assets/progress_icon/light_blue_theme/progress_bar_progress.png" id="4_hs708"]
-[ext_resource type="Texture2D" uid="uid://bqc88w0kgbwhk" path="res://assets/options_menu/options_menu_button_normal.png" id="5_5ag4w"]
-[ext_resource type="Texture2D" uid="uid://6eg6c7ec3dik" path="res://assets/options_menu/options_menu_button_pressed.png" id="6_y5tyq"]
+[ext_resource type="Texture2D" uid="uid://cgftcxvrrljl0" path="res://assets/progress_icon/light_blue_theme/progress_bar_under.png" id="2_miyvb"]
+[ext_resource type="Texture2D" uid="uid://dvd7k3f034txi" path="res://assets/progress_icon/light_blue_theme/progress_bar_over.png" id="3_03rnj"]
+[ext_resource type="Texture2D" uid="uid://c0kwj1bj38imt" path="res://assets/options_menu/options_menu_button_normal.png" id="5_5ag4w"]
+[ext_resource type="Texture2D" uid="uid://defilye517jw6" path="res://assets/options_menu/options_menu_button_pressed.png" id="6_y5tyq"]
 [ext_resource type="Script" path="res://scripts/ui/options_menu_button_manager.gd" id="7_7g7aa"]
 
 [node name="UI" type="CanvasLayer"]
@@ -33,6 +32,8 @@ anchor_right = 0.9
 anchor_bottom = 0.975
 offset_right = 1.71661e-05
 offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 40
 
 [node name="QuoteLabel" type="Label" parent="BackgroundPanel/UIWindow"]
@@ -75,7 +76,6 @@ size_flags_vertical = 4
 fill_mode = 4
 texture_under = ExtResource("2_miyvb")
 texture_over = ExtResource("3_03rnj")
-texture_progress = ExtResource("4_hs708")
 
 [node name="ProgressValueLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressBar"]
 unique_name_in_owner = true

@@ -51,7 +51,7 @@ func apply_ui_theme() -> void:
 		progress_bar.texture_under = Data.available_themes[theme_name]["progress_bar"]["under"]
 		progress_bar.texture_over = Data.available_themes[theme_name]["progress_bar"]["over"]
 		progress_bar.texture_progress = Data.available_themes[theme_name]["progress_bar"]["progress"]
-
+		
 
 ## Update all UI elements within the container.
 func update_ui() -> void:

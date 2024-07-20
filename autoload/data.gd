@@ -30,6 +30,9 @@ const LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/light
 ## Path to the dark blue material design theme file.
 const DARK_BLUE_MATERIAL_DESIGN_THEME_PATH: String = "res://assets/themes/dark_blue_material_design_theme.tres"
 
+## Path to the folder containing assets for the progress bar.
+const PROGRESS_BAR_ASSETS_PATH: String = "res://assets/progress_bar/"
+
 # **********************************
 # *           Save Data            *
 # **********************************
@@ -82,11 +85,7 @@ var available_themes: Dictionary = {
 			"primary_container": "#f1f0f7",
 			"outline": "#000000"
 		},
-		"progress_bar": {
-			"under": load("res://assets/progress_icon/light_blue_theme/progress_bar_under.png"),
-			"over": load("res://assets/progress_icon/light_blue_theme/progress_bar_over.png"),
-			"progress": load("res://assets/progress_icon/light_blue_theme/progress_bar_progress.png")
-		}
+		"progress_bar": {}
 	},
 	"light_blue_material_design": {
 		"theme": preload(LIGHT_BLUE_MATERIAL_DESIGN_THEME_PATH),
@@ -96,11 +95,7 @@ var available_themes: Dictionary = {
 			"primary_container": "#dae2ff",
 			"outline": "#757680"
 		},
-		"progress_bar": {
-			"under": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_under.png"),
-			"over": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_over.png"),
-			"progress": load("res://assets/progress_icon/light_blue_material_design_theme/progress_bar_progress.png")
-		}
+		"progress_bar": {}
 	},
 	"dark_blue_material_design": {
 		"theme": preload(DARK_BLUE_MATERIAL_DESIGN_THEME_PATH),
@@ -110,11 +105,7 @@ var available_themes: Dictionary = {
 			"primary_container": "#121318",
 			"outline": "#8f909a"
 		},
-		"progress_bar": {
-			"under": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_under.png"),
-			"over": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_over.png"),
-			"progress": load("res://assets/progress_icon/dark_blue_material_design_theme/progress_bar_progress.png")
-		}
+		"progress_bar": {}
 	}
 }
 
@@ -128,9 +119,10 @@ var selected_theme_index: int
 # *            Functions           *
 # **********************************
 
-## Connects to [EventBus]'s signals.
+## Connects to [EventBus]'s signals and load assets for progres bar, when the node is ready.
 func _ready() -> void:
 	EventBus.pushups_added.connect(_on_pushups_added)
+	_load_progress_bar_assets()
 
 
 ## Creates a [StyleBoxFlat] for a [Panel] based on the [member current_ui_theme]. [br]
@@ -188,6 +180,7 @@ func add_log_entry(log_message: String) -> void:
 	logs_array.append("[%s] %s" % [get_current_system_time(), log_message])
 
 
+#FIXME: Change to get and set methods?
 ## Returns [member logs_array]. [br]
 ##
 ## [br]
@@ -195,6 +188,46 @@ func add_log_entry(log_message: String) -> void:
 ## Returns the array of log messages.
 func get_logs_array() -> Array:
 	return logs_array
+
+
+#FIXME: Add docs
+func _load_progress_bar_assets() -> void:
+	var dir: DirAccess = DirAccess.open(PROGRESS_BAR_ASSETS_PATH)
+	
+	# If opening the directory failed
+	if dir == null:
+		print("Error opening directory: %s" % dir.get_open_error())
+		return
+	
+	# Get sub-folders
+	var theme_folders: PackedStringArray = dir.get_directories()
+	
+	# Loop trough sub-folders
+	for theme in theme_folders:
+		
+		#FIXME Check if theme exists 
+		if available_themes.has(theme):
+			var theme_folder_path: String = PROGRESS_BAR_ASSETS_PATH.path_join(theme)
+			
+			var assets_dict: Dictionary = {}
+			
+			# Loop trough assets within sub-folder
+			for asset in DirAccess.get_files_at(theme_folder_path):
+				
+				# Only needed when testing in editor
+				if asset.ends_with(".import"):
+					continue
+				
+				var texture: String = asset.split(".png")[0]
+				
+				var asset_path: String = theme_folder_path.path_join(asset)
+				assets_dict[texture] = load(asset_path)
+			
+			print(assets_dict)
+			Data.available_themes[theme]["progress_bar"] = assets_dict	
+				
+			
+		
 
 
 ## Handles the addition of push-ups to the total count. [br]
