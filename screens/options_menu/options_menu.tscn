@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://tpmqq0tay5vs"]
+
+[ext_resource type="Script" uid="uid://cd28tkjdkfsh1" path="res://screens/options_menu/options_menu_manager.gd" id="1_3n07y"]
+[ext_resource type="PackedScene" uid="uid://cwaf57q1jy301" path="res://templates/options_menu_template/option_menu_template.tscn" id="1_4k610"]
+
+[node name="OptionMenuTemplate" unique_id=1313584618 instance=ExtResource("1_4k610")]
+
+[node name="BackgroundPanel" parent="FullWindow" index="0"]
+anchor_bottom = 0.7
+script = ExtResource("1_3n07y")
+
+[node name="TitleLabel" parent="FullWindow/BackgroundPanel" index="0"]
+text = "Options"
+
+[node name="ButtonsContainer" parent="FullWindow/BackgroundPanel" index="1"]
+theme_override_constants/separation = 30
+
+[node name="SettingsButton" type="Button" parent="FullWindow/BackgroundPanel/ButtonsContainer" index="0" unique_id=980345937]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Settings"
+icon_alignment = 1
+expand_icon = true
+
+[node name="AppearanceButton" type="Button" parent="FullWindow/BackgroundPanel/ButtonsContainer" index="1" unique_id=90012156]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Appearance"
+
+[node name="LoggingMenuButton" type="Button" parent="FullWindow/BackgroundPanel/ButtonsContainer" index="2" unique_id=1429504621]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Show logs"
+
+[node name="ResetMenuButton" type="Button" parent="FullWindow/BackgroundPanel/ButtonsContainer" index="3" unique_id=319156804]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Reset progress"
+
+[node name="CloseButton" parent="FullWindow/BackgroundPanel/ButtonsContainer" index="4"]
+size_flags_vertical = 3

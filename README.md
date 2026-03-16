@@ -1,14 +1,46 @@
-# ***Push-Up Progression***
-![Made with Godot](https://img.shields.io/badge/Made%20with-Godot-3776AB.svg?style=plastic&logo=godot-engine&logoColor=white)
-![Version](https://img.shields.io/badge/version-1.3.0-00BB1A.svg?style=plastic)
+<p align="center">
+  <img src="docs/app_icon.png" width="144" height="144" alt="App Icon" />
+</p>
 
-An app for tracking push-up progress and reaching daily goals. Designed for smartphones.
+<h1 align="center">Push-Up Progression</h1>
 
-Created with [Godot Game Engine [4.3.dev5]](https://godotengine.org/).
+<p align="center">
+  <a href="https://github.com/Vandreic/PushupProgression/releases">
+    <img src="https://img.shields.io/badge/release-v1.4.0-00BB1A.svg?style=plastic" alt="Release version" />
+  </a>
+  <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
+    <img src="https://img.shields.io/badge/license-AGPLv3-blue.svg?style=plastic" alt="License" />
+  </a>
+  <a href="https://godotengine.org/">
+    <img src="https://img.shields.io/badge/Made%20with-Godot-3776AB.svg?style=plastic&logo=godot-engine&logoColor=white" alt="Made with Godot" />
+  </a>
+</p>
 
-<br>
+<p align="center">
+  An app for tracking push-up progress and reaching daily goals.
+</p>
 
-<p align="center"><img src="app_screenshot.png" width="40%" alt="app_screenshot.png" ></p>
+<p align="center">
+  Created with <a href="https://godotengine.org/article/maintenance-release-godot-4-6-1/" target="_blank">Godot Game Engine [4.6.1]</a>.
+</p>
+
+<hr style="width: 100%; height: 1px">
+<h4 align="center">
+  <a href="#screenshots">Screenshots</a> •
+  <a href="#roadmap">Roadmap</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#license">License</a>
+</p>
+<hr style="width: 100%; height: 1px">
+
+## Screenshots
+
+
+| Main page | Settings |
+|:---:|:---:|
+| ![Main Page](docs/main_page.png) | ![Settings Menu](docs/settings.png) |
+| Appearance | Reset options |
+| ![Appearance Menu](docs/appearance.png) | ![Reset Options](docs/reset_options.png) |
 
 ## Roadmap
 * ~~Implement pop-up confirmation for resetting saved progression~~
@@ -16,15 +48,21 @@ Created with [Godot Game Engine [4.3.dev5]](https://godotengine.org/).
 * ~~Custom daily goals & pushups per session option~~
 * ~~Integrate logging system for saving and loading processes~~
 * ~~Add notification for saved progression status~~
+* ~~Visual theme update~~
 * Show previous progression
-* Visual theme update
 
 ## Usage
 
 <details>
 <summary>Android</summary>
 
-You can install Push-Up Progression by using [Obtainium](https://github.com/ImranR98/Obtainium/) for automatic updates or manually if you prefer direct downloads.
+<p>
+<a href="https://github.com/ImranR98/Obtainium">
+   <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" height="80" alt="badge_obtainium.png">
+   </a>
+</p>
+
+You can install Push-Up Progression by using [Obtainium](https://github.com/ImranR98/Obtainium/) for automatic updates, or manually if you prefer direct downloads.
 
 <details>
 <summary>Install with Obtainium</summary>
@@ -39,7 +77,7 @@ You can install Push-Up Progression by using [Obtainium](https://github.com/Imra
 <details>
 <summary>Update through Obtainium</summary>
 
-When new updates are released, PushupProgression can be updated via Obtainium.
+When new updates are released, Push-Up Progression can be updated via Obtainium.
 
 1. Open Obtainium.
 2. To update Push-Up Progression:
@@ -86,4 +124,4 @@ Push-Up Progression hasn't been compiled for macOS, iOS, or Linux, but you can c
 </details>
 
 ## License
-Push-Up Progression is released under the [GNU General Public License v3.0](LICENSE.md).
+Push-Up Progression is released under the [GNU Affero General Public License v3.0 (AGPL-3.0-only)](LICENSE.md).

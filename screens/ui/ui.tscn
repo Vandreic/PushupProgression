@@ -1,0 +1,152 @@
+[gd_scene format=3 uid="uid://bv2v88irqyogj"]
+
+[ext_resource type="Script" uid="uid://be4f7ob8naa8k" path="res://screens/ui/ui_manager.gd" id="1_8wh5j"]
+[ext_resource type="Theme" uid="uid://bi5sl1kglohpl" path="res://assets/themes/light_blue_theme.tres" id="2_7x34e"]
+[ext_resource type="Script" uid="uid://dxqsw51hvp42q" path="res://screens/ui/ui_utilities/current_progress_container_manager.gd" id="2_kyyc0"]
+[ext_resource type="Texture2D" uid="uid://b5y0vfo8qy03b" path="res://assets/progress_bar/light_blue/under.png" id="4_d2bhw"]
+[ext_resource type="Texture2D" uid="uid://bs47sj3ui582h" path="res://assets/progress_bar/light_blue/over.png" id="5_5wq5r"]
+[ext_resource type="Texture2D" uid="uid://dbmvagc5lmtu1" path="res://assets/progress_bar/light_blue/progress.png" id="6_4itsy"]
+[ext_resource type="Script" uid="uid://bwvark7dfgdnm" path="res://screens/ui/ui_utilities/options_menu_button_manager.gd" id="7_7g7aa"]
+[ext_resource type="Texture2D" uid="uid://ddbxixina3k1v" path="res://assets/icons/menu_normal.svg" id="7_153st"]
+[ext_resource type="Texture2D" uid="uid://dw26bvffdvtaq" path="res://assets/icons/menu_pressed.svg" id="8_pqvvn"]
+
+[node name="UI" type="CanvasLayer" unique_id=187805293]
+
+[node name="UIManager" type="Node" parent="." unique_id=1124141759 groups=["ui_manager"]]
+script = ExtResource("1_8wh5j")
+
+[node name="BackgroundPanel" type="Panel" parent="." unique_id=177373102]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_7x34e")
+
+[node name="UIWindow" type="VBoxContainer" parent="BackgroundPanel" unique_id=1362321084]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.025
+anchor_top = 0.015
+anchor_right = 0.975
+anchor_bottom = 0.985
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="QuoteLabel" type="Label" parent="BackgroundPanel/UIWindow" unique_id=1655747673]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 90
+text = "Consistency is key!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressUIContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow" unique_id=348516471]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 60
+
+[node name="CurrentProgressContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer" unique_id=429509644]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 60
+script = ExtResource("2_kyyc0")
+
+[node name="ProgressBarContainer" type="VBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer" unique_id=1815362650]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ProgressLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer" unique_id=598718148]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+text = "Today's progression: 0 push-ups."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="TextureProgressBar" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer" unique_id=1363927688]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+fill_mode = 4
+texture_under = ExtResource("4_d2bhw")
+texture_over = ExtResource("5_5wq5r")
+texture_progress = ExtResource("6_4itsy")
+
+[node name="ProgressValueLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressBar" unique_id=55445016]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressTextContainer" type="HBoxContainer" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer" unique_id=1487781410]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 260
+
+[node name="DailyGoalLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer" unique_id=1061980962]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Goal: 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RemainingPushupsLabel" type="Label" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer/ProgressBarContainer/ProgressTextContainer" unique_id=346318579]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Remaining: 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AddPushupsButton" type="Button" parent="BackgroundPanel/UIWindow/ProgressUIContainer/CurrentProgressContainer" unique_id=1914401453]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(450, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Add 10 pushups"
+
+[node name="OptionsMenuButton" type="TextureButton" parent="BackgroundPanel" unique_id=36168700]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.04
+anchor_top = 0.95
+anchor_right = 0.14
+anchor_bottom = 0.99
+offset_left = -4.99998
+offset_top = -6.40001
+offset_right = 4.99998
+offset_bottom = 6.39996
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = ExtResource("7_153st")
+texture_pressed = ExtResource("8_pqvvn")
+stretch_mode = 5
+script = ExtResource("7_7g7aa")
+
+[node name="AppVersion" type="Label" parent="BackgroundPanel" unique_id=1784987120]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.196078)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -55.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "version 1.0.0"
+horizontal_alignment = 1
+vertical_alignment = 1
